@@ -22,16 +22,22 @@ duplicating it.
 
 Full runnable sample: `examples/pushOrder.request.json`.
 
+## Required per-order fields (marked `*` in the docs)
+
+`reference`, `courier`, `createdAt`, `updatedAt`, `name`, `street`, `city`,
+`state`, `postCode`, `country` are **mandatory** for each order (plus the
+root-level `apiKey`). Everything in the next table beyond these is optional.
+
 ## Per-order fields (common)
 
 | Field | Meaning |
 |---|---|
-| `reference` | Your order reference (recommended unique) |
-| `orderID` | Order ID on the source platform |
-| `courier`, `courierService` | Desired courier code + service code (optional at import) |
-| `status` | Order status string |
-| `createdAt`, `updatedAt` | `YYYY-MM-DD HH:MM:SS`. `updatedAt` drives the upsert |
-| `name`, `street`, `city`, `state`, `postCode`, `country` | Recipient address (`country` = ISO alpha-2). **Note:** here the ZIP field is `postCode` (not `ZIP` as in `pushShipment`) |
+| `reference` | Your order reference (recommended unique) — **required** |
+| `orderID` | Order ID on the source platform (optional) |
+| `courier` | Desired courier code — **required**. `courierService` (service code) is optional at import |
+| `status` | Order status string (optional) |
+| `createdAt`, `updatedAt` | `YYYY-MM-DD HH:MM:SS` — **required**. `updatedAt` drives the upsert |
+| `name`, `street`, `city`, `state`, `postCode`, `country` | Recipient address — **required** (`country` = ISO alpha-2). **Note:** here the ZIP field is `postCode` (not `ZIP` as in `pushShipment`) |
 | `email`, `telephone` | Recipient contacts |
 | `amount`, `shippingCost`, `currencyCode` | Order totals |
 | `payment`, `isCOD` | Payment method / cash-on-delivery |

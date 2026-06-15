@@ -27,6 +27,10 @@ Put the key in the **JSON request body** under `apiKey`:
 }
 ```
 
+> **Exception — `getQuotes`.** This one endpoint does *not* take `apiKey` in the
+> body: it expects the key in an HTTP header `x-api-key` (and `x-sandbox` for
+> sandbox). See `getquotes.md`.
+
 ## Testing the key
 
 The quickest connectivity test is the `getChannel` endpoint — call it with just

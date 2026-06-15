@@ -32,7 +32,7 @@ analytics. This skill teaches you to integrate with its **public REST API**.
 | **Response envelope** | `{"<endpointName>": {"result": "OK"\|"KO", "error": null\|"<message>"}}` |
 | **Rate limit** | Token bucket: 120 capacity, refill 2 tokens/sec. A batch of N items costs N tokens. Over limit → HTTP `429 Too Many Requests` |
 | **Time zone** | CEST (UTC+2 DST / UTC+1 winter). Dates are `YYYY-MM-DD`, datetimes `YYYY-MM-DD HH:MM:SS` |
-| **Sandbox** | No separate environment. Pass `"sandbox": true` on endpoints that support it (e.g. `createLabel`, `getQuotes`) to test without real effects (no carrier pickup, no billing) |
+| **Sandbox** | No separate environment. Pass `"sandbox": true` in the body on endpoints that support it (e.g. `createLabel`) to test without real effects (no carrier pickup, no billing). **`getQuotes` is the exception**: it uses an `x-sandbox` header (see its reference) |
 | **Versions** | `1.3` is the production version. `1.1`/`1.2` are deprecated but still served. `getPudos` lives under `/1.2/`. A newer **v2** (different auth) exists at `/v2/` — out of scope here |
 
 ## Domain model in one minute

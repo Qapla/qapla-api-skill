@@ -14,8 +14,8 @@ source of truth is <https://api.qapla.dev/1.3/>.
 | Endpoint | Ver. | Purpose |
 |---|---|---|
 | [`pushShipment`](pushshipment.md) | 1.3 | Insert shipments that already have a tracking number → enter tracking |
-| `getShipment` / `getShipments` | 1.3 | Read one / many shipments of the channel — [response example](examples/getShipment.response.json) |
-| `getCompanyShipment` / `getCompanyShipments` | 1.2 | Read shipments across **all** channels of the company for a day |
+| `getShipment` / `getShipments` | 1.3 / 1.2 | Read one / many shipments of the channel (`getShipments` documented under 1.2) — [response example](examples/getShipment.response.json) |
+| `getCompanyShipment` / `getCompanyShipments` | 1.3 | Read shipments across **all** channels of the company for a day |
 | `updateShipment` | 1.2 | Update a shipment |
 | `deleteShipment` / `undeleteShipment` | 1.2 | Soft-delete / restore a shipment |
 | `trackingByTimeFrame` | 1.2 | Poll shipments whose status changed within a time window |
@@ -25,7 +25,7 @@ source of truth is <https://api.qapla.dev/1.3/>.
 | Endpoint | Ver. | Purpose |
 |---|---|---|
 | [`pushOrder`](pushorder.md) | 1.3 | Import raw orders (max ~100/request) |
-| `getOrder` / `getOrders` | 1.3 | Read one / many raw orders — [response example](examples/getOrder.response.json) |
+| `getOrder` / `getOrders` | 1.3 / 1.2 | Read one / many raw orders (`getOrders` documented under 1.2) — [response example](examples/getOrder.response.json) |
 | `updateOrder` | 1.2 | Update a raw order |
 | `markOrderReady` | 1.3 | Mark an order ready for label creation — [request example](examples/markOrderReady.request.json) |
 | `deleteOrder` / `undeleteOrder` | 1.2 | Soft-delete / restore a raw order |
@@ -52,8 +52,8 @@ source of truth is <https://api.qapla.dev/1.3/>.
 
 | Endpoint | Ver. | Purpose |
 |---|---|---|
-| `getCouriers` | 1.3 | List couriers enabled on the channel |
-| `detectCourier` | 1.3 | Detect a courier from a tracking number |
+| `getCouriers` | 1.2 | List couriers enabled on the channel |
+| `detectCourier` | 1.2 | Detect a courier from a tracking number |
 | `detectOrderCourier` | 1.2 | Suggest a courier for an order by applying the channel's shipping rules |
 
 ## Address & utilities
@@ -61,8 +61,8 @@ source of truth is <https://api.qapla.dev/1.3/>.
 | Endpoint | Ver. | Purpose |
 |---|---|---|
 | `checkAddress` | 1.3 | Verify / geocode a recipient address (billable) — [request](examples/checkAddress.request.json) / [response](examples/checkAddress.response.json) |
-| `getCredits` | 1.3 | Read remaining credits/balance |
-| `getQaplaStatus` | 1.3 | Service/status info |
+| `getCredits` | 1.2 | Read remaining credits/balance |
+| `getQaplaStatus` | 1.2 | Service/status info |
 
 ## Channels (channel management)
 

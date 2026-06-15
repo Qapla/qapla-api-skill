@@ -25,21 +25,30 @@ Full runnable sample: `examples/pushShipment.request.json` (response in
 
 ## Per-shipment fields
 
-**Required:**
+**Required (marked `*` in the docs):**
 
 | Field | Meaning |
 |---|---|
 | `trackingNumber` | The carrier tracking number / waybill |
 | `courier` | Qapla' courier code (e.g. `DHL`, `UPS`, `GLS`). See `getCouriers` |
+| `shipDate` | Ship date (`YYYY-MM-DD`) |
 
-**Recipient & order (recommended for notifications/tracking page):**
+**Required to activate transactional emails/SMS** (these four are the fields the
+docs mark with `•` — without them notifications can't be sent):
 
 | Field | Meaning |
 |---|---|
-| `name`, `street`, `city`, `ZIP`, `state`, `country` | Recipient address. `country` is ISO 3166-1 alpha-2 (e.g. `IT`) |
-| `email`, `telephone` | Recipient contacts (used to send notifications) |
 | `reference` | Your order reference |
-| `shipDate`, `orderDate` | Ship date / order date (`YYYY-MM-DD`) |
+| `name` | Recipient name |
+| `email` | Recipient email |
+| `telephone` | Recipient phone |
+
+**Recommended (recipient address & tracking-page data):**
+
+| Field | Meaning |
+|---|---|
+| `street`, `city`, `ZIP`, `state`, `country` | Recipient address. `country` is ISO 3166-1 alpha-2 (e.g. `IT`) |
+| `orderDate` | Order date (`YYYY-MM-DD`) |
 | `language` | ISO 639-1 (e.g. `it`, `fr`). Unknown/null → `it` |
 
 **Optional / advanced:**

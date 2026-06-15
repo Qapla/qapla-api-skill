@@ -1,69 +1,107 @@
 # getQuotes
 
 **Endpoint:** `POST https://api.qapla.it/1.3/getQuotes`
-**Billable product** (each quote request may be charged). Supports `sandbox`.
+**Billable product** (each quote request may be charged). Supports sandbox.
+**Must be activated by Qapla' Customer Care before use.**
 
 Get **real-time multi-carrier shipping quotes** for a destination + shipment
 value, before deciding how to ship. Returns one entry per courier, each with one
 or more service quotes (cost, estimated pickup/delivery dates).
 
-## Request shape
+> ⚠️ **Auth is different here.** Unlike every other v1.3 endpoint, `getQuotes`
+> does **not** take `apiKey` in the JSON body. The key goes in an HTTP **header**
+> `x-api-key`, and sandbox is the header `x-sandbox: "true"|"false"`.
+
+## Request
+
+Headers:
+
+| Header | Required | Meaning |
+|---|---|---|
+| `x-api-key` | yes | Channel API Key |
+| `x-sandbox` | no | `"true"` to run in sandbox (returned values may be unrealistic; GLS-ITA has no sandbox and is always sent to production) |
+
+Body (note the **nested `recipient` object** and the `amount*` field names):
 
 ```json
 {
-  "apiKey": "YOUR_KEY",
-  "reference": "QUOTE-001",
-  "address": "...",
-  "postCode": "35010",
-  "city": "Padova",
-  "state": "PD",
-  "country": "IT",
-  "value": 109.25
+  "reference": "unique",
+  "senderCode": "SENDER",
+  "recipient": {
+    "street": "Address",
+    "city": "Milano",
+    "province": "MI",
+    "zipCode": "20100",
+    "country": "IT"
+  },
+  "currency": "EUR",
+  "amountShipment": "200.20",
+  "amountInsurance": "200.20",
+  "amountCash": "200.20",
+  "parcels": [
+    { "weight": 0.8, "height": 12.0, "length": 10.0, "width": 20.0 }
+  ],
+  "couriers": ["UPS", "DHL"]
 }
 ```
 
 Full samples: `examples/getQuotes.request.json` and
 `examples/getQuotes.response.json`.
 
-## Key request fields
+## Body fields
 
 | Field | Required | Meaning |
 |---|---|---|
-| `apiKey` | yes | Channel API Key |
-| `reference` | rec. | Your reference, echoed back. Allowed chars: letters, digits, `-`, `_`, `.` |
-| `address` | rec. | Recipient address (incl. street number if available) |
-| `postCode` | yes in EU | Recipient ZIP |
-| `city` | yes | For international, use the international (English) city name |
-| `state` | yes in IT | Province (IT) or state where applicable |
-| `country` | yes | ISO alpha-2 code |
-| `value` | yes | Shipment value in `currency`, float `#.##` (no symbol) |
+| `reference` | yes | Your reference, echoed back |
+| `senderCode` | no | Sender code (configured sender) |
+| `recipient` | yes | Recipient object (see below) |
+| `recipient.street` | yes | Street/address |
+| `recipient.city` | yes | City (use the international/English name abroad) |
+| `recipient.country` | yes | ISO alpha-2 code |
+| `recipient.zipCode` | no | Recipient ZIP |
+| `recipient.province` | no | Province/state |
+| `currency` | no | Currency for the amounts |
+| `amountShipment` | yes | Shipment value, float `#.##` (no symbol) |
+| `amountInsurance` | no | Insured value |
+| `amountCash` | no | Cash-on-delivery amount |
+| `parcels[]` | yes | One or more parcels, each with `weight`, `width`, `height`, `length` (all required per parcel) |
+| `couriers[]` | no | Restrict the quote to these courier codes; omit for all enabled |
 
 ## Response structure
 
-Top-level: `result` (`OK`/`KO`), `version`, `reference` (echoed), `id`
-(UUIDv4 request id), `receivedAt` / `processedAt` (RFC3339).
-
-Then `couriers[]`, each with:
+Wrapped in `getQuotes`:
 
 | Field | Meaning |
 |---|---|
-| `courier` | Qapla' courier code |
-| `quotes[]` | One per service, each with: |
-| └ `courierService` | Carrier service code |
-| └ `qaplaService` | Qapla' service code |
-| └ `serviceName` | Human-readable service name |
-| └ `currency` | Currency of the quoted cost |
-| └ `cost` | The quoted price |
-| └ `pickupDate` | Estimated pickup date (`yyyy-MM-dd`) |
-| └ `deliveryDate` | Estimated delivery date (`yyyy-MM-dd`) |
+| `result` | `OK`/`KO` |
+| `version` | API version (e.g. `1.3.0`) |
+| `reference` | Echoed request reference |
+| `quotationId` | UUID of the quote request |
+| `startTimestamp` / `endTimestamp` | RFC3339 processing window |
+| `couriers[]` | One per courier, each with `code`, `quotes[]`, and courier-level `messages[]` |
 
-> Quoted costs may be net of VAT depending on the courier — check the live docs.
+Each `couriers[].quotes[]` entry:
+
+| Field | Meaning |
+|---|---|
+| `service.courierCode` | Carrier service code |
+| `service.qaplaCode` | Qapla' service code |
+| `service.description` | Human-readable service name |
+| `messages[]` | Per-quote messages: `{ type, code, content }` |
+| `deliveryOptions` | Delivery options (may be `null`) |
+| `currency` | Currency of the quoted amount |
+| `amount` | The quoted price |
+| `expectedPickupDate` | Estimated pickup date (may be `null`) |
+| `expectedDeliveryDate` | Estimated delivery date (may be `null`) |
+
+> Quoted costs are reference rates and may differ from the final invoice
+> (carriers return a `messages[]` note about this). Check the live docs.
 
 ## Notes
 
 - This is a real-time call to carriers; expect higher latency than a plain DB
   read, and quotes that vary over time.
-- Use `sandbox` while developing.
-- The carrier/service codes returned (`courier`, `courierService`) feed directly
-  into `createLabel`.
+- Use the `x-sandbox` header while developing.
+- The service codes returned (`service.courierCode` → `courierService`,
+  `service.qaplaCode`) feed into `createLabel` to ship with the chosen service.
 - Official docs: <https://api.qapla.dev/1.3/getQuotes>.

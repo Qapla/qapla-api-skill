@@ -27,19 +27,27 @@ Full runnable sample: `examples/createLabel.request.json`. **Always develop with
 
 ## Key fields
 
-**Required core:**
+**Required core (marked `*` in the docs):**
 
 | Field | Meaning |
 |---|---|
+| `reference` | Your label/order reference |
 | `courier` | Qapla' courier code (e.g. `CRONO-PTI`, `GLS`, `BRT`) |
 | `courierService` | Carrier service code (e.g. `P46`) — valid values depend on the courier |
 | `name`, `address`, `city`, `state`, `postCode`, `country` | Recipient (`country` = ISO alpha-2) |
-| `email`, `telephone` | Recipient contacts |
-| `parcels[]` | At least one parcel: `weight`, `length`, `width`, `height` (`boxCode`, `content`, `originCountry` optional) |
+
+(plus the root-level `apiKey`.)
+
+**Strongly recommended / usually needed (not flagged mandatory at top level):**
+
+| Field | Meaning |
+|---|---|
+| `parcels[]` | One or more parcels: `weight`, `length`, `width`, `height` (`boxCode`, `content`, `originCountry` optional). Required in practice by virtually every carrier |
+| `email`, `telephone` | Recipient contacts (for notifications) |
 
 **Order / commercial:**
 
-`reference`, `orderID`, `origin`, `amount`, `shippingCost`, `currencyCode`,
+`orderID`, `origin`, `amount`, `shippingCost`, `currencyCode`,
 `payment`, `isCOD`, `notes`, `custom1`–`custom3`, `content`, `costCenterCode`.
 
 **Shipping options:**
