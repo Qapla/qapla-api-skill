@@ -37,6 +37,31 @@ QAPLA_API_KEY=xxxxx python3 scripts/qapla_client.py   # calls getChannel
 
 ## Run log
 
+### 2026-06-15 — 7/7 passed (post multi-agent refactor, fresh-context agents)
+
+After splitting the skill into thin entrypoints (`SKILL.md`, `AGENTS.md`,
+`.cursor/rules/qapla-api.mdc`) all pointing to a new canonical
+`references/overview.md` (single source of truth), the 7 scenarios were re-run
+with the same method (one fresh `general-purpose` agent per verbatim prompt).
+The installed skill at `~/.claude/skills/qapla-api/` was synced from the repo
+first — it is a *copy*, not a symlink, so edits to the repo must be deployed
+before evaluating via auto-trigger.
+
+| # | Scenario | Triggered | Read overview.md? | Result |
+|---|---|---|---|---|
+| 1 | pushShipment | ✅ qapla-api | ✅ | ✅ PASS — `apiKey` + array; `trackingNumber`/`courier:"UPS"`/`shipDate`; per-item result check |
+| 2 | label + PUDO | ✅ qapla-api | ✅ | ✅ PASS — `getPudos → createLabel → confirmLabel`; `"sandbox": true`; PUDO fields vary per courier |
+| 3 | getQuotes (critical) | ✅ qapla-api | ✅ | ✅ PASS — `x-api-key` header (not body); `recipient{}`; `amountShipment` string; `x-sandbox` header |
+| 4 | authentication | ✅ qapla-api | ✅ | ✅ PASS — `apiKey` in body; Control Panel path; getQuotes header exception |
+| 5 | anti-hallucination (critical) | ✅ qapla-api | ✅ | ✅ PASS — refused `/v3/bulkRefund`; version info reached *via the overview.md pointer* (no longer inline in SKILL.md) |
+| 6 | rate limit 429 | ✅ qapla-api | ✅ | ✅ PASS — token bucket (120 cap, 2/sec); batch cost = N; backoff; ban warning |
+| 7 | PEP 8 (negative) | ✅ did NOT trigger | n/a | ✅ PASS — pure Python style; no qapla-api activation; no file modified |
+
+Key finding: 6/7 agents explicitly opened `references/overview.md`, confirming
+the `SKILL.md → overview.md` indirection holds in a fresh context — the
+orientation that used to be inline in `SKILL.md` is still reached. The critical
+cases (#3 getQuotes header auth, #5 anti-hallucination) survive the refactor.
+
 ### 2026-06-15 — 7/7 passed (fresh-context agents)
 
 Method: each of the 7 prompts was run in a separate fresh `general-purpose`
