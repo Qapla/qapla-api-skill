@@ -1,5 +1,9 @@
 # Qapla' API — AI Agent Knowledge Pack
 
+[![Release](https://img.shields.io/github/v/release/Qapla/qapla-api-skill?label=release&sort=semver)](https://github.com/Qapla/qapla-api-skill/releases/latest)
+[![API](https://img.shields.io/badge/Qapla'%20API-v1.3-informational)](https://api.qapla.dev/1.3/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 A portable **knowledge pack** that teaches an AI coding agent how to integrate
 with and answer questions about the **Qapla' public REST API (v1.3)** —
 shipments, raw orders, carrier labels, tracking, real-time quotes, pickup points
