@@ -1,5 +1,11 @@
 # Evaluation scenarios — qapla-api skill
 
+> **Last validated run: 2026-06-15 — 7/7 passed.** In a fresh session the skill
+> triggers on the 6 relevant scenarios and stays silent on the negative control
+> (#7). All answers accurate per the references. The critical `getQuotes` case
+> (auth via `x-api-key` header, not `apiKey` in the body) holds in a fresh
+> context; anti-hallucination guardrail (#5) works; no over-triggering.
+
 Representative prompts used to validate the skill. Per Anthropic's skill
 best-practices, run these against **Haiku, Sonnet and Opus** in a fresh session
 (the skill auto-loads from its `description`), and check both that the skill
