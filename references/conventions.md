@@ -8,9 +8,10 @@ These rules are shared by all v1.3 endpoints. Read once.
 https://api.qapla.it/<version>/<endpoint>
 ```
 
-- `<version>`: `1.3` for production. `1.1`/`1.2` are deprecated but still served.
-  A few endpoints are only published under an older version — notably
-  **`getPudos` lives at `/1.2/getPudos`** (no `1.3` alias).
+- `<version>`: `1.3` for production. `1.0`/`1.1` are deprecated but still
+  served; **`1.2` is current** (not deprecated) — several endpoints are
+  published only under `1.2` (notably **`getPudos`**, `trackingByTimeFrame`,
+  `detectOrderCourier`, the platform-order endpoints), with no `1.3` alias.
 - `<endpoint>`: the endpoint name, e.g. `pushShipment`, `createLabel`.
 
 > Note: the documentation site is `api.qapla.dev`; the API host you actually

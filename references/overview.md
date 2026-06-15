@@ -25,7 +25,7 @@ analytics. This document orients you to its **public REST API**.
 | **Rate limit** | Token bucket: 120 capacity, refill 2 tokens/sec. A batch of N items costs N tokens. Over limit → HTTP `429 Too Many Requests` |
 | **Time zone** | CEST (UTC+2 DST / UTC+1 winter). Dates are `YYYY-MM-DD`, datetimes `YYYY-MM-DD HH:MM:SS` |
 | **Sandbox** | No separate environment. Pass `"sandbox": true` in the body on endpoints that support it (e.g. `createLabel`) to test without real effects (no carrier pickup, no billing). **`getQuotes` is the exception**: it uses an `x-sandbox` header (see its reference) |
-| **Versions** | `1.3` is the production version. `1.1`/`1.2` are deprecated but still served. `getPudos` lives under `/1.2/`. A newer **v2** (different auth) exists at `/v2/` — out of scope here |
+| **Versions** | `1.3` is the production version. `1.0`/`1.1` are deprecated; **`1.2` is current** — several endpoints (`getPudos`, `trackingByTimeFrame`, `detectOrderCourier`, platform-order) are served only under `/1.2/`. A newer **v2** (different auth) exists at `/v2/`; see [migration](migration.md) |
 
 ## Domain model in one minute
 
@@ -34,7 +34,8 @@ Qapla' has three orthogonal "pillars"; a merchant may use only some:
 1. **Tracking** — shipments that already have a tracking number live in `ordini`
    (the central shipments table). Push them with **`pushShipment`**.
 2. **Transactional events** — on each tracking status change, Qapla' fires
-   notifications (email/SMS/webhook) to merchant and recipient.
+   notifications (email/SMS/webhook) to merchant and recipient. See
+   [webhooks](webhooks.md) for the outbound webhook contract.
 3. **Labels** — import raw orders (**`pushOrder`**), generate a carrier label
    (**`createLabel`**), then confirm/transmit it (**`confirmLabel`**). On
    transmission the shipment automatically enters pillars 1 & 2.

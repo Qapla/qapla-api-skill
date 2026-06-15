@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `references/webhooks.md` — outbound webhook contract: event types
+  (shipment / return / order), payload, the required `{"result":"OK"}` response,
+  retries and auto-disable, and a receiver checklist.
+- `references/migration.md` — version-migration guide (`1.0`/`1.1` → `1.2`/`1.3`,
+  and `1.x` → `v2`).
+
+### Changed
+- Clarified version policy: **`1.2` is current** (not deprecated) — several
+  endpoints are served only under `1.2`; `1.0`/`1.1` are the deprecated versions
+  (`conventions.md`, `overview.md`).
+
 ## [1.0.0] - 2026-06-15
 
 First stable release. A portable, multi-agent knowledge pack for the Qapla'

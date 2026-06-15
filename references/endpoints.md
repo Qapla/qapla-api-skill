@@ -86,6 +86,12 @@ source of truth is <https://api.qapla.dev/1.3/>.
 |---|---|---|
 | `apiVirtual` / virtual-courier endpoints | 1.2 | Merchant prints its own labels and pushes statuses to Qapla' via API (no Qapla' tracking/label generation) |
 
+## Webhooks (outbound)
+
+Not a REST endpoint you call — Qapla' **POSTs** events to a URL you configure per
+channel. See [`webhooks.md`](webhooks.md): shipment / return / order events, the
+`{"result":"OK"}` response contract, retries and auto-disable.
+
 ---
 
 **Not listed = not public.** If an endpoint or field is not here and not on
