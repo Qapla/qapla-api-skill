@@ -5,15 +5,16 @@ Full list of public endpoints, grouped by area. Call as
 "Ver." is the version under which the endpoint is documented/served (some
 modern endpoints are 1.3/1.4; a few are only served under 1.2).
 
-Endpoints with a dedicated deep-dive in this skill are linked. For all others,
-the source of truth is <https://api.qapla.dev/1.3/>.
+Endpoints with a dedicated deep-dive in this skill are linked. Some rows also
+link a real request/response payload under `examples/`. For all others, the
+source of truth is <https://api.qapla.dev/1.3/>.
 
 ## Shipments (pillar 1 — tracking)
 
 | Endpoint | Ver. | Purpose |
 |---|---|---|
 | [`pushShipment`](pushshipment.md) | 1.3 | Insert shipments that already have a tracking number → enter tracking |
-| `getShipment` / `getShipments` | 1.3 | Read one / many shipments of the channel |
+| `getShipment` / `getShipments` | 1.3 | Read one / many shipments of the channel — [response example](examples/getShipment.response.json) |
 | `getCompanyShipment` / `getCompanyShipments` | 1.2 | Read shipments across **all** channels of the company for a day |
 | `updateShipment` | 1.2 | Update a shipment |
 | `deleteShipment` / `undeleteShipment` | 1.2 | Soft-delete / restore a shipment |
@@ -24,9 +25,9 @@ the source of truth is <https://api.qapla.dev/1.3/>.
 | Endpoint | Ver. | Purpose |
 |---|---|---|
 | [`pushOrder`](pushorder.md) | 1.3 | Import raw orders (max ~100/request) |
-| `getOrder` / `getOrders` | 1.3 | Read one / many raw orders |
+| `getOrder` / `getOrders` | 1.3 | Read one / many raw orders — [response example](examples/getOrder.response.json) |
 | `updateOrder` | 1.2 | Update a raw order |
-| `markOrderReady` | 1.3 | Mark an order ready for label creation |
+| `markOrderReady` | 1.3 | Mark an order ready for label creation — [request example](examples/markOrderReady.request.json) |
 | `deleteOrder` / `undeleteOrder` | 1.2 | Soft-delete / restore a raw order |
 
 ## Labels (pillar 3 — generation & transmission)
@@ -59,7 +60,7 @@ the source of truth is <https://api.qapla.dev/1.3/>.
 
 | Endpoint | Ver. | Purpose |
 |---|---|---|
-| `checkAddress` | 1.3 | Verify / geocode a recipient address (billable) |
+| `checkAddress` | 1.3 | Verify / geocode a recipient address (billable) — [request](examples/checkAddress.request.json) / [response](examples/checkAddress.response.json) |
 | `getCredits` | 1.3 | Read remaining credits/balance |
 | `getQaplaStatus` | 1.3 | Service/status info |
 

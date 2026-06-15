@@ -8,6 +8,7 @@ description: >-
   couriers and channels. Covers authentication (per-channel API Key), the
   response envelope, rate limiting, the sandbox flag, and the full endpoint
   catalog with request/response examples.
+license: MIT
 ---
 
 # Qapla' Public API (v1.3)
@@ -89,6 +90,12 @@ Key vocabulary:
   instead of one HTTP call per item — but mind the 100-item practical cap and
   the token cost.
 - Use `"sandbox": true` while developing on label/quote endpoints.
+
+A ready-made, dependency-free Python client is bundled: see
+`scripts/qapla_client.py`. It injects `apiKey`, parses the two-level envelope
+(`split_batch()`), and retries `429` with backoff — read it as a reference when
+writing client code, or run it (`QAPLA_API_KEY=… python3 scripts/qapla_client.py`)
+for a connectivity smoke test against `getChannel`.
 
 ## Guardrails
 

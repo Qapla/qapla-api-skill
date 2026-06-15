@@ -1,0 +1,30 @@
+# Evaluation scenarios — qapla-api skill
+
+Representative prompts used to validate the skill. Per Anthropic's skill
+best-practices, run these against **Haiku, Sonnet and Opus** in a fresh session
+(the skill auto-loads from its `description`), and check both that the skill
+*triggers* and that the answer is *correct*.
+
+Each scenario lists: the user prompt, what should happen, and the desk-check
+result (whether the bundled content is sufficient to answer correctly without
+the live docs).
+
+| # | Prompt | Expected behavior | Desk-check |
+|---|---|---|---|
+| 1 | "Using the Qapla' API, build me a pushShipment call for a UPS parcel with a tracking number." | Triggers skill; produces JSON with `apiKey` + `pushShipment: [{trackingNumber, courier: "UPS", ...}]`; notes per-item result checking. | ✅ covered by `references/pushshipment.md` + example |
+| 2 | "I need Qapla' to generate a GLS label in sandbox and ship to a pickup point." | Explains the `pushOrder → createLabel → confirmLabel` flow; uses `"sandbox": true`; points to `getPudos` for the PUDO block. | ✅ covered by createlabel.md + getpudos.md |
+| 3 | "Get me real-time shipping quotes for a 109€ parcel to Padova (35010)." | Builds a `getQuotes` body with address/postCode/city/state/country/value; explains `couriers[].quotes[]` response. | ✅ covered by getquotes.md + examples |
+| 4 | "How do I authenticate to the Qapla' API and where does the key go?" | Per-channel API Key in the JSON body as `apiKey`; from Control Panel; treat as secret. | ✅ covered by authentication.md |
+| 5 | "Does Qapla' have a /v3/ endpoint for bulk refunds?" | Should REFUSE to invent it — say it's not in the public docs and defer to api.qapla.dev. | ✅ guardrail in SKILL.md |
+| 6 | "I'm getting HTTP 429 from pushShipment, what do I do?" | Explains token bucket (120 cap, 2/sec), exponential backoff, batch cost = N tokens. | ✅ covered by conventions.md |
+
+## Negative / edge checks
+- Scenario 5 specifically verifies the **anti-hallucination guardrail** holds.
+- Confirm the skill does NOT trigger on unrelated prompts (e.g. "format this Python file") — over-triggering is a failure too.
+
+## How to run a quick live connectivity smoke test
+With a real channel key:
+
+```bash
+QAPLA_API_KEY=xxxxx python3 scripts/qapla_client.py   # calls getChannel
+```
