@@ -1,0 +1,116 @@
+{
+  "getOrder": {
+    "result": "OK",
+    "error": null,
+    "version": "1.3.1",
+    "count": 1,
+    "orders": [
+      {
+        "reference": "BAT-234241299",
+        "orderID": 234241222,
+        "status": "Processato",
+        "dateIns": "2023-10-23 15:48:27",
+        "createdAt": "2018-04-01 22:38:18",
+        "updatedAt": "2018-04-01 22:40:41",
+        "isActive": true,
+        "isDeleted": false,
+        "isShipped": false,
+        "origin": {
+          "code": "magento2",
+          "name": "Magento2",
+          "icon": "https://cdn.qapla.it/origin/magento2.svg"
+        },
+        "courier": {
+          "code": "GENERIC",
+          "name": "[Generic Courier]",
+          "icon": "https://cdn.qapla.it/courier/GENERIC.svg",
+          "courierService": ""
+        },
+        "consignee": {
+          "name": "Barbara Gordon",
+          "address": "Via manin, 8",
+          "city": "Vigonza",
+          "state": "PD",
+          "postCode": "35010",
+          "country": "IT",
+          "email": "batgirl@qapla.it",
+          "phone": "3473425220"
+        },
+        "amount": 109.25,
+        "payment": "pp_hosted",
+        "isCOD": false,
+        "notes": "Consegnare solo se in costume",
+        "parcels": [
+          {
+            "width": 20,
+            "height": 7,
+            "length": 12,
+            "weight": 1.5,
+            "boxCode": null,
+            "content": null,
+            "originCountry": null
+          },
+          {
+            "width": 22,
+            "height": 10,
+            "length": 35,
+            "weight": 1.1,
+            "boxCode": null,
+            "content": null,
+            "originCountry": null
+          }
+        ],
+        "custom1": "custom value 1",
+        "custom2": "custom value 2",
+        "custom3": "custom value 3",
+        "content": "The goods",
+        "latestShipDate": "2018-04-03",
+        "latestDeliveryDate": "2018-04-05",
+        "tag": "blue",
+        "shippingInsurance": 100,
+        "rows": [
+          {
+            "sku": "BAR-301",
+            "name": "Barrette di Crusca d'Avena con Cioccolato (4 pezzi) 120g",
+            "qty": "1",
+            "price": "6.35",
+            "total": "6.35",
+            "customsCode": null,
+            "originCountry": null,
+            "netWeight": null,
+            "unitOfMeasurement": null,
+            "parcelID": null
+          },
+          {
+            "sku": "BEV-001",
+            "name": "Bevanda al mango in polvere 9g",
+            "qty": "5",
+            "price": "0.38",
+            "total": "1.9",
+            "customsCode": null,
+            "originCountry": null,
+            "netWeight": null,
+            "unitOfMeasurement": null,
+            "parcelID": null
+          }
+        ],
+        "PUDO": {
+          "id": "1234",
+          "courierID": 0,
+          "type": "LOCKER",
+          "name": "Bar Mario snc",
+          "address": "Via mario rossi",
+          "city": "Varese",
+          "state": "VA",
+          "country": "IT",
+          "postalCode": "21100",
+          "description": "Note",
+          "psfKey": null,
+          "keyword": null,
+          "postnumber": null,
+          "harmonisedId": null
+        }
+      }
+    ]
+  }
+}

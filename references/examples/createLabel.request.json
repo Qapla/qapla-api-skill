@@ -1,0 +1,140 @@
+{
+  "apiKey": "[API_KEY]",
+  "sandbox": true,
+  "includeExtShipmentID": false,
+  "createLabel": {
+    "costCenterCode": "ABC-1234",
+    "origin": "magento",
+    "reference": "BAT-234241299",
+    "orderID": 123213,
+    "courier": "CRONO-PTI",
+    "courierService": "P46",
+    "name": "Barbara Gordon",
+    "address": "Via manin, 8",
+    "city": "Vigonza",
+    "state": "PD",
+    "postCode": "35010",
+    "country": "IT",
+    "email": "batgirl@yahoo.it",
+    "telephone": "3473425220",
+    "isCOD": false,
+    "payment": "Foo",
+    "amount": 109.25,
+    "shippingCost": 9.35,
+    "currencyCode": "EUR",
+    "notes": "Consegnare solo se in costume nero",
+    "parcels": [{
+      "weight": 1.3,
+      "length": 10,
+      "width": 15,
+      "height": 5,
+      "boxCode": null,
+      "content": null,
+      "originCountry": null
+    }],
+    "shippingCODPaymentOption": "",
+    "shippingInsurance": 300.99,
+    "shippingDeliveryOptions": "A,P",
+    "shippingRequiredDeliveryDate": "YYYY-MM-DD",
+    "shippingRequiredDeliveryTimeSlot": "HS-HE",
+    "pickupDate": "YYYY-MM-DD",
+    "gSpedPrinterID": 22,
+    "content": "The goods",
+    "custom1": "Custom 1",
+    "custom2": "Custom 2",
+    "custom3": "Custom 3",
+    "sender": {
+      "code": "FEDO",
+      "businessName": "fedò snc",
+      "street": "Via I Maggio, 11",
+      "city": "Vedano Olona",
+      "state": "VA",
+      "postCode": "21040",
+      "country ": "IT",
+      "email": "evelina@fedo.it",
+      "telephone": "0332261261",
+      "referent": "Evelina",
+      "isDefault": false
+    },
+    "tradeDocuments": [
+      {
+        "type": "CERTIFICATE_OF_ORIGIN",
+        "name": "FILENAME.PDF",
+        "content": "BASE64PDF"
+      },
+      {
+        "type": "OTHER",
+        "name": "FILENAME2.PDF",
+        "content": "BASE64PDF"
+      },
+      {
+        "type": "CERTIFICATE_OF_ORIGIN",
+        "name": "FILENAME3.PDF",
+        "content": "BASE64PDF"
+      }
+    ],
+    "rows": [
+      {
+        "sku": "BAR-301",
+        "name": "Barrette di Crusca d'Avena con Cioccolato (4 pezzi) 120g",
+        "qty": 1,
+        "weight": 1.5,
+        "url": "https://www.iltuosito.it/alimenti/barretta-al-cocco",
+        "imageUrl": "https://www.iltuosito.it/img/alimenti/barretta-al-cocco.jpg",
+        "price": 6.35,
+        "total": 6.35,
+        "isReturnable": true,
+        "notes": "this is a product note",
+        "customsCode": "HSCode12345",
+        "netWeight": "1",
+        "originCountry": "IT",
+        "unitOfMeasurement": null,
+        "parcelID": 1,
+        "transparencyCodes": [
+          "ABC123",
+          "DEF456"
+        ]
+      },
+      {
+        "sku": "BEV-001",
+        "name": "Bevanda al mango in polvere 9g",
+        "qty": 5,
+        "weight": 1,
+        "url": "https://www.iltuosito.it/alimenti/barretta-al-cocco",
+        "imageUrl": "https://www.iltuosito.it/img/alimenti/barretta-al-cocco.jpg",
+        "price": 0.38,
+        "total": 1.9,
+        "isReturnable": true,
+        "customsCode": "HSCode12345",
+        "netWeight": "1",
+        "originCountry": "IT",
+        "unitOfMeasurement": null,
+        "parcelID": 1
+      }
+    ],
+    "PUDO": {
+      "id": "1234",
+      "type": "LOCKER",
+      "name": "Bar Mario snc",
+      "address": "Via mario rossi",
+      "city": "Varese",
+      "state": "VA",
+      "country": "IT",
+      "postalCode": "21100",
+      "description": "Note"
+    },
+    "invoice":{
+      "number": "A00012345/2022",
+      "date": "2022-11-01"
+    },
+    "dangerousGoods": [
+        {
+           "parcel":"1",
+           "type":"battery",
+           "batteryPackingType":"CONTAINED_IN_EQUIPMENT",
+           "batteryMaterialType":"LITHIUM_METAL"
+        }
+     ],
+    "goodsCode": "CODE123"
+  }
+}

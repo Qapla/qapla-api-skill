@@ -1,0 +1,99 @@
+{
+  "apiKey": "[API_KEY]",
+  "pushShipment": [
+    {
+      "trackingNumber": "123987299",
+      "courier": "DHL",
+      "shipDate": "2014-08-01"
+    },
+    {
+      "trackingNumber": "1Z0V5V416840696736",
+      "courier": "UPS",
+      "shipDate": "2014-08-02",
+      "reference": "ord. # 1674",
+      "orderDate": "2014-07-30",
+      "parcels": [{
+        "weight": 1.3,
+        "length": 10,
+        "width": 15,
+        "height": 5,
+        "boxCode": null,
+        "content": null,
+        "originCountry": null
+      }],
+      "name": "Pepito Sbazzeguti",
+      "street": "Via Aieie, 99",
+      "city": "Parnazza",
+      "ZIP": "12345",
+      "state": "MZ",
+      "country": "IT",
+      "email": "name@domain.ext",
+      "telephone": "02342522",
+      "agent": "agent@company.ext",
+      "amount": 150.00,
+      "pod": false,
+      "shipping": 8.00,
+      "custom1": "valore custom 1",
+      "custom2": "valore custom 2",
+      "custom3": "valore custom 3",
+      "note": "This is a note",
+      "language": "it",
+      "deliveryDate": "2014-07-31",
+      "latestShipDate": "2014-08-03",
+      "latestDeliveryDate": "2014-08-05",
+      "tag": "customer1",
+      "isTrackingNumber": false,
+      "origin": "magento",
+      "isReturnable": true,
+      "platformOrderID": "1234567890",
+      "rows": [
+        {
+          "sku": "BAR-301",
+          "name": "Barrette di Crusca d'Avena con Cioccolato (4 pezzi) 120g",
+          "qty": 1,
+          "weight": 1.5,
+          "url": "https://www.iltuosito.it/alimenti/barretta-al-cocco",
+          "imageUrl": "https://www.iltuosito.it/img/alimenti/barretta-al-cocco.jpg",
+          "price": 6.35,
+          "total": 6.35,
+          "isReturnable": true,
+          "customsCode": null,
+          "originCountry": null,
+          "netWeight": null,
+          "unitOfMeasurement": null,
+          "parcelID": null,
+          "transparencyCodes": [
+            "ABC123",
+            "DEF456"
+          ],
+          "custom1": "valore custom 1",
+          "custom2": "valore custom 2",
+          "custom3": "valore custom 3",
+          "custom4": "valore custom 4",
+          "custom5": "valore custom 5"
+        },
+        {
+          "sku": "BEV-001",
+          "name": "Bevanda al mango in polvere 9g",
+          "qty": 5,
+          "weight": 1,
+          "url": "https://www.iltuosito.it/alimenti/barretta-al-cocco",
+          "imageUrl": "https://www.iltuosito.it/img/alimenti/barretta-al-cocco.jpg",
+          "price": 0.38,
+          "total": 1.9,
+          "isReturnable": true,
+          "customsCode": null,
+          "originCountry": null,
+          "netWeight": null,
+          "unitOfMeasurement": null,
+          "parcelID": null,
+          "custom1": "valore custom 1",
+          "custom2": "valore custom 2",
+          "custom3": "valore custom 3",
+          "custom4": "valore custom 4",
+          "custom5": "valore custom 5"
+        }
+      ]
+    }
+  ]
+}

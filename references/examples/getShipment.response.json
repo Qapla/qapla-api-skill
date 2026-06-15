@@ -1,0 +1,177 @@
+{
+  "getShipment": {
+    "result": "OK",
+    "error": null,
+    "version": "1.3.0",
+    "lang": "it",
+    "count": 1,
+    "shipments": [
+      {
+        "id": 1690120025,
+        "hash": "347513728eab0009bfc60cc47acaffd0",
+        "url": "https://tracking.qapla.it/347513728eab0009bfc60cc47acaffd0",
+        "reference": "RAD000UFPL",
+        "trackingNumber": "080010017684806",
+        "isDeleted": false,
+        "isArchived": false,
+        "origin": {
+          "code": "magento",
+          "name": "Magento",
+          "icon": "https://cdn.qapla.it/origin/magento.svg"
+        },
+        "courier": {
+          "code": "BRT",
+          "name": "BRT",
+          "icon": "https://cdn.qapla.it/courier/BRT.svg",
+          "note": null,
+          "estimatedDeliveryDate": null,
+          "trackingURL": "https://brt.it/tracking/fooandnoes"
+        },
+        "status": {
+          "date": "2019-06-14 06:15",
+          "dateISO": "2019-06-14 06:15:00",
+          "status": "ON_THE_ROAD",
+          "place": "RIVALTA (TO) (IT)",
+          "qaplaStatus": {
+            "id": 3,
+            "status": "IN TRANSIT",
+            "detailID": 0,
+            "detail": null,
+            "color": "#1D76D8",
+            "icon": "https://cdn.qapla.it/status/3.svg"
+          },
+          "dateUpd": "2019-06-14 15:53:15",
+          "lastCheck": "2019-06-14 22:17:13"
+        },
+        "shipDate": "2019-06-13",
+        "orderDate": "2019-01-31",
+        "dateIns": "2019-06-14 15:49:18",
+        "consignee": {
+          "name": "Luca Cassia",
+          "address": "Via Campazzino, 12",
+          "city": "Milano",
+          "state": "MI",
+          "postCode": "20100",
+          "country": "IT",
+          "email": "adso@defanchisgiocattoli.it",
+          "isAmazon": false,
+          "phone": "02343522"
+        },
+        "language": "it",
+        "newTrackingNumber": null,
+        "oldTrackingNumber": null,
+        "hasNewTrackingNumber": false,
+        "isTrackingNumber": true,
+        "returnTrackingNumber": null,
+        "isReturnShipment": false,
+        "isCOD": false,
+        "amountText": null,
+        "amount": null,
+        "isDelivered": false,
+        "isChild": true,
+        "parent": {
+          "id": "2010200",
+          "reference": "AD000UFPL",
+          "rackingNumber": "090010015489",
+          "courier": "BRT",
+          "url": "https://api.qapla.it/1.3/getShipment/?apiKey=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&id=0000000"
+        },
+        "hasChildren": true,
+        "children": [
+          {
+            "id": "121029109",
+            "reference": "303-XX11XX-5621132",
+            "trackingNumber": "0844!!!!7689193",
+            "courier": "DPD",
+            "url": "https://api.qapla.it/1.3/getShipment/?apiKey=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&id=000001"
+          }
+        ],
+        "trueTrackingNumber": null,
+        "altTrackingNumber": null,
+        "custom1": null,
+        "custom2": null,
+        "custom3": null,
+        "deliveryMode": "pickup",
+        "hasFlag": true,
+        "latestShipDate": "2018-04-03",
+        "latestDeliveryDate": "2018-04-05",
+        "flag": {
+          "description": "Ritardo Courier",
+          "note": "telefonato a Pino"
+        },
+        "notifications": {
+          "email": [
+            {
+              "result": "OK",
+              "statusID": 3,
+              "status": "IN TRANSIT",
+              "date": "2019-06-14 16:00:08",
+              "error": false,
+              "isOpened": true
+            }
+          ],
+          "sms": [
+            {
+              "result": "OK",
+              "statusID": 20,
+              "status": "PARTITO",
+              "date": "2019-06-14 18:50:29"
+            }
+          ],
+          "webhook": [
+            {
+              "statusID": 3,
+              "date": "2019-06-14 23:51:06",
+              "result": "OK",
+              "status": "IN TRANSITO"
+            }
+          ],
+          "qaplAPP": [
+            {
+              "statusID": 4,
+              "result": "OK",
+              "date": "2019-06-15 08:00:00",
+              "status": "IN COSEGNA"
+            },
+            {
+              "statusID": 3,
+              "result": "OK",
+              "date": "2019-06-14 19:15:09",
+              "status": "IN TRANSITO"
+            }
+          ]
+        },
+        "trackingHistory": [
+          {
+            "date": "2019-06-14 06:15",
+            "dateISO": "2019-06-14 06:15:00",
+            "status": "IN TRANSIT",
+            "place": "RIVALTA (TO) (IT)",
+            "qaplaStatus": {
+              "id": 3,
+              "status": "IN TRANSIT",
+              "detailID": 0,
+              "detail": null,
+              "color": "#1D76D8",
+              "icon": "https://cdn.qapla.it/status/3.svg"
+            }
+          },
+          {
+            "date": null,
+            "dateISO": null,
+            "status": "PARCEL HANDED TO DPD",
+            "place": null,
+            "qaplaStatus": {
+              "id": 20,
+              "status": "DEPARTED",
+              "detailID": 0,
+              "detail": null,
+              "color": "#8A2BE2",
+              "icon": "https://cdn.qapla.it/status/20.svg"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

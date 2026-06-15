@@ -1,0 +1,129 @@
+{
+  "apiKey": "[API_KEY]",
+  "origin": "magento2",
+  "pushOrder": [
+    {
+      "costCenterCode": "ABC-1234",
+      "reference": "BAT-234241299",
+      "orderID": 234241222,
+      "courier": "GENERIC",
+      "courierService": "P46",
+      "status": "Processato",
+      "createdAt": "2018-04-01 22:38:18",
+      "updatedAt": "2018-04-01 22:40:41",
+      "name": "Barbara Gordon",
+      "street": "Via manin, 8",
+      "city": "Vigonza",
+      "state": "Padova",
+      "postCode": "35010",
+      "country": "IT",
+      "email": "batgirl@qapla.it",
+      "telephone": "3473425220",
+      "amount": 109.25,
+      "shippingCost": 9.35,
+      "currencyCode": "EUR",
+      "payment": "pp_hosted",
+      "isCOD": false,
+      "notes": "Consegnare solo se in costume",
+      "parcels": [{
+        "width": 20,
+        "height": 7,
+        "weight": 1.5,
+        "length": 12,
+        "boxCode": null,
+        "content": null,
+        "originCountry": null
+      }, {
+        "width": 22,
+        "height": 10,
+        "weight": 1.1,
+        "length": 35,
+        "boxCode": null,
+        "content": null,
+        "originCountry": null
+      }],
+      "isReturnable": true,
+      "shippingCODPaymentOption": "",
+      "shippingInsurance": "300.99",
+      "shippingDeliveryOptions": "A,P",
+      "shippingRequiredDeliveryDate": "2020-09-01",
+      "latestShipDate": "2018-04-03",
+      "latestDeliveryDate": "2018-04-05",
+      "tag": "blue",
+      "pickUpDate": "2020-08-30",
+      "custom1": "custom value 1",
+      "custom2": "custom value 2",
+      "custom3": "custom value 3",
+      "pickupPoint": "0201",
+      "content": "The goods",
+      "rows": [
+        {
+          "sku": "BAR-301",
+          "name": "Barrette di Crusca d'Avena con Cioccolato (4 pezzi) 120g",
+          "qty": 1,
+          "weight": 1.5,
+          "url": "https://www.iltuosito.it/alimenti/barretta-al-cocco",
+          "imageUrl": "https://www.iltuosito.it/img/alimenti/barretta-al-cocco.jpg",
+          "price": 6.35,
+          "total": 6.35,
+          "isReturnable": true,
+          "notes": "this is a product note",
+          "customsCode": null,
+          "originCountry": null,
+          "netWeight": null,
+          "unitOfMeasurement": null,
+          "parcelID": null,
+          "transparencyCodes": [
+            "ABC123",
+            "DEF456"
+          ]
+        },
+        {
+          "sku": "BEV-001",
+          "name": "Bevanda al mango in polvere 9g",
+          "qty": 5,
+          "weight": 1,
+          "url": "https://www.iltuosito.it/alimenti/barretta-al-cocco",
+          "imageUrl": "https://www.iltuosito.it/img/alimenti/barretta-al-cocco.jpg",
+          "price": 0.38,
+          "total": 1.9,
+          "isReturnable": true,
+          "customsCode": null,
+          "originCountry": null,
+          "netWeight": null,
+          "unitOfMeasurement": null,
+          "parcelID": null
+        }
+      ],
+      "sender": {
+        "code": "FEDO",
+        "businessName": "fedò snc",
+        "street": "Via I Maggio, 11",
+        "city": "Vedano Olona",
+        "state": "VA",
+        "postCode": "21040",
+        "country ": "IT",
+        "email": "evelina@fedo.it",
+        "telephone": "0332261261",
+        "referent": "Evelina",
+        "isDefault": false
+      },
+      "PUDO": {
+        "id": "1234",
+        "type": "LOCKER",
+        "name": "Bar Mario snc",
+        "address": "Via mario rossi",
+        "city": "Varese",
+        "state": "VA",
+        "country": "IT",
+        "postalCode": "21100",
+        "description": "Note"
+      },
+      "invoice": {
+        "number": "A00012345/2022",
+        "date": "2022-11-01"
+      },
+      "goodsCode": "CODE123"
+    }
+  ]
+}

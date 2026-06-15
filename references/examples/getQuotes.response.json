@@ -1,0 +1,96 @@
+{
+    "getQuotes": {
+      "result": "OK",
+      "version": "1.3.0",
+      "reference": "abc123",
+      "quotationId": "566ef67f-ec5f-4517-ac32-543c69032f5d",
+      "startTimestamp": "2024-06-20T13:15:02.408+00:00",
+      "endTimestamp": "2024-06-20T13:15:06.208+00:00",
+      "couriers": [
+        {
+          "code": "UPS",
+          "quotes": [
+            {
+              "service": {
+                "courierCode": "07",
+                "qaplaCode": 1,
+                "description": "Express"
+              },
+              "messages": [
+                {
+                  "type": "message",
+                  "code": 110971,
+                  "content": "Your invoice may vary from the displayed reference rates"
+                },
+                {
+                  "type": "message",
+                  "code": 110920,
+                  "content": "Ship To Address Classification is changed from Commercial to Residential"
+                }
+              ],
+              "deliveryOptions": null,
+              "currency": "EUR",
+              "amount": 79.55,
+              "expectedPickupDate": null,
+              "expectedDeliveryDate": null
+            },
+            {
+              "service": {
+                "courierCode": "11",
+                "qaplaCode": 3,
+                "description": "Standard"
+              },
+              "messages": [
+                {
+                  "type": "message",
+                  "code": 110971,
+                  "content": "Your invoice may vary from the displayed reference rates"
+                },
+                {
+                  "type": "message",
+                  "code": 110920,
+                  "content": "Ship To Address Classification is changed from Commercial to Residential"
+                }
+              ],
+              "deliveryOptions": null,
+              "currency": "EUR",
+              "amount": 55.25,
+              "expectedPickupDate": null,
+              "expectedDeliveryDate": null
+            }
+          ],
+          "messages": [
+            {
+              "type": "message",
+              "code": 110971,
+              "content": "Your invoice may vary from the displayed reference rates"
+            },
+            {
+              "type": "message",
+              "code": 110920,
+              "content": "Ship To Address Classification is changed from Commercial to Residential"
+            }
+          ]
+        },
+        {
+          "code": "DHL",
+          "quotes": [
+            {
+              "service": {
+                "courierCode": "I",
+                "qaplaCode": 4,
+                "description": "Domestic Express H 9"
+              },
+              "messages": [],
+              "deliveryOptions": null,
+              "currency": "EUR",
+              "amount": 57.68,
+              "expectedPickupDate": null,
+              "expectedDeliveryDate": "2024-06-24T09:00:00"
+            }
+          ],
+          "messages": []
+        }
+      ]
+    }
+  }

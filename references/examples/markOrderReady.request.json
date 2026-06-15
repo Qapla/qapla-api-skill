@@ -1,0 +1,9 @@
+{
+  "apiKey": "[API_KEY]",
+  "origin": "magento2",
+  "reference": "TEST-ORDER-0001",
+  "selected": true,
+  "selectingUser": "user@example.org",
+  "tag": "cyan",
+  "courier": "GENERIC"
+}

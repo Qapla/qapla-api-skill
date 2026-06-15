@@ -1,0 +1,30 @@
+{
+  "pushShipment": {
+    "result": "OK",
+    "error": null,
+    "count": 2,
+    "shipments": [{
+      "result": "OK",
+      "error": null,
+      "id": 9999999,
+      "url": "https://tracking.qapla.it/27e7cefc788a11e9bfc60cc47acaffd0Q!",
+      "hash": "27e7cefc788a11e9bfc60cc47acaffd0Q!",
+      "courier": "DHL",
+      "trackingNumber": "123987299"
+    },
+      {
+        "result": "OK",
+        "error": null,
+        "url": "https://tracking.qapla.it/27e7cefc788a11e9bfc60cc47acaffd0!",
+        "hash": "27e7cefc788a11e9bfc60cc47acaffd0!",
+        "courier": "UPS",
+        "trackingNumber": "1Z0V5V416840696736",
+        "reference": "ord. # 1674",
+        "custom1": "valore custom 1",
+        "custom2": "valore custom 2",
+        "custom3": "valore custom 3"
+      }
+    ],
+    "imported": 2
+  }
+}
