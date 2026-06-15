@@ -124,6 +124,8 @@ See `SKILL.md` and `references/` for everything else.
 
 ## Links
 
+- Latest release: <https://github.com/Qapla/qapla-api-skill/releases/latest>
+- Changelog: [CHANGELOG.md](CHANGELOG.md)
 - API docs: <https://api.qapla.dev/1.3/>
 - Control Panel: <https://cp.qapla.it>
 - Qapla': <https://www.qapla.it>
