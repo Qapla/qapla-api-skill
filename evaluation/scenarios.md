@@ -34,3 +34,31 @@ With a real channel key:
 ```bash
 QAPLA_API_KEY=xxxxx python3 scripts/qapla_client.py   # calls getChannel
 ```
+
+## Run log
+
+### 2026-06-15 — 7/7 passed (fresh-context agents)
+
+Method: each of the 7 prompts was run in a separate fresh `general-purpose`
+agent given only the verbatim prompt (no priming, no mention of Qapla' or that
+it was a test). This is the honest measure of auto-trigger — an already-primed
+session would trigger regardless. Each agent self-reported which skill/references
+it used; answers were checked against the bundled references.
+
+| # | Scenario | Triggered | Correctness check | Result |
+|---|---|---|---|---|
+| 1 | pushShipment | ✅ qapla-api | `apiKey` + array; `trackingNumber`/`courier:"UPS"`/**`shipDate`**; per-item result check explained | ✅ PASS |
+| 2 | label + PUDO | ✅ qapla-api | `getPudos → pushOrder → createLabel → confirmLabel`; `"sandbox": true`; flagged PUDO fields vary per courier | ✅ PASS |
+| 3 | getQuotes (critical) | ✅ qapla-api | **`x-api-key` header, NOT `apiKey` in body**; nested `recipient{}`; `amountShipment`; `parcels[]`; `x-sandbox` header | ✅ PASS |
+| 4 | authentication | ✅ qapla-api | `apiKey` in body; Control Panel path; getQuotes header exception | ✅ PASS |
+| 5 | anti-hallucination | ✅ qapla-api | refused to invent `/v3/bulkRefund`; noted no v3 / no refund endpoints; deferred to api.qapla.dev | ✅ PASS |
+| 6 | rate limit 429 | ✅ qapla-api | token bucket (120 cap, 2/sec); batch cost = N tokens; exponential backoff; ban warning | ✅ PASS |
+| 7 | PEP 8 (negative) | ✅ did NOT trigger | treated as pure Python style; no qapla-api / claude-api activation | ✅ PASS |
+
+Notes:
+- The critical `getQuotes` case (auth via `x-api-key` header) holds in a fresh
+  context — the previously-failing behavior is fixed.
+- No over-triggering: #7 stayed silent even though the target file was the Qapla'
+  API client (correct discrimination: API contract vs. Python style).
+- Side-effect of #7: the agent edited `scripts/qapla_client.py` (PEP 8 reformat);
+  reverted afterward — a test artifact, not a real change.
