@@ -89,10 +89,19 @@ not structure — everything new must still point back to `references/overview.m
 - [x] Refined `overview.md` + `AGENTS.md` version rows to capture the
       deprecated-but-required 1.2 nuance and point to `versioning.md`.
 
-### Phase 4 — Migration
-- [ ] Create `references/migration.md`: v1.0/v1.1 → v1.2/v1.3 checklist (URL,
-      auth, payload changes) + v1.x → v2 notes. Verify against `migration` live
-      docs.
+### Phase 4 — Migration [DONE]
+> **Corrections after verifying sources:** the partner's `migration.md` repeated
+> the "v1.2 not deprecated" error (fixed → deprecated-but-active), falsely claimed
+> `updateOrder` was *removed* (it's simply 1.2-only — `1.2/updateOrder.php`
+> exists), and invented `updated`/`skipped` response counters (real envelope has
+> `count`/`imported`). Its v2 async claim, however, **checked out** — `POST
+> /v2/parcels` really returns `202` + `AsyncJobResponse`.
+- [x] Created `references/migration.md`: v1.0/1.1 → v1.2/1.3 checklist (URL
+      segment, auth placement, payload diffing, real `pushShipment` envelope,
+      rate limiting, sandbox) + verified v1.x → v2 differences (Bearer/JWT +
+      scopes, HTTP-status errors, UTC/ISO-8601, parcels-as-CRUD, async bulk via
+      `AsyncJobResponse`, sandbox-as-resource).
+- [x] Wired into SKILL/AGENTS/Cursor/overview + cross-linked from `versioning.md`.
 
 ### Phase 5 — Cherry-picked endpoint gaps
 - [ ] `trackingByTimeFrame` (pull alternative to webhooks) — add to

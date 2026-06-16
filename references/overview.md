@@ -70,6 +70,7 @@ Key vocabulary:
    - `webhooks.md` (Pillar 2 — receive outbound event callbacks)
    - `statuses.md` (how to read tracking statuses — branch on the canonical id)
    - `versioning.md` (which version to call; v1.2-only endpoints; v2 overview)
+   - `migration.md` (upgrading a legacy integration; v1.x → v2)
 3. Use the runnable example payloads in `examples/` as a starting point — they
    are the real request/response samples from the official docs.
 

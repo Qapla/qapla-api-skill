@@ -94,3 +94,6 @@ For new integrations today, stick with **v1.3** (this skill's focus). Reach for 
 only when you specifically need its model, and read the live v2 docs +
 `/v2/swagger/openapi.json` first — its endpoints and payloads are out of scope
 here.
+
+> Upgrading an existing integration off an older version? See
+> [`migration.md`](migration.md).

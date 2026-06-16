@@ -32,7 +32,8 @@ tracking, label printing, transactional notifications).
    instead of calling an endpoint, see `references/webhooks.md` (Pillar 2). To
    interpret tracking statuses, see `references/statuses.md` (branch on the
    canonical id, never the label). For the version policy (which version to call,
-   v1.2-only endpoints, the v2 preview), see `references/versioning.md`.
+   v1.2-only endpoints, the v2 preview), see `references/versioning.md`; to
+   upgrade a legacy integration, see `references/migration.md`.
 4. Use the runnable example payloads in `references/examples/` as a starting
    point, and the dependency-free reference client in `scripts/qapla_client.py`
    when writing code.

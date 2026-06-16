@@ -38,6 +38,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   HTTP-status errors, scopes; current surface `auth`/`parcels`/`sandbox`). Lists
   which endpoints are 1.3 vs 1.2-only. Wired into all entrypoints.
 
+- **Migration guide** — `references/migration.md` covers upgrading a legacy
+  integration: v1.0/1.1 → v1.2/1.3 checklist (URL segment, auth placement,
+  payload diffing, the real `pushShipment` envelope, rate limiting, sandbox) and
+  the v1.x → v2 differences (Bearer/JWT + scopes, HTTP-status errors, UTC/ISO-8601,
+  parcels as a first-class CRUD resource, async bulk create via
+  `AsyncJobResponse`, sandbox-as-resource), all verified against the per-version
+  sources. Wired into all entrypoints.
+
 ### Fixed
 - `endpoints.md`: corrected the `getQaplaStatus` description — it returns the
   canonical status list (id/label/color/sub-states), not generic "service info".

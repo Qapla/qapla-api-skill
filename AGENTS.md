@@ -14,7 +14,8 @@ to every call, and the per-endpoint deep-dives live in
 `references/{pushshipment,pushorder,createlabel,getquotes,getpudos}.md` with the
 full catalog in `references/endpoints.md`. To receive outbound event callbacks
 (Pillar 2) see `references/webhooks.md`; to interpret tracking statuses see
-`references/statuses.md` (branch on the canonical id). Runnable sample payloads are in
+`references/statuses.md` (branch on the canonical id); to upgrade a legacy
+integration see `references/migration.md`. Runnable sample payloads are in
 `references/examples/`; a dependency-free reference client is
 `scripts/qapla_client.py`.
 
