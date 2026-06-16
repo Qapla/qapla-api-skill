@@ -25,7 +25,7 @@ analytics. This document orients you to its **public REST API**.
 | **Rate limit** | Token bucket: 120 capacity, refill 2 tokens/sec. A batch of N items costs N tokens. Over limit → HTTP `429 Too Many Requests` |
 | **Time zone** | CEST (UTC+2 DST / UTC+1 winter). Dates are `YYYY-MM-DD`, datetimes `YYYY-MM-DD HH:MM:SS` |
 | **Sandbox** | No separate environment. Pass `"sandbox": true` in the body on endpoints that support it (e.g. `createLabel`) to test without real effects (no carrier pickup, no billing). **`getQuotes` is the exception**: it uses an `x-sandbox` header (see its reference) |
-| **Versions** | `1.3` is the production version. `1.1`/`1.2` are deprecated but still served. `getPudos` lives under `/1.2/`. A newer **v2** (different auth) exists at `/v2/` — out of scope here |
+| **Versions** | `1.3` is the current version; use it where the endpoint exists. `1.1`/`1.2` are deprecated but still active — and **many endpoints are still 1.2-only** (not yet migrated), so calling them under `/1.2/` is expected. `1.4` exists for `createLabel` only (`parcelsTracking`). A separate **v2** (Bearer/JWT, UTC, HTTP-status errors) is preview/opt-in. See `versioning.md` |
 
 ## Domain model in one minute
 
@@ -34,7 +34,8 @@ Qapla' has three orthogonal "pillars"; a merchant may use only some:
 1. **Tracking** — shipments that already have a tracking number live in `ordini`
    (the central shipments table). Push them with **`pushShipment`**.
 2. **Transactional events** — on each tracking status change, Qapla' fires
-   notifications (email/SMS/webhook) to merchant and recipient.
+   notifications (email/SMS/webhook) to merchant and recipient. To react in your
+   own code, register an outbound **webhook** (see `webhooks.md`).
 3. **Labels** — import raw orders (**`pushOrder`**), generate a carrier label
    (**`createLabel`**), then confirm/transmit it (**`confirmLabel`**). On
    transmission the shipment automatically enters pillars 1 & 2.
@@ -66,6 +67,9 @@ Key vocabulary:
    - `createlabel.md`
    - `getquotes.md`
    - `getpudos.md`
+   - `webhooks.md` (Pillar 2 — receive outbound event callbacks)
+   - `statuses.md` (how to read tracking statuses — branch on the canonical id)
+   - `versioning.md` (which version to call; v1.2-only endpoints; v2 overview)
 3. Use the runnable example payloads in `examples/` as a starting point — they
    are the real request/response samples from the official docs.
 

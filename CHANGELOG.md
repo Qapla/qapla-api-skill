@@ -11,6 +11,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Webhooks reference (Pillar 2)** — `references/webhooks.md` documents the
+  outbound event callbacks (Shipments / Shipments Return / Orders), the verified
+  payload fields (v1.2 core + v1.3 enhanced `rows`/`parcels`/`consignee`), the
+  `{"result":"OK"}`/`{"result":"KO"}` response contract, retry/auto-disable
+  behavior, and security guidance. Verified against the live docs at
+  <https://webhook.qapla.dev>.
+- `references/examples/webhookReceiver.md` — minimal Node (Express) and PHP
+  receivers that verify `apiKey`, return the contract body, and branch on the
+  canonical `qaplaStatusID`.
+- Wired `webhooks.md` into `overview.md`, `endpoints.md`, `SKILL.md`,
+  `AGENTS.md`, and the Cursor rule; added webhooks to the skill trigger
+  descriptions.
+- **Status model reference** — `references/statuses.md` documents the canonical
+  Qapla' status table (ids, IT labels, colors, and the ECCEZIONE sub-states),
+  verified against the live `getQaplaStatus` endpoint, plus the three
+  context-dependent field namings (`statusID` in the list vs `id` in embedded
+  `qaplaStatus` objects vs `qaplaStatusID` in webhooks) and the "branch on the
+  canonical integer id, never the label" rule. Wired into all entrypoints.
+- **Versioning reference** — `references/versioning.md` documents the API version
+  policy verified against the live docs and per-version sources: `1.3` current,
+  `1.1`/`1.2` deprecated-but-active (with `1.2` still hosting many not-yet-migrated
+  endpoints), `1.4` as a `createLabel`-only extension (`parcelsTracking`), and the
+  separate **v2** generation (Bearer/JWT auth via `/v2/auth/token`, UTC + ISO-8601,
+  HTTP-status errors, scopes; current surface `auth`/`parcels`/`sandbox`). Lists
+  which endpoints are 1.3 vs 1.2-only. Wired into all entrypoints.
+
+### Fixed
+- `endpoints.md`: corrected the `getQaplaStatus` description — it returns the
+  canonical status list (id/label/color/sub-states), not generic "service info".
+- `overview.md` / `AGENTS.md`: clarified the version row — `1.2` is deprecated but
+  still required for un-migrated endpoints (previously implied `1.3`-only).
+
 ## [1.0.0] - 2026-06-15
 
 First stable release. A portable, multi-agent knowledge pack for the Qapla'

@@ -3,7 +3,8 @@
 Full list of public endpoints, grouped by area. Call as
 `https://api.qapla.it/<version>/<endpoint>` with `apiKey` in the body.
 "Ver." is the version under which the endpoint is documented/served (some
-modern endpoints are 1.3/1.4; a few are only served under 1.2).
+modern endpoints are 1.3/1.4; many are still only served under 1.2 — see
+[`versioning.md`](versioning.md) for the version policy and which to call).
 
 Endpoints with a dedicated deep-dive in this skill are linked. Some rows also
 link a real request/response payload under `examples/`. For all others, the
@@ -62,7 +63,7 @@ source of truth is <https://api.qapla.dev/1.3/>.
 |---|---|---|
 | `checkAddress` | 1.3 | Verify / geocode a recipient address (billable) — [request](examples/checkAddress.request.json) / [response](examples/checkAddress.response.json) |
 | `getCredits` | 1.2 | Read remaining credits/balance |
-| `getQaplaStatus` | 1.2 | Service/status info |
+| [`getQaplaStatus`](statuses.md) | 1.2 | List the canonical Qapla' status definitions (id, label, color, sub-states) |
 
 ## Channels (channel management)
 
@@ -85,6 +86,19 @@ source of truth is <https://api.qapla.dev/1.3/>.
 | Endpoint | Ver. | Purpose |
 |---|---|---|
 | `apiVirtual` / virtual-courier endpoints | 1.2 | Merchant prints its own labels and pushes statuses to Qapla' via API (no Qapla' tracking/label generation) |
+
+## Webhooks (pillar 2 — outbound events)
+
+Not REST endpoints you call, but outbound callbacks Qapla' sends **to you**. See
+[`webhooks.md`](webhooks.md) for the full reference.
+
+| Event | Trigger |
+|---|---|
+| Shipments | Carrier status change on a tracked shipment |
+| Shipments Return | A customer return is registered (*Resi automatici* add-on) |
+| Orders | Shipment creation or first carrier transmission |
+
+> Documented at <https://webhook.qapla.dev> (separate from the REST docs).
 
 ---
 

@@ -4,8 +4,9 @@ description: >-
   Integrate with or answer questions about the Qapla' shipping & tracking REST
   API (public v1.3). Use this when working with Qapla' to push shipments or raw
   orders, generate and confirm carrier labels, track parcels, get real-time
-  multi-carrier quotes, look up pickup points (PUDO), verify addresses, or list
-  couriers and channels. Covers authentication (per-channel API Key), the
+  multi-carrier quotes, look up pickup points (PUDO), verify addresses, list
+  couriers and channels, or receive outbound tracking-event webhooks. Covers
+  authentication (per-channel API Key), the
   response envelope, rate limiting, the sandbox flag, and the full endpoint
   catalog with request/response examples.
 license: MIT
@@ -27,7 +28,11 @@ tracking, label printing, transactional notifications).
    they apply to **every** call.
 3. Pick the endpoint from `references/endpoints.md` (full catalog) or the
    per-endpoint deep-dives (`references/pushshipment.md`, `pushorder.md`,
-   `createlabel.md`, `getquotes.md`, `getpudos.md`).
+   `createlabel.md`, `getquotes.md`, `getpudos.md`). To receive event callbacks
+   instead of calling an endpoint, see `references/webhooks.md` (Pillar 2). To
+   interpret tracking statuses, see `references/statuses.md` (branch on the
+   canonical id, never the label). For the version policy (which version to call,
+   v1.2-only endpoints, the v2 preview), see `references/versioning.md`.
 4. Use the runnable example payloads in `references/examples/` as a starting
    point, and the dependency-free reference client in `scripts/qapla_client.py`
    when writing code.
