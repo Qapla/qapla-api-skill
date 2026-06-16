@@ -6,7 +6,8 @@
 Insert shipments that **already have a tracking number** into Qapla' so they
 enter active tracking and trigger transactional events. Use this when the label
 was produced outside Qapla' (your own system, the carrier portal, a virtual
-courier) and you only need tracking + notifications.
+courier) and you only need tracking + notifications. For self-managed/offline
+logistics where you push status updates yourself, see `apivirtual.md`.
 
 > If instead you want Qapla' to generate the label, use `pushOrder` →
 > `createLabel` → `confirmLabel`.

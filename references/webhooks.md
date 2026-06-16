@@ -220,5 +220,5 @@ envelope, where `result` is `OK`/`KO`.)
 Webhooks are push (Qapla' calls you on change, no polling). If you instead need
 to poll status on your own schedule, use the `trackingByTimeFrame` pull endpoint
 (returns shipments whose status changed within a time window) — see
-`endpoints.md`. A minimal receiver lives in
+[`trackingbytimeframe.md`](./trackingbytimeframe.md). A minimal receiver lives in
 [`examples/webhookReceiver.md`](./examples/webhookReceiver.md).

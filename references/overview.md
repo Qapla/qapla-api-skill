@@ -67,6 +67,8 @@ Key vocabulary:
    - `createlabel.md`
    - `getquotes.md`
    - `getpudos.md`
+   - `trackingbytimeframe.md` (poll status changes — pull alternative to webhooks)
+   - `apivirtual.md` (virtual courier — push your own status updates)
    - `webhooks.md` (Pillar 2 — receive outbound event callbacks)
    - `statuses.md` (how to read tracking statuses — branch on the canonical id)
    - `versioning.md` (which version to call; v1.2-only endpoints; v2 overview)

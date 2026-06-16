@@ -19,7 +19,7 @@ source of truth is <https://api.qapla.dev/1.3/>.
 | `getCompanyShipment` / `getCompanyShipments` | 1.3 | Read shipments across **all** channels of the company for a day |
 | `updateShipment` | 1.2 | Update a shipment |
 | `deleteShipment` / `undeleteShipment` | 1.2 | Soft-delete / restore a shipment |
-| `trackingByTimeFrame` | 1.2 | Poll shipments whose status changed within a time window |
+| [`trackingByTimeFrame`](trackingbytimeframe.md) | 1.2 | Poll shipments whose status changed within a time window (pull alternative to webhooks) |
 
 ## Orders (pillar 3 — raw orders → labels)
 
@@ -85,7 +85,7 @@ source of truth is <https://api.qapla.dev/1.3/>.
 
 | Endpoint | Ver. | Purpose |
 |---|---|---|
-| `apiVirtual` / virtual-courier endpoints | 1.2 | Merchant prints its own labels and pushes statuses to Qapla' via API (no Qapla' tracking/label generation) |
+| [`apiVirtual`](apivirtual.md) / virtual-courier | `/virtual/` | Merchant prints its own labels and pushes statuses to Qapla' via API (no Qapla' tracking/label generation) |
 
 ## Webhooks (pillar 2 — outbound events)
 

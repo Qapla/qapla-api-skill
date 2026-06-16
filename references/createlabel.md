@@ -71,6 +71,41 @@ Full runnable sample: `examples/createLabel.request.json`. **Always develop with
 Returns the generated label reference and the label content/URL (PDF/ZPL,
 depending on the courier and channel config), plus the usual `result`/`error`.
 
+## Confirming & transmitting — `confirmLabel`
+
+`createLabel` only **generates** the label. To actually hand the shipment(s) to
+the carrier (and trigger entry into tracking + transactional events), confirm
+them with `confirmLabel`:
+
+**Endpoint:** `POST https://api.qapla.it/1.3/confirmLabel/` (also `1.2`).
+**Note:** must be enabled by Customer Care before use.
+
+```json
+{
+  "apiKey": "YOUR_KEY",
+  "confirmLabel": {
+    "courier": "DHL",
+    "labelCreationDate": "2026-06-16",
+    "pickupDate": "2026-06-18",
+    "labelID": [100, 101, 102, 103]
+  }
+}
+```
+
+| Field | Meaning |
+|---|---|
+| `courier`* | Qapla' courier code |
+| `labelCreationDate`* / `labelID`* | Use **one or the other**: confirm all labels created on a date, **or** an explicit array of label IDs from `createLabel`. (Some couriers, e.g. GLS-AT, support only `labelCreationDate`.) |
+| `pickupDate` | Chosen pickup date (`YYYY-MM-DD`) — only for certain couriers (CRONO-PTI, DHLPARCEL-ES, FEDEX, GLS-SPAIN, PTI, SDA, SEUR, TNT-ITA, TWS) |
+| `pickupTime` | `HH:MM`; requires `pickupDate`; only SDA, CRONO-PTI, FEDEX |
+
+The response returns the **manifest (borderò / distinta di carico)** as a
+base64-encoded PDF, plus the confirmation `number`, `date`, and `shipments` count.
+A per-label `error` array reports any labels that failed to confirm.
+
+> Full flow: `pushOrder` → `createLabel` → **`confirmLabel`** → shipment enters
+> pillars 1 & 2.
+
 ## Common errors & gotchas
 
 - Invalid/disabled `courier` or wrong `courierService` for that courier.
