@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-06-16
+
+Content expansion merged from a comparison with a sibling integration skill, with
+every imported fact verified against the authoritative sources (the live
+`webhook.qapla.dev` and the `api.qapla.dev` per-version sources) and validated by
+a fresh-context eval (12/12). Highlights: Pillar 2 (webhooks) is now covered, the
+canonical status model is documented from the real `getQaplaStatus` output, and
+the version policy (incl. v2) and a legacy-migration guide are added.
+
 ### Added
 - **Webhooks reference (Pillar 2)** — `references/webhooks.md` documents the
   outbound event callbacks (Shipments / Shipments Return / Orders), the verified
@@ -45,6 +54,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   parcels as a first-class CRUD resource, async bulk create via
   `AsyncJobResponse`, sandbox-as-resource), all verified against the per-version
   sources. Wired into all entrypoints.
+
+- **`trackingByTimeFrame` deep-dive** — `references/trackingbytimeframe.md`: the
+  pull/polling alternative to webhooks (GET window query, `qaplaStatus`-object
+  response, polling-cadence and dedup guidance).
+- **Virtual courier deep-dive** — `references/apivirtual.md`: `POST /virtual/`
+  (note: non-versioned path), the `virtual[]` update array (≤100, `statusID`
+  driven), and how it pairs with `pushShipment`.
+- `createlabel.md`: added a **`confirmLabel`** section documenting the two-step
+  generate→transmit flow (`labelCreationDate` vs `labelID`, per-courier
+  `pickupDate`/`pickupTime`, the base64 manifest/borderò response, Customer Care
+  activation). Verified against the per-version sources.
 
 ### Fixed
 - `endpoints.md`: corrected the `getQaplaStatus` description — it returns the

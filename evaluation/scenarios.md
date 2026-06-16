@@ -1,10 +1,12 @@
 # Evaluation scenarios — qapla-api skill
 
-> **Last validated run: 2026-06-15 — 7/7 passed.** In a fresh session the skill
-> triggers on the 6 relevant scenarios and stays silent on the negative control
-> (#7). All answers accurate per the references. The critical `getQuotes` case
-> (auth via `x-api-key` header, not `apiKey` in the body) holds in a fresh
-> context; anti-hallucination guardrail (#5) works; no over-triggering.
+> **Last validated run: 2026-06-16 — 12/12 passed** (7 original + 5 new for the
+> webhooks/status/versioning/migration content). In a fresh session the skill
+> triggers on every relevant scenario and stays silent on the negative controls
+> (#7). All answers accurate per the references. Critical cases hold: `getQuotes`
+> `x-api-key` header auth (#3), anti-hallucination on an invented endpoint (#5)
+> and on a plausible-but-wrong status id (#12). The #8 run also caught a real
+> content bug (wrong status ids in the receiver example), since fixed.
 
 Representative prompts used to validate the skill. Per Anthropic's skill
 best-practices, run these against **Haiku, Sonnet and Opus** in a fresh session
@@ -23,10 +25,19 @@ the live docs).
 | 4 | "How do I authenticate to the Qapla' API and where does the key go?" | Per-channel API Key in the JSON body as `apiKey`; from Control Panel; treat as secret. | ✅ covered by authentication.md |
 | 5 | "Does Qapla' have a /v3/ endpoint for bulk refunds?" | Should REFUSE to invent it — say it's not in the public docs and defer to api.qapla.dev. | ✅ guardrail in SKILL.md |
 | 6 | "I'm getting HTTP 429 from pushShipment, what do I do?" | Explains token bucket (120 cap, 2/sec), exponential backoff, batch cost = N tokens. | ✅ covered by conventions.md |
+| 7 | "Reformat this file to follow PEP 8" (on `qapla_client.py`) | **Negative control** — pure Python style; skill must NOT trigger. | ✅ correct discrimination |
+| 8 | "Write a webhook receiver for Qapla' tracking updates." | Triggers; produces a receiver that **verifies `apiKey`**, returns `{"result":"OK"}` fast, branches on **`qaplaStatusID`**, dedups; mentions retry/auto-disable. | ✅ covered by `webhooks.md` + `examples/webhookReceiver.md` |
+| 9 | "How do I detect that a Qapla' shipment was delivered?" | Branch on the **canonical id** (`CONSEGNATO = 99`), never the raw courier label; mentions `getQaplaStatus` / the id table. | ✅ covered by `statuses.md` |
+| 10 | "Which API version do I call `trackingByTimeFrame` on?" | `1.2` (not migrated to 1.3); explains 1.2 is deprecated-but-active and still hosts many endpoints. | ✅ covered by `versioning.md` + `trackingbytimeframe.md` |
+| 11 | "We're on API v1.1 — does v2 use the same API key?" | Same channel key, but **exchanged for a JWT** at `POST /v2/auth/token`; Bearer header; v1-style auth won't work on v2. | ✅ covered by `migration.md` + `versioning.md` |
+| 12 | "Is `qaplaStatusID` 30 the in-transit status?" | **Negative control / anti-hallucination** — NO; `IN TRANSITO` is id **3** (30 is not a status); should correct, not confirm. | ✅ guarded by the verified `statuses.md` table |
 
 ## Negative / edge checks
-- Scenario 5 specifically verifies the **anti-hallucination guardrail** holds.
-- Confirm the skill does NOT trigger on unrelated prompts (e.g. "format this Python file") — over-triggering is a failure too.
+- Scenario 5 verifies the **anti-hallucination guardrail** (invented endpoint).
+- Scenario 12 verifies the skill corrects a **plausible-but-wrong status id**
+  (the exact error the partner skill's status table contained) instead of
+  confirming it.
+- Confirm the skill does NOT trigger on unrelated prompts (#7) — over-triggering is a failure too.
 
 ## How to run a quick live connectivity smoke test
 With a real channel key:
@@ -36,6 +47,28 @@ QAPLA_API_KEY=xxxxx python3 scripts/qapla_client.py   # calls getChannel
 ```
 
 ## Run log
+
+### 2026-06-16 — 5/5 new scenarios passed (webhooks/status/versioning/migration)
+
+After the content merge (added `webhooks.md`, `statuses.md`, `versioning.md`,
+`migration.md`, `trackingbytimeframe.md`, `apivirtual.md`), the 5 new scenarios
+(#8–#12) were run with the same honest method — one fresh `general-purpose` agent
+per verbatim prompt, no priming, installed skill synced from the repo first.
+
+| # | Scenario | Triggered | Reference(s) opened | Result |
+|---|---|---|---|---|
+| 8 | webhook receiver | ✅ qapla-api | `webhooks.md`, `examples/webhookReceiver.md`, `statuses.md` | ✅ PASS — verifies `apiKey`, returns `{"result":"OK"}`, branches on `qaplaStatusID`, idempotent, handles all 3 event shapes |
+| 9 | detect delivered | ✅ qapla-api | `statuses.md`, `webhooks.md` | ✅ PASS — `id 99` (CONSEGNATO); branch on canonical id; noted the field-naming-by-context nuance |
+| 10 | trackingByTimeFrame version | ✅ qapla-api | `versioning.md` | ✅ PASS — `1.2` (not migrated to 1.3); mixing versions is expected |
+| 11 | v2 same API key? | ✅ qapla-api | `versioning.md`, `authentication.md` | ✅ PASS — same source key, exchanged for a JWT at `/v2/auth/token`; Bearer header |
+| 12 | `qaplaStatusID 30`? (negative) | ✅ qapla-api | `statuses.md` | ✅ PASS — correctly rejected; `IN TRANSITO` is id `3`, 30 is not a defined id |
+
+**Bug caught and fixed by the eval:** scenario #8's agent flagged that
+`examples/webhookReceiver.md` branched on `60`/`70` — ids that **don't exist** in
+the canonical table (those were the partner skill's incorrect values, written in
+Phase 1 before the status table was verified in Phase 2). Corrected to `5`
+(TENTATIVO DI CONSEGNA FALLITO) and `6` (ECCEZIONE) and re-synced. A repo-wide
+grep confirms no other invented status-id literals remain.
 
 ### 2026-06-15 — 7/7 passed (post multi-agent refactor, fresh-context agents)
 

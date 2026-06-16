@@ -45,11 +45,12 @@ async function enqueue(body) {
     return;
   }
   // shipment status event — branch on the canonical integer id, never the label
+  // (ids per statuses.md: do NOT invent values like 60/70 — they don't exist)
   switch (Number(body.qaplaStatusID)) {
-    case 99: await markDelivered(body); break;       // Consegnata
-    case 95: await flagReturned(body); break;        // Rientrata
-    case 60: await scheduleRetry(body); break;       // Tentativo fallito
-    case 70: await raiseException(body); break;      // Anomalia
+    case 99: await markDelivered(body); break;       // CONSEGNATO
+    case 95: await flagReturned(body); break;        // RIENTRATO
+    case 5:  await scheduleRetry(body); break;       // TENTATIVO DI CONSEGNA FALLITO
+    case 6:  await raiseException(body); break;      // ECCEZIONE (+ statusDetails sub-state)
     default: await recordTransit(body);
   }
 }

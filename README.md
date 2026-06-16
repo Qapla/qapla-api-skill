@@ -31,12 +31,18 @@ references/
   conventions.md             # base URL, response envelope, rate limiting, sandbox, dates
   authentication.md          # per-channel API Key
   endpoints.md               # full endpoint catalog
+  versioning.md              # version policy (1.3/1.2/1.4/v2) + which version to call
+  migration.md               # upgrading a legacy integration; v1.x → v2
+  statuses.md                # canonical status model (branch on the id, not the label)
+  webhooks.md                # Pillar 2: outbound event callbacks
   pushshipment.md            # deep-dives for the main endpoints
   pushorder.md
-  createlabel.md
+  createlabel.md             # incl. confirmLabel (generate → transmit) flow
   getquotes.md
   getpudos.md
-  examples/                  # real request/response JSON samples from the docs
+  trackingbytimeframe.md     # pull alternative to webhooks
+  apivirtual.md              # virtual courier (push your own status updates)
+  examples/                  # real request/response JSON samples + webhookReceiver.md
 scripts/qapla_client.py      # dependency-free reference client
 ```
 

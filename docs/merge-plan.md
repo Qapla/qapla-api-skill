@@ -103,21 +103,26 @@ not structure — everything new must still point back to `references/overview.m
       `AsyncJobResponse`, sandbox-as-resource).
 - [x] Wired into SKILL/AGENTS/Cursor/overview + cross-linked from `versioning.md`.
 
-### Phase 5 — Cherry-picked endpoint gaps
-- [ ] `trackingByTimeFrame` (pull alternative to webhooks) — add to
-      `endpoints.md` + a short note in a deep-dive or `shipments` section.
-- [ ] `confirmLabel` flow detail (create → confirm/transmit) — ensure
-      `createlabel.md` covers the two-step transmission.
-- [ ] Virtual courier / tracking-only shipments — note in `pushshipment.md`.
-- [ ] COD / customs / `addParcel` (FedEx/UPS/TNT/GLS) multi-parcel notes — fold
-      into `createlabel.md` where currently thin.
+### Phase 5 — Cherry-picked endpoint gaps [DONE]
+- [x] `trackingByTimeFrame` — new `references/trackingbytimeframe.md` (pull
+      alternative to webhooks); linked from `endpoints.md`, `webhooks.md`, overview.
+- [x] `confirmLabel` two-step flow — added a section to `createlabel.md`
+      (`labelCreationDate` vs `labelID`, per-courier `pickupDate`/`pickupTime`,
+      base64 manifest/borderò, Customer Care activation).
+- [x] Virtual courier — new `references/apivirtual.md` (`POST /virtual/`,
+      `virtual[]` updates ≤100, `statusID`-driven); cross-linked from `pushshipment.md`.
+- [x] COD / customs / parcels — already enumerated in `createlabel.md`; kept the
+      "fields vary per courier → live docs" guardrail rather than inventing
+      per-courier field sets.
 
-### Phase 6 — Tests + release
-- [ ] Add eval scenarios in `evaluation/scenarios.md`: (a) webhook receiver
-      returns correct contract body; (b) branch on canonical status id not label;
-      (c) v1.2 endpoint awareness; (d) negative control on a fabricated status id.
-- [ ] Run the full eval (target: still green).
-- [ ] CHANGELOG `Unreleased` → `1.1.0`; bump version reference; tag + push.
+### Phase 6 — Tests + release [DONE]
+- [x] Added eval scenarios #8–#12 (webhook receiver, status branching, version
+      selection, v1.x → v2 auth, negative control on a fabricated status id).
+- [x] Ran the eval with fresh-context agents — 5/5 new pass (12/12 total). The
+      run caught a real bug (wrong `60`/`70` ids in the receiver example),
+      now fixed.
+- [x] CHANGELOG `Unreleased` → `1.1.0` (2026-06-16); README tree updated; tag +
+      push.
 
 ## Wiring checklist (run after each new reference file)
 
