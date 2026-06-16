@@ -61,7 +61,7 @@ right per endpoint:
 |---|---|---|---|
 | `getQaplaStatus` list | `statusID` | `statusDetailID` (+ `statusDetail`) | `status` |
 | Embedded `qaplaStatus` object (`getShipment`, `getCompanyShipments`, `trackingByTimeFrame`) | `id` | `detailID` (+ `detail`) | `status` |
-| Webhook payload | `qaplaStatusID` | `statusDetails[]` (array of `{id, detail}`) | `qaplaStatus` |
+| Webhook payload | `qaplaStatusID` (a **string**, e.g. `"99"`) | `statusDetails[]` (array of `{id, detail}`) | `qaplaStatus` |
 
 ### `getQaplaStatus` list entry
 

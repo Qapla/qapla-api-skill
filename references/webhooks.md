@@ -46,7 +46,7 @@ Sent as `Content-Type: application/json`. Core fields (v1.2 baseline):
   "date": "2024-03-15 10:22:00",
   "courierStatus": "delivered",
   "place": "Milan, IT",
-  "qaplaStatusID": 99,
+  "qaplaStatusID": "99",
   "qaplaStatus": "CONSEGNATO",
   "statusDetails": [],
   "return": 0,
@@ -66,7 +66,7 @@ Sent as `Content-Type: application/json`. Core fields (v1.2 baseline):
 | `reference` | Your order reference |
 | `date` | Timestamp of the status event (`YYYY-MM-DD HH:MM:SS`, CEST) |
 | `courierStatus` | Raw status text from the carrier — **do not branch on this** |
-| `qaplaStatusID` | Canonical Qapla' status id — **branch on this** (see `statuses.md`) |
+| `qaplaStatusID` | Canonical Qapla' status id — **branch on this** (see `statuses.md`). Sent as a **string** (e.g. `"99"`); coerce with `Number()` before comparing |
 | `qaplaStatus` | Human-readable canonical label (localized) |
 | `statusDetails` | Array of `{id, detail}` sub-state objects |
 | `place` | Last known location text |
@@ -85,13 +85,12 @@ When the enhanced payload is enabled, three more objects are appended:
 {
   "rows": [
     {
-      "id": 1, "sku": "WIDGET-42", "name": "Widget",
-      "price": 9.99, "total": 19.98, "qty": 2,
-      "weight": 0.3, "netWeight": 0.28, "unitOfMeasurement": "kg",
-      "url": "https://store.example.com/widget",
-      "imageUrl": "https://cdn.example.com/widget.jpg",
-      "isReturnable": true, "customsCode": "9503.00",
-      "originCountry": "IT", "notes": "", "parcelID": 1
+      "id": "1234567890", "sku": "t-shirt-white-xl", "name": "T-Shirt white XL",
+      "price": "20.0", "total": "40.0", "qty": "2", "weight": "1",
+      "url": "https://my-shop.com/products/t-shirt-white-xl",
+      "imageUrl": "https://my-shop.com/assets/1234567890.jpeg",
+      "isReturnable": false, "notes": "", "customsCode": "",
+      "netWeight": "", "originCountry": "IT", "unitOfMeasurement": "", "parcelID": "0"
     }
   ],
   "parcels": [
@@ -118,9 +117,9 @@ returns:
 ```json
 {
   "webhookReturnShipments": {
-    "id": "evt-123",
+    "id": "123456789098765432",
     "apiKey": "YOUR_CHANNEL_PRIVATE_KEY",
-    "version": 1.3,
+    "version": 1.0,
     "count": 1,
     "returnShipments": [
       {
@@ -142,7 +141,7 @@ returns:
           "state": "BO", "postCode": "40100", "country": "IT"
         },
         "rows": [
-          { "sku": "WIDGET-42", "name": "Widget", "qty": "1", "total": "9.99", "reason": "Wrong size" }
+          { "sku": "WIDGET-42", "name": "Widget", "qty": 1, "total": "9.99", "reason": "Wrong size" }
         ]
       }
     ]

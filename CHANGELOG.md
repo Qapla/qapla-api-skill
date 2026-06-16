@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-06-16
+
+### Fixed
+- `webhooks.md`: re-verified against the now-local `webhook.qapla.dev` source and
+  aligned field types to it — `qaplaStatusID` is a **string** (`"99"`, coerce with
+  `Number()` before comparing), `rows[]` numeric fields are strings, and the
+  return-webhook example uses the real envelope values. Retry behavior (2 more
+  attempts) and the 100-failure auto-disable confirmed verbatim.
+- `statuses.md`: noted that the webhook `qaplaStatusID` is a string.
+
 ## [1.1.0] - 2026-06-16
 
 Content expansion merged from a comparison with a sibling integration skill, with
