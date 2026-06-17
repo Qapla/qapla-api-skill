@@ -97,23 +97,20 @@ run your suite against a non-production channel before promoting.
 ## v1.x → v2 (optional)
 
 v2 is a **separate generation**, not a v1 version bump, and it **coexists** with
-v1.3 — migrate only for features you need. Verified differences:
+v1.3 — migrate only for features you need. At a high level it differs in:
 
-| Aspect | v1.x | v2 |
-|---|---|---|
-| **Auth** | `apiKey` in body/query | Exchange the key for a **JWT** at `POST /v2/auth/token`, then send `Authorization: Bearer …`. Same channel key, different flow — v1-style auth won't work on v2. |
-| **Permissions** | Implicit per key | Explicit **scopes** (e.g. `parcels:create`, `sandbox:read`) |
-| **Errors** | `{"<endpoint>":{"result":"OK"\|"KO",…}}` envelope | Standard **HTTP status codes** |
-| **Time / dates** | CEST, `YYYY-MM-DD HH:MM:SS` | **UTC**, ISO 8601 `YYYY-MM-DDTHH:MM:SSZ` |
-| **Parcels** | Embedded in shipment/order payloads | **First-class resource** with its own CRUD (`/v2/parcels`, `/v2/parcels/{hash}`) |
-| **Bulk create** | Synchronous (result inline) | May be **asynchronous**: `POST /v2/parcels` can return `202` with an `AsyncJobResponse` (`jobId`, `status`, `statusUrl`, `hashes`, `totalParcels`) to poll |
-| **Sandbox** | `sandbox: true` flag | Modeled as its own resource (`/v2/sandbox` CRUD) |
+- **Auth** — exchange the channel key for a **Bearer JWT**, then send
+  `Authorization: Bearer …`. Same channel key, different flow — v1-style auth
+  (`apiKey` in body/query) won't work on v2.
+- **Errors** — standard **HTTP status codes**, not the `{"<endpoint>":{"result":…}}`
+  envelope.
+- **Time / dates** — **UTC**, ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`).
 
-The published v2 surface is still small (auth / parcels / sandbox; OpenAPI
-`2.8.8`). Before building against it, read the live v2 docs and
-`/v2/swagger/openapi.json` — its endpoints and payloads are out of scope for this
-skill. See [`versioning.md`](versioning.md#v2--separate-generation-opt-in) for the
-auth flow.
+Its endpoints, fields, scopes, and exact request payloads are evolving and **out
+of scope for this skill** — and the published spec can lag the deployed API. Work
+from the live v2 docs and Swagger before building: <https://api.qapla.dev/v2/>.
+See [`versioning.md`](versioning.md#v2--separate-generation) for the high-level
+positioning.
 
 ## Related references
 

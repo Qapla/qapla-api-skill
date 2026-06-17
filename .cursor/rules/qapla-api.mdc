@@ -29,11 +29,13 @@ To work on a Qapla' task:
 3. Pick the endpoint from
    [`references/endpoints.md`](mdc:references/endpoints.md) (full catalog) or the
    per-endpoint deep-dives: `references/pushshipment.md`, `pushorder.md`,
-   `createlabel.md`, `getquotes.md`, `getpudos.md`. For outbound event callbacks
-   (Pillar 2), see `references/webhooks.md`. To interpret tracking statuses, see
-   `references/statuses.md` (branch on the canonical id, never the label). For
-   the version policy and v2 preview, see `references/versioning.md`; to upgrade
-   a legacy integration, see `references/migration.md`.
+   `createlabel.md`, `getquotes.md`, `getpudos.md`, `trackingbytimeframe.md` (the
+   pull alternative to webhooks), `apivirtual.md` (virtual courier). For outbound
+   event callbacks (Pillar 2), see `references/webhooks.md`. To interpret tracking
+   statuses, see `references/statuses.md` (branch on the canonical id, never the
+   label). For the version policy and the separate v2 generation, see
+   `references/versioning.md`; to upgrade a legacy integration, see
+   `references/migration.md`.
 4. Use the sample payloads in `references/examples/` and the dependency-free
    reference client in `scripts/qapla_client.py` when writing code.
 

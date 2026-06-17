@@ -35,7 +35,7 @@ the live docs).
 ## Negative / edge checks
 - Scenario 5 verifies the **anti-hallucination guardrail** (invented endpoint).
 - Scenario 12 verifies the skill corrects a **plausible-but-wrong status id**
-  (the exact error the partner skill's status table contained) instead of
+  (a non-existent id that earlier draft content had wrongly listed) instead of
   confirming it.
 - Confirm the skill does NOT trigger on unrelated prompts (#7) — over-triggering is a failure too.
 
@@ -65,8 +65,8 @@ per verbatim prompt, no priming, installed skill synced from the repo first.
 
 **Bug caught and fixed by the eval:** scenario #8's agent flagged that
 `examples/webhookReceiver.md` branched on `60`/`70` — ids that **don't exist** in
-the canonical table (those were the partner skill's incorrect values, written in
-Phase 1 before the status table was verified in Phase 2). Corrected to `5`
+the canonical table (incorrect values from earlier draft content, written before
+the status table was verified against the live `getQaplaStatus`). Corrected to `5`
 (TENTATIVO DI CONSEGNA FALLITO) and `6` (ECCEZIONE) and re-synced. A repo-wide
 grep confirms no other invented status-id literals remain.
 

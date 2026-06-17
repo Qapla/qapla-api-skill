@@ -129,7 +129,7 @@ returns:
         "parcels": 1,
         "weight": 1.2,
         "trackingNumber": "RT580104809",
-        "refundMethodCode": "ORIGINAL",
+        "refundMethodCode": "0001",
         "courier": { "code": "GLS-ITA", "name": "GLS", "icon": "https://cdn.qapla.it/couriers/gls.svg" },
         "sender": {
           "name": "Jane Doe", "address": "Via Roma 1", "city": "Milan",

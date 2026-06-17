@@ -28,12 +28,14 @@ tracking, label printing, transactional notifications).
    they apply to **every** call.
 3. Pick the endpoint from `references/endpoints.md` (full catalog) or the
    per-endpoint deep-dives (`references/pushshipment.md`, `pushorder.md`,
-   `createlabel.md`, `getquotes.md`, `getpudos.md`). To receive event callbacks
-   instead of calling an endpoint, see `references/webhooks.md` (Pillar 2). To
-   interpret tracking statuses, see `references/statuses.md` (branch on the
-   canonical id, never the label). For the version policy (which version to call,
-   v1.2-only endpoints, the v2 preview), see `references/versioning.md`; to
-   upgrade a legacy integration, see `references/migration.md`.
+   `createlabel.md`, `getquotes.md`, `getpudos.md`, `trackingbytimeframe.md` —
+   the pull alternative to webhooks — and `apivirtual.md` — the virtual courier).
+   To receive event callbacks instead of calling an endpoint, see
+   `references/webhooks.md` (Pillar 2). To interpret tracking statuses, see
+   `references/statuses.md` (branch on the canonical id, never the label). For the
+   version policy (which version to call, v1.2-only endpoints, the separate v2
+   generation), see `references/versioning.md`; to upgrade a legacy integration,
+   see `references/migration.md`.
 4. Use the runnable example payloads in `references/examples/` as a starting
    point, and the dependency-free reference client in `scripts/qapla_client.py`
    when writing code.

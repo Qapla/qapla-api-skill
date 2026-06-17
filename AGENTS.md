@@ -11,10 +11,11 @@ knowledge in this repo's `references/` directory.
 the canonical orientation (domain model + "which endpoint do I need?" decision
 rule). Then `references/conventions.md` and `references/authentication.md` apply
 to every call, and the per-endpoint deep-dives live in
-`references/{pushshipment,pushorder,createlabel,getquotes,getpudos}.md` with the
-full catalog in `references/endpoints.md`. To receive outbound event callbacks
-(Pillar 2) see `references/webhooks.md`; to interpret tracking statuses see
-`references/statuses.md` (branch on the canonical id); to upgrade a legacy
+`references/{pushshipment,pushorder,createlabel,getquotes,getpudos,trackingbytimeframe,apivirtual}.md`
+with the full catalog in `references/endpoints.md`. To receive outbound event
+callbacks (Pillar 2) see `references/webhooks.md`; to interpret tracking statuses
+see `references/statuses.md` (branch on the canonical id); for the version policy
+and the separate v2 generation see `references/versioning.md`; to upgrade a legacy
 integration see `references/migration.md`. Runnable sample payloads are in
 `references/examples/`; a dependency-free reference client is
 `scripts/qapla_client.py`.
@@ -28,7 +29,7 @@ Core facts (the rest is in `references/overview.md`):
 | **Response envelope** | `{"<endpointName>": {"result": "OK"\|"KO", "error": null\|"<message>"}}`. For batch endpoints also check the per-item `result`. |
 | **Rate limit** | Token bucket: 120 capacity, +2/sec. A batch of N items costs N tokens. Over limit → HTTP `429` (back off and retry). |
 | **Sandbox** | Pass `"sandbox": true` in the body where supported (e.g. `createLabel`). Exception: `getQuotes` uses an `x-sandbox` header. |
-| **Versions** | `1.3` is current; many endpoints are still **1.2-only** (not yet migrated), so calling them under `/1.2/` is expected. `1.4` is `createLabel`-only. A separate **v2** (Bearer/JWT) is preview/opt-in. See `references/versioning.md`. |
+| **Versions** | `1.3` is current; many endpoints are still **1.2-only** (not yet migrated), so calling them under `/1.2/` is expected. `1.4` is `createLabel`-only. A separate **v2** (Bearer/JWT) is a distinct RESTful generation, documented independently. See `references/versioning.md`. |
 
 **Guardrails:** this documents the **public** API only — do not invent
 endpoints, parameters, or fields. The live docs at <https://api.qapla.dev/1.3/>

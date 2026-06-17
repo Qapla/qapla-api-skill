@@ -11,6 +11,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-06-17
+
+### Changed
+- **v2 section reduced to a drift-proof pointer.** A pre-release assessment
+  against the real `qore/api` implementation found the v2 details had drifted: the
+  auth field is `apiKey` (not `api_key`), scopes are not granular yet, the version
+  label was wrong, the surface is larger than listed, and v2 is no longer
+  "preview". Rather than ship specifics that conflict with the deployed API,
+  `versioning.md` and `migration.md` now describe v2 only at a high level (Bearer
+  JWT, HTTP-status errors, UTC/ISO 8601) and defer to the live docs at
+  <https://api.qapla.dev/v2/> for endpoints, fields, scopes, and the auth payload.
+  Aligned the v2 wording in `overview.md`, `SKILL.md`, `AGENTS.md`, and the Cursor
+  rule (no more "preview/opt-in").
+
+### Fixed
+- `webhooks.md`: corrected the return-webhook `refundMethodCode` example value
+  (`"ORIGINAL"` → `"0001"`) to match the `webhook.qapla.dev` source.
+
+### Removed
+- `docs/merge-plan.md` — internal one-off planning artifact (the merge it tracked
+  is complete); removed so it no longer travels with the distributed pack.
+- Sanitized the two internal "partner skill" references in
+  `evaluation/scenarios.md`.
+
+### Wired
+- Added `trackingbytimeframe.md` and `apivirtual.md` to the reading order in
+  `SKILL.md`, `AGENTS.md`, and the Cursor rule (previously only linked from
+  `overview.md`/`endpoints.md`).
+
 ## [1.1.1] - 2026-06-16
 
 ### Fixed
