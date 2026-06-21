@@ -8,7 +8,9 @@ description: >-
   couriers and channels, or receive outbound tracking-event webhooks. Covers
   authentication (per-channel API Key), the
   response envelope, rate limiting, the sandbox flag, and the full endpoint
-  catalog with request/response examples.
+  catalog with request/response examples. Also covers the newer **v2** generation
+  (Bearer/JWT auth, RESTful resources, async jobs) for its stable core — parcels,
+  sandbox, auth, jobs.
 license: MIT
 ---
 
@@ -39,6 +41,12 @@ tracking, label printing, transactional notifications).
 4. Use the runnable example payloads in `references/examples/` as a starting
    point, and the dependency-free reference client in `scripts/qapla_client.py`
    when writing code.
+5. **For the v2 API** (a separate, RESTful generation with Bearer/JWT auth — the
+   direction the platform is heading), start at `references/v2/overview.md`, then
+   `references/v2/authentication.md` and the resource deep-dives
+   (`references/v2/parcels.md`, `references/v2/sandbox.md`,
+   `references/v2/endpoints.md`). Most integrations still target v1.3 today; use
+   v2 when you need a resource it exposes (e.g. parcels) or its model.
 
 > The same knowledge powers the cross-agent entrypoints in this repo
 > (`AGENTS.md`, `.cursor/rules/qapla-api.mdc`); all of them point back to

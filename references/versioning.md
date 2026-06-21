@@ -56,16 +56,19 @@ knowledge does not carry over. At a high level it differs in:
   envelope.
 - **Time** — **UTC**, ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`), vs CEST + `YYYY-MM-DD HH:MM:SS`.
 
-v2 is developed and documented independently and is actively evolving, so its
-exact endpoints, fields, scopes, and auth request payload are **out of scope for
-this skill** — and the published spec can lag the deployed API. For anything v2,
-work from the live docs, which are the only authoritative, current source:
+v2 is developed and documented independently and is **actively evolving** toward
+becoming the platform's primary API surface. This skill now documents its **stable
+core** (auth, parcels, sandbox, jobs) under [`v2/`](v2/overview.md), extracted from
+the real `qore/api` implementation (more current than the public Swagger, which can
+lag). Other resources (orders, shipments, labels, couriers) exist in the
+implementation but are still in flight — for those, the live docs are the
+authoritative source:
 
 - Docs + Swagger UI: <https://api.qapla.dev/v2/>
 
-For new integrations today, this skill targets **v1.3**. Reach for v2 only when
-you specifically need its model, and follow the live v2 docs for the auth flow and
-payloads — do not assume the field names or surface described elsewhere.
+For most new integrations today, **v1.3** is still the documented target. Reach for
+v2 when you need a resource it already exposes well (e.g. parcels) or its model
+(JWT, REST, async jobs). Start at [`v2/overview.md`](v2/overview.md).
 
 > Upgrading an existing integration off an older version? See
 > [`migration.md`](migration.md).

@@ -11,6 +11,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-06-21
+
+### Added
+- **v2 API stable core now documented** under `references/v2/`. Reversing the
+  1.1.2 "pointer-only" stance: v2 has matured (it is the generation the platform is
+  moving toward), so the skill now teaches its stable surface, extracted from the
+  real `qore/api` implementation (v2.9.4 — more current than the public Swagger,
+  which lags). New files:
+  - `v2/overview.md` — model, base URL (`api.qapla.it/v2`), JWT auth, RFC 7807
+    errors, UTC/ISO 8601, ETag/`304`, rate limits, and the **async jobs** pattern
+    (`202` + poll `/v2/jobs/{jobId}`), plus a v1.3↔v2 comparison.
+  - `v2/authentication.md` — token exchange (`POST /v2/auth/token` with **`apiKey`**
+    camelCase → Bearer JWT, 24h), token caching, and the now-**enforced granular
+    scopes**.
+  - `v2/parcels.md`, `v2/sandbox.md` — full CRUD deep-dives with verbatim field
+    names from the implementation DTOs.
+  - `v2/endpoints.md` — v2 catalog: the stable core plus the in-flight resources
+    (orders, shipments, labels, couriers) flagged as not-yet-in-public-spec.
+
+### Changed
+- Wired v2 cross-references through `versioning.md`, `migration.md`, `overview.md`,
+  `authentication.md`, `SKILL.md`, `AGENTS.md`, and the Cursor rule.
+- Corrected two facts that drifted since 1.1.2 as v2 evolved: **scopes are now
+  granular and enforced** (no longer wildcard `['*']`), and the auth field is
+  confirmed **`apiKey`** (camelCase).
+
 ## [1.1.2] - 2026-06-17
 
 ### Changed

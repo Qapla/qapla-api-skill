@@ -106,11 +106,17 @@ v1.3 — migrate only for features you need. At a high level it differs in:
   envelope.
 - **Time / dates** — **UTC**, ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`).
 
-Its endpoints, fields, scopes, and exact request payloads are evolving and **out
-of scope for this skill** — and the published spec can lag the deployed API. Work
-from the live v2 docs and Swagger before building: <https://api.qapla.dev/v2/>.
-See [`versioning.md`](versioning.md#v2--separate-generation) for the high-level
-positioning.
+- **Scopes** — v2 enforces **granular scopes** per endpoint (e.g. `parcels:create`);
+  v1.x has none. The token response lists what your key can do.
+- **Bulk** — large writes go **asynchronous**: a `202` returns a job to poll at
+  `GET /v2/jobs/{jobId}` (or notify a `webhookUrl`).
+
+The **stable core** (auth, parcels, sandbox, jobs) is now documented in
+[`v2/`](v2/overview.md) — start at [`v2/overview.md`](v2/overview.md) and
+[`v2/authentication.md`](v2/authentication.md) for the token flow. Resources still
+in flight (orders, shipments, labels, couriers) should be built against the live
+docs/Swagger: <https://api.qapla.dev/v2/>. See
+[`versioning.md`](versioning.md#v2--separate-generation) for the positioning.
 
 ## Related references
 

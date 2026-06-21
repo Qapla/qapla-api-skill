@@ -45,6 +45,7 @@ your `apiKey` and confirm `result == "OK"`.
 - Misuse/abuse of the API can get the key **banned** (see rate limiting in
   `conventions.md`).
 
-> The newer API **v2** introduces a different, more secure auth model. If you are
-> starting a brand-new integration, check whether v2 is appropriate at
-> <https://api.qapla.dev/v2>. This skill covers v1.3.
+> The newer API **v2** introduces a different, more secure auth model — exchange
+> the channel key for a short-lived **Bearer JWT**, with granular scopes. See
+> [`v2/authentication.md`](v2/authentication.md) (and [`v2/overview.md`](v2/overview.md)).
+> This file covers v1.3.
