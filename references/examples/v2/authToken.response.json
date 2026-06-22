@@ -1,0 +1,17 @@
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.<payload>.<signature>",
+  "scopes": [
+    "parcels:create",
+    "parcels:read",
+    "parcels:update",
+    "parcels:delete",
+    "jobs:read"
+  ],
+  "token_type": "Bearer",
+  "expires_in": 86400,
+  "rate_limit": {
+    "refill_rate": 2,
+    "bucket_size": 120
+  },
+  "cache": false
+}

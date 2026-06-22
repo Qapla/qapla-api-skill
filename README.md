@@ -52,7 +52,9 @@ references/
     parcels.md               #   parcels resource CRUD
     sandbox.md               #   sandbox playground resource CRUD
     endpoints.md             #   v2 catalog: stable core + in-flight resources
+  examples/v2/               # runnable v2 JSON samples (auth, parcels, job, error, sandbox)
 scripts/qapla_client.py      # dependency-free reference client (v1.3)
+scripts/qapla_v2_client.py   # dependency-free reference client (v2: JWT, REST, jobs)
 ```
 
 The three entrypoints are thin: they orient the agent and point into

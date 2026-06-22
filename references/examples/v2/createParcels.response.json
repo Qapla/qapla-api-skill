@@ -1,0 +1,40 @@
+[
+  {
+    "parcelHash": "f3a9c1e2d4b5a6f7",
+    "parcelNumber": 1,
+    "label": {
+      "format": "PDF",
+      "label": "JVBERi0xLjQKJ...<base64-truncated>"
+    },
+    "totalParcelCount": 2,
+    "originCountryIso": "IT",
+    "clientInternalCode": "SKU-001",
+    "weightKg": 0.8,
+    "lengthCm": 20.0,
+    "widthCm": 15.0,
+    "heightCm": 10.0,
+    "contentsDescription": "T-shirt",
+    "shippingNotes": "Fragile",
+    "createdAt": "2026-06-22T10:00:00+00:00",
+    "updatedAt": null
+  },
+  {
+    "parcelHash": "a1b2c3d4e5f60718",
+    "parcelNumber": 2,
+    "label": {
+      "format": "PDF",
+      "label": "JVBERi0xLjQKJ...<base64-truncated>"
+    },
+    "totalParcelCount": 2,
+    "originCountryIso": "IT",
+    "clientInternalCode": null,
+    "weightKg": 1.2,
+    "lengthCm": 30.0,
+    "widthCm": 20.0,
+    "heightCm": 15.0,
+    "contentsDescription": null,
+    "shippingNotes": null,
+    "createdAt": "2026-06-22T10:00:00+00:00",
+    "updatedAt": null
+  }
+]

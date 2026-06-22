@@ -50,13 +50,15 @@ returned label format: `PDF` (default) or `ZPL`.
 | `parcels[].shippingNotes` | no | max 255 |
 | `webhookUrl` | no | Valid URL; notified when an async job finishes |
 
+Sample request: [`../examples/v2/createParcels.request.json`](../examples/v2/createParcels.request.json).
+
 **Responses:**
 
 | Status | When | Body |
 |---|---|---|
-| `201 Created` | ≤10 parcels (synchronous) | a `ParcelResponse`, or an array if >1 |
-| `202 Accepted` | >10 parcels (async) | an `AsyncJobResponse` — poll `GET /v2/jobs/{jobId}` (see [`overview.md`](overview.md#async-jobs-pattern)) |
-| `409 Conflict` | An order with the same channel + `origin` + `reference` already exists | RFC 7807 error |
+| `201 Created` | ≤10 parcels (synchronous) | a `ParcelResponse`, or an array if >1 — [example](../examples/v2/createParcels.response.json) |
+| `202 Accepted` | >10 parcels (async) | an `AsyncJobResponse` ([example](../examples/v2/createParcelsAsync.response.json)) — poll `GET /v2/jobs/{jobId}` (see [`overview.md`](overview.md#async-jobs-pattern)) |
+| `409 Conflict` | An order with the same channel + `origin` + `reference` already exists | RFC 7807 error ([example](../examples/v2/error.problem.json)) |
 
 ### ParcelResponse
 

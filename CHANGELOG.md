@@ -11,6 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-06-22
+
+### Added
+- **v2 reference client** `scripts/qapla_v2_client.py` (stdlib-only, Python 3.8+):
+  token exchange + JWT caching/refresh, Bearer auth, RESTful verbs, RFC 7807 error
+  parsing (`QaplaV2Error` carries `status`/`title`/`detail`/`violations`), `429`
+  retry with `X-RateLimit-Retry-After` support, parcels convenience methods, and
+  async job polling (`poll_job`). CLI smoke test exchanges a token and prints the
+  granted scopes.
+- **Runnable v2 example payloads** in `references/examples/v2/`: `authToken`
+  request/response, `createParcels` request + sync response + async `202`, `job`
+  response, RFC 7807 `error.problem`, and `sandbox` request/response (showing the
+  camelCase-in / snake_case-out quirk). Wired into the v2 deep-dives.
+
+### Changed
+- `references/v2/*` and `README.md`: link the new client and example payloads.
+
 ## [1.2.1] - 2026-06-22
 
 ### Added

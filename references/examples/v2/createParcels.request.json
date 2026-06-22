@@ -1,0 +1,26 @@
+{
+  "order": {
+    "reference": "ORDER-123",
+    "origin": "shopify"
+  },
+  "parcels": [
+    {
+      "weightKg": 0.8,
+      "lengthCm": 20.0,
+      "widthCm": 15.0,
+      "heightCm": 10.0,
+      "originCountryIso": "IT",
+      "contentsDescription": "T-shirt",
+      "clientInternalCode": "SKU-001",
+      "shippingNotes": "Fragile"
+    },
+    {
+      "weightKg": 1.2,
+      "lengthCm": 30.0,
+      "widthCm": 20.0,
+      "heightCm": 15.0,
+      "originCountryIso": "IT"
+    }
+  ],
+  "webhookUrl": "https://your.app/qapla/jobs"
+}

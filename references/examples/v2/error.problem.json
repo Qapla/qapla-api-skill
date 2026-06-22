@@ -1,0 +1,16 @@
+{
+  "type": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+  "title": "Unprocessable Entity",
+  "status": 422,
+  "detail": "Validation failed.",
+  "violations": [
+    {
+      "propertyPath": "parcels[0].weightKg",
+      "message": "This value should be positive."
+    },
+    {
+      "propertyPath": "parcels[0].originCountryIso",
+      "message": "This value should have exactly 2 characters."
+    }
+  ]
+}

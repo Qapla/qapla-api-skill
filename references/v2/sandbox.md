@@ -41,7 +41,9 @@ the canonical "hello world" for a v2 client.
 ```
 
 All required except `dateTimeValue` (optional). `stringValue` needs ≥3 chars.
-→ `201 Created` with the entity (snake_case fields).
+→ `201 Created` with the entity (snake_case fields). Samples:
+[request](../examples/v2/sandbox.request.json) (camelCase) /
+[response](../examples/v2/sandbox.response.json) (snake_case).
 
 ## List — `GET /v2/sandbox`
 

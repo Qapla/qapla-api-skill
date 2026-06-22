@@ -1,0 +1,7 @@
+{
+  "stringValue": "hello",
+  "intValue": 42,
+  "boolValue": true,
+  "floatValue": 3.14,
+  "dateTimeValue": "2026-06-22 10:00:00"
+}

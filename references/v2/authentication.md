@@ -43,6 +43,9 @@ Content-Type: application/json
 | `rate_limit` | This channel's bucket: `refill_rate` (tokens/sec) and `bucket_size` (capacity) |
 | `cache` | `true` if the token came from Qapla's cache, `false` if freshly minted (also surfaced as the `X-Auth-Cache: HIT\|MISS` header) |
 
+Sample payloads: [`../examples/v2/authToken.request.json`](../examples/v2/authToken.request.json)
+and [`../examples/v2/authToken.response.json`](../examples/v2/authToken.response.json).
+
 ## 2. Use the token
 
 Send it as a Bearer header on every other v2 call:
@@ -51,6 +54,13 @@ Send it as a Bearer header on every other v2 call:
 GET https://api.qapla.it/v2/parcels?orderReference=ABC&orderOrigin=shopify
 Authorization: Bearer <JWT>
 ```
+
+> A ready-made, dependency-free Python client for v2 is bundled:
+> [`../../scripts/qapla_v2_client.py`](../../scripts/qapla_v2_client.py). It does
+> the token exchange, caches/refreshes the JWT, sends the Bearer header, parses
+> RFC 7807 errors, retries `429`, and polls async jobs. Run it as a connectivity
+> test: `QAPLA_API_KEY=… python3 scripts/qapla_v2_client.py` (exchanges a token and
+> prints the granted scopes).
 
 ## Token lifetime & caching
 

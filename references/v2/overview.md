@@ -79,12 +79,20 @@ Then poll `GET /v2/jobs/{jobId}`:
 Poll until `status` is `completed` or `failed`. Several write endpoints also accept
 an optional `webhookUrl` so the job can notify you on completion instead of polling.
 
+Samples: [`../examples/v2/createParcelsAsync.response.json`](../examples/v2/createParcelsAsync.response.json)
+(the `202`) and [`../examples/v2/job.response.json`](../examples/v2/job.response.json)
+(a finished job). An RFC 7807 error body looks like
+[`../examples/v2/error.problem.json`](../examples/v2/error.problem.json).
+
 ## Where to go next
 
 1. [`authentication.md`](authentication.md) — the token exchange and Bearer flow (read first).
 2. [`endpoints.md`](endpoints.md) — the v2 catalog: stable resources + what's still in flight.
 3. Deep-dives for the stable resources: [`parcels.md`](parcels.md), [`sandbox.md`](sandbox.md).
-4. The live Swagger UI at <https://api.qapla.dev/v2/> for anything not covered here
+4. The bundled v2 client [`../../scripts/qapla_v2_client.py`](../../scripts/qapla_v2_client.py)
+   (token exchange, Bearer, RFC 7807 errors, `429` retry, job polling) and the
+   runnable sample payloads in [`../examples/v2/`](../examples/v2/).
+5. The live Swagger UI at <https://api.qapla.dev/v2/> for anything not covered here
    or that may have changed.
 
 > **When should I use v2 vs v1.3?** For now, v1.3 remains the documented target for
