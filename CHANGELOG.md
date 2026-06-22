@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-06-22
+
+### Added
+- `v2/parcels.md`: documented the optional **`x-label-format`** request header
+  (`PDF` default / `ZPL`) on `POST /v2/parcels`, found while verifying the
+  controller.
+- `evaluation/scenarios.md`: 4 new v2 scenarios (#13–16) covering parcels async
+  jobs, the `403`/scope model, the `apiKey` auth field, and the envelope negative
+  control — **run 4/4 PASS**, no content bug found. The `≤10` sync / `>10` async
+  threshold was confirmed against the `qore/api` `ParcelsController`.
+
+### Changed
+- `README.md`: reflect that the skill now documents the **v2 stable core** —
+  added a v2 badge, the `references/v2/` tree, and an updated scope/disclaimer.
+
 ## [1.2.0] - 2026-06-21
 
 ### Added

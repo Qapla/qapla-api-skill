@@ -15,7 +15,8 @@ from (e.g. `shopify`). All units are metric (kg, cm).
 
 ## Create — `POST /v2/parcels`
 
-Scope: `parcels:create`.
+Scope: `parcels:create`. Optional request header **`x-label-format`** selects the
+returned label format: `PDF` (default) or `ZPL`.
 
 ```json
 {

@@ -2,12 +2,15 @@
 
 [![Release](https://img.shields.io/github/v/release/Qapla/qapla-api-skill?label=release&sort=semver)](https://github.com/Qapla/qapla-api-skill/releases/latest)
 [![API](https://img.shields.io/badge/Qapla'%20API-v1.3-informational)](https://api.qapla.dev/1.3/)
+[![API v2](https://img.shields.io/badge/Qapla'%20API-v2%20core-informational)](https://api.qapla.dev/v2/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 A portable **knowledge pack** that teaches an AI coding agent how to integrate
 with and answer questions about the **Qapla' public REST API (v1.3)** —
 shipments, raw orders, carrier labels, tracking, real-time quotes, pickup points
-(PUDO), address checks, couriers, and channels.
+(PUDO), address checks, couriers, and channels. It also documents the **stable
+core of the newer v2 generation** (Bearer/JWT auth, RESTful resources, async
+jobs) — auth, parcels, sandbox, and jobs.
 
 It mirrors the official, public documentation at
 <https://api.qapla.dev/1.3/> so the agent can work without network access, and
@@ -43,7 +46,13 @@ references/
   trackingbytimeframe.md     # pull alternative to webhooks
   apivirtual.md              # virtual courier (push your own status updates)
   examples/                  # real request/response JSON samples + webhookReceiver.md
-scripts/qapla_client.py      # dependency-free reference client
+  v2/                        # the v2 generation (Bearer/JWT, RESTful, async jobs)
+    overview.md              #   model, base URL, JWT, RFC 7807 errors, async jobs
+    authentication.md        #   token exchange (apiKey → Bearer JWT) + scopes
+    parcels.md               #   parcels resource CRUD
+    sandbox.md               #   sandbox playground resource CRUD
+    endpoints.md             #   v2 catalog: stable core + in-flight resources
+scripts/qapla_client.py      # dependency-free reference client (v1.3)
 ```
 
 The three entrypoints are thin: they orient the agent and point into
@@ -122,9 +131,11 @@ See `SKILL.md` and `references/` for everything else.
 
 ## Scope & disclaimer
 
-- Covers the **public** API **v1.3** (with notes on `1.4` and a pointer to the
-  newer **v2**). It deliberately documents only what is public at
-  <https://api.qapla.dev>.
+- Covers the **public** API **v1.3** (with notes on `1.4`) and the **stable core
+  of v2** (auth, parcels, sandbox, jobs). v2's still-in-flight resources (orders,
+  shipments, labels, couriers) are flagged and point to the live docs. The v2 core
+  is extracted from the deployed implementation, which can be ahead of the public
+  Swagger — <https://api.qapla.dev/v2/> remains the source of truth.
 - This is documentation/tooling, not an official SDK. The live docs are
   authoritative; if anything here drifts, trust <https://api.qapla.dev>.
 
