@@ -1,0 +1,12 @@
+{
+    "action": "redeliver_new_address",
+    "notes": "Ring the bell twice",
+    "address": {
+        "name": "Mario Rossi",
+        "street": "Via Roma 1",
+        "city": "Milano",
+        "zip": "20100",
+        "province": "MI",
+        "phone": "+39061234567"
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "destCap": "20100",
+    "originCap": "20121",
+    "originArea": "NORD",
+    "requestedWeightBand": "2-5",
+    "ranking": [
+        {
+            "position": 1,
+            "courierCode": "BRT",
+            "status": "ok",
+            "level": "origin_cap_dest_weight",
+            "weightBand": "2-5",
+            "sampleSize": 1673,
+            "leadMedian": 2,
+            "leadMean": 2.1,
+            "leadP90": 3,
+            "transitMedian": 1,
+            "transitMean": 1.3,
+            "transitP90": 2,
+            "transitSampleSize": 820
+        },
+        {
+            "position": 2,
+            "courierCode": "GLS",
+            "status": "ok",
+            "level": "cap",
+            "weightBand": null,
+            "sampleSize": 540,
+            "leadMedian": 3,
+            "leadMean": 3.4,
+            "leadP90": 5,
+            "transitMedian": 2,
+            "transitMean": 2.2,
+            "transitP90": 3,
+            "transitSampleSize": 210
+        },
+        {
+            "position": null,
+            "courierCode": "TNT",
+            "status": "insufficient_data",
+            "level": null,
+            "weightBand": null,
+            "sampleSize": null,
+            "leadMedian": null,
+            "leadMean": null,
+            "leadP90": null,
+            "transitMedian": null,
+            "transitMean": null,
+            "transitP90": null,
+            "transitSampleSize": null
+        }
+    ]
+}

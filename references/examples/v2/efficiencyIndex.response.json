@@ -1,0 +1,56 @@
+{
+    "destCap": "20100",
+    "originCap": "20121",
+    "originArea": "NORD",
+    "requestedWeightBand": "2-5",
+    "ranking": [
+        {
+            "rank": 1,
+            "courierCode": "BRT",
+            "status": "ok",
+            "efficiencyIndex": 87.6,
+            "scoreSpeed": 86.0,
+            "scoreConsistency": 86.0,
+            "scoreReliability": 90.0,
+            "level": "origin_cap_dest_weight",
+            "sampleSize": 1673,
+            "speedMedian": 2,
+            "speedP90": 3,
+            "failedRate": 0.02,
+            "stockRate": 0.0,
+            "exceptionRate": 0.04
+        },
+        {
+            "rank": 2,
+            "courierCode": "GLS",
+            "status": "ok",
+            "efficiencyIndex": 77.6,
+            "scoreSpeed": 72.0,
+            "scoreConsistency": 72.0,
+            "scoreReliability": 86.0,
+            "level": "cap",
+            "sampleSize": 540,
+            "speedMedian": 3,
+            "speedP90": 5,
+            "failedRate": 0.04,
+            "stockRate": 0.0,
+            "exceptionRate": 0.02
+        },
+        {
+            "rank": null,
+            "courierCode": "TNT",
+            "status": "insufficient_data",
+            "efficiencyIndex": null,
+            "scoreSpeed": null,
+            "scoreConsistency": null,
+            "scoreReliability": null,
+            "level": null,
+            "sampleSize": null,
+            "speedMedian": null,
+            "speedP90": null,
+            "failedRate": null,
+            "stockRate": null,
+            "exceptionRate": null
+        }
+    ]
+}

@@ -51,8 +51,11 @@ references/
     authentication.md        #   token exchange (apiKey → Bearer JWT) + scopes
     parcels.md               #   parcels resource CRUD
     sandbox.md               #   sandbox playground resource CRUD
+    couriers.md              #   delivery-time / efficiency-index network benchmarks
+    stock-release.md         #   release a shipment held in depot (giacenza)
     endpoints.md             #   v2 catalog: stable core + in-flight resources
-  examples/v2/               # runnable v2 JSON samples (auth, parcels, job, error, sandbox)
+  examples/v2/               # runnable v2 JSON samples (auth, parcels, job, error, sandbox,
+                              # delivery-times, efficiency-index, stock-release)
 scripts/qapla_client.py      # dependency-free reference client (v1.3)
 scripts/qapla_v2_client.py   # dependency-free reference client (v2: JWT, REST, jobs)
 ```
@@ -134,10 +137,12 @@ See `SKILL.md` and `references/` for everything else.
 ## Scope & disclaimer
 
 - Covers the **public** API **v1.3** (with notes on `1.4`) and the **stable core
-  of v2** (auth, parcels, sandbox, jobs). v2's still-in-flight resources (orders,
-  shipments, labels, couriers) are flagged and point to the live docs. The v2 core
-  is extracted from the deployed implementation, which can be ahead of the public
-  Swagger — <https://api.qapla.dev/v2/> remains the source of truth.
+  of v2** (auth, parcels, sandbox, jobs, courier delivery-time/efficiency-index
+  benchmarks, shipment stock-release). v2's still-in-flight resources (orders,
+  general shipments CRUD, labels, courier list/get) are flagged and point to the
+  live docs. The v2 core is extracted from the deployed implementation, which can
+  be ahead of the public Swagger — <https://api.qapla.dev/v2/> remains the source
+  of truth.
 - This is documentation/tooling, not an official SDK. The live docs are
   authoritative; if anything here drifts, trust <https://api.qapla.dev>.
 

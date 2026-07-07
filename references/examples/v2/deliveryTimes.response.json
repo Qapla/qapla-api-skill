@@ -1,0 +1,30 @@
+{
+    "destCap": "20100",
+    "originCap": "20121",
+    "originArea": "NORD",
+    "requestedWeightBand": "2-5",
+    "best": {
+        "courierCode": "BRT",
+        "leadMedian": 2,
+        "leadMean": 2.1,
+        "transitMedian": 1,
+        "transitMean": 1.3,
+        "sampleSize": 1673
+    },
+    "ranking": [
+        {
+            "position": 1,
+            "courierCode": "BRT",
+            "leadMedian": 2,
+            "transitMedian": 1,
+            "sampleSize": 1673
+        },
+        {
+            "position": 2,
+            "courierCode": "GLS",
+            "leadMedian": 3,
+            "transitMedian": 2,
+            "sampleSize": 540
+        }
+    ]
+}

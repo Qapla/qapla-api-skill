@@ -225,6 +225,73 @@ class QaplaV2Client:
         """DELETE /v2/parcels/{hash}. Returns (204, None) on success."""
         return self.request("DELETE", f"parcels/{parcel_hash}")
 
+    # --- convenience: courier benchmarks ----------------------------------
+
+    def get_delivery_times(
+        self,
+        *,
+        dest_cap: str,
+        couriers: list | None = None,
+        weight_kg: float | None = None,
+        origin_cap: str | None = None,
+        detail: str = "summary",
+    ) -> tuple[int, object]:
+        """POST /v2/couriers/delivery-times. Ranks couriers fastest-first for
+        `dest_cap`. `detail="full"` returns the complete ranking incl. percentiles
+        and insufficient-data couriers; default "summary" returns `best` + a slim
+        ranking. Requires scope `delivery-times:read`."""
+        body: dict = {"destCap": dest_cap, "detail": detail}
+        if couriers is not None:
+            body["couriers"] = couriers
+        if weight_kg is not None:
+            body["weightKg"] = weight_kg
+        if origin_cap is not None:
+            body["originCap"] = origin_cap
+        return self.request("POST", "couriers/delivery-times", json_body=body)
+
+    def get_efficiency_index(
+        self,
+        *,
+        dest_cap: str,
+        couriers: list | None = None,
+        weight_kg: float | None = None,
+        origin_cap: str | None = None,
+    ) -> tuple[int, object]:
+        """POST /v2/couriers/efficiency-index. Scores couriers 0-100 (speed +
+        consistency + reliability, weighted 40/20/40) for `dest_cap`, best-first.
+        Requires scope `efficiency-index:read`."""
+        body: dict = {"destCap": dest_cap}
+        if couriers is not None:
+            body["couriers"] = couriers
+        if weight_kg is not None:
+            body["weightKg"] = weight_kg
+        if origin_cap is not None:
+            body["originCap"] = origin_cap
+        return self.request("POST", "couriers/efficiency-index", json_body=body)
+
+    # --- convenience: shipments -------------------------------------------
+
+    def request_stock_release(
+        self,
+        shipment_id: int,
+        *,
+        action: str,
+        notes: str | None = None,
+        address: dict | None = None,
+    ) -> tuple[int, object]:
+        """POST /v2/shipments/{id}/stock-release. `action` is "redeliver" |
+        "redeliver_new_address" | "return_to_sender"; `address` is required iff
+        action is "redeliver_new_address". Requires scope `shipments:write`.
+        Always returns 200 with `status: "sent"`; the real outcome is in the
+        response's `courierOutcome` (ok/error sync for GLS/TNT, "pending" for the
+        deferred BRT flow)."""
+        body: dict = {"action": action}
+        if notes is not None:
+            body["notes"] = notes
+        if address is not None:
+            body["address"] = address
+        return self.request("POST", f"shipments/{shipment_id}/stock-release", json_body=body)
+
     # --- convenience: async jobs -----------------------------------------
 
     def get_job(self, job_id: str) -> tuple[int, object]:

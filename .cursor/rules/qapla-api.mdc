@@ -40,8 +40,9 @@ To work on a Qapla' task:
    reference client in `scripts/qapla_client.py` when writing code.
 5. For the **v2 API** (Bearer/JWT auth, RESTful resources, async jobs), start at
    `references/v2/overview.md` and the deep-dives
-   `references/v2/{authentication,parcels,sandbox,endpoints}.md`. Most integrations
-   still target v1.3; use v2 when you need a resource it exposes (e.g. parcels).
+   `references/v2/{authentication,parcels,sandbox,couriers,stock-release,endpoints}.md`.
+   Most integrations still target v1.3; use v2 when you need a resource it
+   exposes (e.g. parcels).
 
 **Guardrails:** documents the **public** API only — do not invent endpoints,
 parameters, or fields. The live docs at <https://api.qapla.dev/1.3/> are the

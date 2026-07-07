@@ -1,12 +1,12 @@
 # Evaluation scenarios — qapla-api skill
 
-> **Last validated run: 2026-06-22 — 16/16 passed** (12 v1.x + 4 new v2 scenarios
-> for the `references/v2/` content). All answers accurate per the references; the
-> v2 docs held up with no content bug found. Critical cases hold: `getQuotes`
-> `x-api-key` header auth (#3), anti-hallucination on an invented endpoint (#5),
-> plausible-but-wrong status id (#12), and the v2 envelope negative control (#16).
-> The #8 run earlier caught a real content bug (wrong status ids in the receiver
-> example), since fixed.
+> **Last validated run: 2026-07-07 — 19/19 passed** (12 v1.x + 7 v2 scenarios,
+> incl. 3 new for the `couriers`/`stock-release` v2 endpoints). All answers
+> accurate per the references; no content bug found. Critical cases hold:
+> `getQuotes` `x-api-key` header auth (#3), anti-hallucination on an invented
+> endpoint (#5), plausible-but-wrong status id (#12), and the v2 envelope
+> negative control (#16). The #8 run earlier caught a real content bug (wrong
+> status ids in the receiver example), since fixed.
 
 Representative prompts used to validate the skill. Per Anthropic's skill
 best-practices, run these against **Haiku, Sonnet and Opus** in a fresh session
@@ -35,6 +35,9 @@ the live docs).
 | 14 | "I'm calling the Qapla' v2 API and getting a `403` — what does it mean?" | v2 enforces **granular scopes** (and product ownership); `403` = authenticated but missing the required scope/product; error body is RFC 7807 (`application/problem+json`). | ✅ covered by `v2/authentication.md` + `v2/overview.md` |
 | 15 | "What field does the Qapla' v2 token endpoint expect for the API key?" | **`apiKey`** (camelCase), in `POST /v2/auth/token`; returns a Bearer JWT. Should flag that public Swagger may still show `api_key` but the deployed API uses `apiKey`. | ✅ covered by `v2/authentication.md` |
 | 16 | "Does the Qapla' v2 API return the same `{result: OK/KO}` envelope as v1?" | **Negative control** — NO; v2 uses real **HTTP status codes** + **RFC 7807** error bodies, not the v1 envelope. Should correct, not confirm. | ✅ guarded by `v2/overview.md` |
+| 17 | "On the Qapla' v2 API, which courier is fastest to postal code 20100?" | `POST /v2/couriers/delivery-times` with `destCap`, optional `couriers`/`weightKg`/`originCap`; explains `best` + fastest-first `ranking` (default `detail: "summary"`), lead time as the ranking metric. Scope `delivery-times:read`. | ✅ covered by `v2/couriers.md` |
+| 18 | "I want to pick the best v2 courier overall, not just the fastest one, for a lane — what do I call?" | `POST /v2/couriers/efficiency-index`; explains the 0–100 index blending `scoreSpeed`/`scoreConsistency`/`scoreReliability` at 40/20/40, best-first `ranking`, `insufficient_data` couriers appended with null rank. Scope `efficiency-index:read`. | ✅ covered by `v2/couriers.md` |
+| 19 | "A Qapla' v2 shipment is stuck in giacenza (held in depot) — how do I ask the courier to redeliver it to a different address?" | `POST /v2/shipments/{id}/stock-release` with `action: "redeliver_new_address"` and a required `address` object; scope `shipments:write`; explains `courierOutcome` (`ok`/`error` sync for GLS/TNT, `pending` deferred for BRT) vs. the always-`"sent"` `status`. | ✅ covered by `v2/stock-release.md` |
 
 ## Negative / edge checks
 - Scenario 5 verifies the **anti-hallucination guardrail** (invented endpoint).
@@ -51,6 +54,23 @@ QAPLA_API_KEY=xxxxx python3 scripts/qapla_client.py   # calls getChannel
 ```
 
 ## Run log
+
+### 2026-07-07 — 3/3 new v2 scenarios passed (#17–19)
+
+After documenting the three new v2 stable endpoints (`v2/couriers.md`,
+`v2/stock-release.md`, release 1.4.0), the 3 new scenarios were run with the same
+method — one fresh `general-purpose` agent, answering all three prompts in
+sequence, installed skill synced from the repo first, self-reporting skill
+trigger + references opened per prompt.
+
+| # | Scenario | Triggered | Reference(s) opened | Result |
+|---|---|---|---|---|
+| 17 | fastest v2 courier to a CAP | ✅ qapla-api | `v2/overview.md`, `v2/endpoints.md`, `v2/couriers.md` | ✅ PASS — `POST /v2/couriers/delivery-times`, `destCap` required, scope `delivery-times:read`, `best` + fastest-first `ranking` (summary default) |
+| 18 | best overall v2 courier (not just fastest) | ✅ qapla-api | `v2/couriers.md` | ✅ PASS — `POST /v2/couriers/efficiency-index`, same request shape, scope `efficiency-index:read`, 0–100 `efficiencyIndex` = 40/20/40 blend of scoreSpeed/scoreConsistency/scoreReliability, best-first ranking |
+| 19 | redeliver a v2 shipment held in giacenza to a new address | ✅ qapla-api | `v2/stock-release.md` | ✅ PASS — `POST /v2/shipments/{id}/stock-release`, `action: "redeliver_new_address"` + required `address`, scope `shipments:write`, `status: "sent"` always with real result in `courierOutcome` |
+
+**No content bug found** — all three answers matched the references exactly on
+endpoint path, required fields, scope, and response shape.
 
 ### 2026-06-22 — 4/4 new v2 scenarios passed (#13–16)
 

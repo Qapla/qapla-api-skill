@@ -45,6 +45,8 @@ tracking, label printing, transactional notifications).
    direction the platform is heading), start at `references/v2/overview.md`, then
    `references/v2/authentication.md` and the resource deep-dives
    (`references/v2/parcels.md`, `references/v2/sandbox.md`,
+   `references/v2/couriers.md` — delivery-time/efficiency-index benchmarks,
+   `references/v2/stock-release.md` — release a shipment held in depot,
    `references/v2/endpoints.md`). Most integrations still target v1.3 today; use
    v2 when you need a resource it exposes (e.g. parcels) or its model.
 

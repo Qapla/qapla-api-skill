@@ -7,11 +7,13 @@ surface to live under v2). Today it ships a stable core (auth, parcels, sandbox,
 jobs) while other resources are still being migrated.
 
 > **Source of truth & drift warning.** This section reflects the **real
-> implementation** in `qore/api` as of **v2.9.4** (2026-06-16), which is more
-> current than the public Swagger. The public Swagger (`api.qapla.dev/v2`, baseline
-> 2.8.8) **lags** the deployed API — it only lists `auth`/`parcels`/`sandbox` and
-> still shows some outdated field names. v2 is **actively evolving**: when in doubt,
-> verify against the live docs and Swagger UI at <https://api.qapla.dev/v2/>.
+> implementation** in `qore/api` as of **v2.12.0** (2026-07-06), which is more
+> current than the public Swagger. The public Swagger (`api.qapla.dev/v2`, `info.version`
+> still reads `2.8.8`) **lags the API version number** but its `paths` have kept up
+> for the stable core — it now also lists `couriers/delivery-times`,
+> `couriers/efficiency-index` and `shipments/{id}/stock-release`, alongside some
+> outdated field names elsewhere. v2 is **actively evolving**: when in doubt, verify
+> against the live docs and Swagger UI at <https://api.qapla.dev/v2/>.
 
 ## How v2 differs from v1.3 — read this first
 
@@ -39,7 +41,7 @@ jobs) while other resources are still being migrated.
 | **Async jobs** | Bulk writes (>10 items) return `202 Accepted` + a job; poll `GET /v2/jobs/{jobId}` until `completed`/`failed`. See below |
 | **Product gating** | Some resources require an active product on the channel; otherwise `403` with `detail: PRODUCT_NOT_OWNED` |
 | **Caching** | Read endpoints support HTTP **ETag** / `304 Not Modified` (`X-Cache-Status: HIT\|MISS`, `Cache-Control: max-age=3600`) |
-| **Version** | `2.9.4` (2026-06-16). Tracks `qore/api`, evolving independently of v1.x |
+| **Version** | `2.12.0` (2026-07-06). Tracks `qore/api`, evolving independently of v1.x |
 
 ## Async jobs pattern
 
@@ -88,7 +90,9 @@ Samples: [`../examples/v2/createParcelsAsync.response.json`](../examples/v2/crea
 
 1. [`authentication.md`](authentication.md) — the token exchange and Bearer flow (read first).
 2. [`endpoints.md`](endpoints.md) — the v2 catalog: stable resources + what's still in flight.
-3. Deep-dives for the stable resources: [`parcels.md`](parcels.md), [`sandbox.md`](sandbox.md).
+3. Deep-dives for the stable resources: [`parcels.md`](parcels.md),
+   [`sandbox.md`](sandbox.md), [`couriers.md`](couriers.md) (delivery-time /
+   efficiency-index benchmarks), [`stock-release.md`](stock-release.md).
 4. The bundled v2 client [`../../scripts/qapla_v2_client.py`](../../scripts/qapla_v2_client.py)
    (token exchange, Bearer, RFC 7807 errors, `429` retry, job polling) and the
    runnable sample payloads in [`../examples/v2/`](../examples/v2/).

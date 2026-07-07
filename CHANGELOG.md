@@ -11,6 +11,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-07-07
+
+### Added
+- **v2: three new stable endpoints**, verified against `qore/api` **2.12.0**
+  (2026-07-06):
+  - `references/v2/couriers.md`: `POST /v2/couriers/delivery-times` (rank
+    couriers fastest-first for a destination CAP, `detail: summary|full`) and
+    `POST /v2/couriers/efficiency-index` (0–100 score blending
+    speed/consistency/reliability 40/20/40, best-first). Both are cross-merchant
+    network benchmarks, scopes `delivery-times:read` / `efficiency-index:read`.
+    Noted: the product-entitlement gate is **not wired yet** on either endpoint
+    despite being billable features internally (explicit TODO in the
+    controllers) — don't assume `403 PRODUCT_NOT_OWNED` can't happen later.
+  - `references/v2/stock-release.md`: `POST /v2/shipments/{id}/stock-release`
+    (redeliver / redeliver to a new address / return to sender a shipment held
+    in depot), scope `shipments:write`. GLS/TNT resolve synchronously
+    (`courierOutcome: ok|error`); BRT is deferred (`pending`, resolved later via
+    tracking events).
+  - `references/v2/endpoints.md` moved these three into the stable-core table
+    (with pointers back to the still-in-flight general `couriers`/`shipments`
+    resources); `references/v2/overview.md` version bumped to 2.12.0.
+  - New runnable examples in `references/examples/v2/`: `deliveryTimes`
+    (+ `deliveryTimesFull`), `efficiencyIndex`, `stockRelease` request/response
+    pairs.
+  - `scripts/qapla_v2_client.py`: convenience methods `get_delivery_times`,
+    `get_efficiency_index`, `request_stock_release`.
+
 ## [1.3.0] - 2026-06-22
 
 ### Added

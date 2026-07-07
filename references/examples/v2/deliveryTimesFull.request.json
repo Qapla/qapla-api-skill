@@ -1,0 +1,11 @@
+{
+    "destCap": "20100",
+    "couriers": [
+        "BRT",
+        "GLS",
+        "TNT"
+    ],
+    "weightKg": 3.5,
+    "originCap": "20121",
+    "detail": "full"
+}
