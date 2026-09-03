@@ -1,12 +1,13 @@
 # Evaluation scenarios — qapla-api skill
 
-> **Last validated run: 2026-07-07 — 19/19 passed** (12 v1.x + 7 v2 scenarios,
-> incl. 3 new for the `couriers`/`stock-release` v2 endpoints). All answers
-> accurate per the references; no content bug found. Critical cases hold:
+> **Last validated run: 2026-09-03 — 19/19 passed** (post-1.4.1, full suite,
+> one fresh agent per scenario). No content bug found. Critical cases hold:
 > `getQuotes` `x-api-key` header auth (#3), anti-hallucination on an invented
-> endpoint (#5), plausible-but-wrong status id (#12), and the v2 envelope
-> negative control (#16). The #8 run earlier caught a real content bug (wrong
-> status ids in the receiver example), since fixed.
+> endpoint (#5), the PEP 8 negative control correctly not triggering the skill
+> (#7), plausible-but-wrong status id (#12), and the v2 envelope negative
+> control (#16). ⚠️ **But see the two method findings in the run log below: the
+> suite has zero coverage for everything 1.4.1 corrected, and this file ships
+> inside the installed skill, so an agent can read its own answer key.**
 
 Representative prompts used to validate the skill. Per Anthropic's skill
 best-practices, run these against **Haiku, Sonnet and Opus** in a fresh session
@@ -54,6 +55,62 @@ QAPLA_API_KEY=xxxxx python3 scripts/qapla_client.py   # calls getChannel
 ```
 
 ## Run log
+
+### 2026-09-03 — 19/19 passed, but the suite tested none of what 1.4.1 fixed
+
+Full suite re-run after release 1.4.1, against the **installed copy**
+(`~/.claude/skills/qapla-api`, synced from `git archive v1.4.1`). Method: one
+fresh `general-purpose` agent per scenario, Sonnet, given **only** the user
+prompt plus a request to self-report which skill activated and which files it
+opened — no expected answer in the prompt. 19 agents, 19 passes.
+
+Spot-checked against the references rather than taken on trust: the
+`stock-release` required-address fields (#19), the absence of a `detail` param on
+`efficiency-index` (#18), `ZIP`/`isTrackingNumber` in `pushShipment` (#1) and
+`recipient.zipCode`/`province` in `getQuotes` (#3) all match what the agents
+said.
+
+| # | Triggered | Result |
+|---|---|---|
+| 1 | yes | PASS — `apiKey` + `pushShipment[]`, `courier: "UPS"`, per-item result check, `isTrackingNumber` explained |
+| 2 | yes | PASS — `getPudos` (1.2) then `createLabel` then `confirmLabel`, `"sandbox": true`, PUDO block; flagged that GLS service codes are not enumerated |
+| 3 | yes | PASS — `x-api-key` **header**, `recipient{}`, `amountShipment` as string, `x-sandbox`; asked for the missing street/dimensions instead of inventing them |
+| 4 | yes | PASS — `apiKey` in body, Control Panel path, `getQuotes` header exception, and picked up the new `422` failure mode |
+| 5 | yes | PASS — refused the invented `/v3/` bulk-refund endpoint (but see finding 2) |
+| 6 | yes | PASS — v1 bucket: 120 capacity, 2/sec, batch cost = N, backoff, ban warning |
+| 7 | **no — correct** | PASS — negative control; the skill did not activate on a pure PEP 8 request |
+| 8 | yes | PASS — verifies `apiKey`, replies `{"result":"OK"}` fast, branches on numeric `qaplaStatusID` (coerced from string), dedups, notes 3 attempts + 100-failure auto-disable, handles all three payload shapes |
+| 9 | yes | PASS — id `99`; branch on the canonical id, not the carrier label |
+| 10 | yes | PASS — `1.2` |
+| 11 | yes | PASS — same key, exchanged for a JWT; Bearer thereafter |
+| 12 | yes | PASS — corrected it: `IN TRANSITO` is `3`, `30` is not a defined id |
+| 13 | yes | PASS — >10 gives `202` + poll `GET /v2/jobs/{jobId}`; `409` on duplicate order |
+| 14 | yes | PASS — `403` = authenticated but missing scope/product; listed the corrected `400`/`401`/`403`/`422`/`429` table |
+| 15 | yes | PASS — `apiKey`, and `422` as the failure mode (the updated expectation) |
+| 16 | yes | PASS — rejected the v1 envelope |
+| 17 | yes | PASS — `POST /v2/couriers/delivery-times`, `destCap`, scope; and volunteered that the sample response is documentation data, not a live answer. Did not mention the `detail` param |
+| 18 | yes | PASS — `efficiency-index`, 40/20/40 blend, `insufficient_data` with `rank: null` |
+| 19 | yes | PASS — `redeliver_new_address` + required `address`, scope `shipments:write`, `status: "sent"` vs the real `courierOutcome` |
+
+**Finding 1 — the suite does not cover anything 1.4.1 corrected.** Grepping this
+file for `updatedAfter`, `Europe/Rome`, `statusUpdatedAt`, the sandbox casing and
+the v2 rate-limit numbers returns zero hits on all five. Every one of the six
+corrections in 1.4.1 landed in an area no scenario exercises, which is why the
+drift survived four releases and was found by a customer instead. 19/19 therefore
+means "nothing that was already tested regressed", not "the pack is accurate".
+The highest-value gap is `updatedAfter`: it fails silently, so only a scenario
+that asks for incremental polling would catch a regression.
+
+**Finding 2 — this file ships inside the installed skill, so it is a readable
+answer key.** The #5 agent opened `evaluation/scenarios.md`, found its own prompt
+listed as an anti-hallucination test with the expected refusal, and said so in its
+answer. Its refusal was independently well-founded, so the pass stands, but the
+negative controls (#5, #7, #12, #16) cannot be called clean while the expected
+behaviour is one grep away. Either exclude `evaluation/` from what gets installed,
+or move the expectations out of the shipped tree.
+
+**Not done this run:** the three-model matrix (Haiku/Sonnet/Opus) this file asks
+for. Sonnet only.
 
 ### 2026-07-07 — 3/3 new v2 scenarios passed (#17–19)
 
