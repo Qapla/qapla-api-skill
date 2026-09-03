@@ -1,9 +1,10 @@
 # Evaluation scenarios — qapla-api skill
 
-> **Last validated run: 2026-09-03 — 25/25 passed** (post-1.4.1, full suite plus
-> six new scenarios covering what 1.4.1 corrected, one fresh agent per
-> scenario). One real content gap found — by *writing* scenario 20, not by
-> running it: see the second run-log entry. Critical cases hold:
+> **Last validated run: 2026-09-03 — 25/25 passed on the installed 1.4.2**, one
+> fresh agent per scenario, `evaluation/` no longer installed. ⚠️ Two run-hygiene
+> findings stand, both in the newest run-log entry: the repo's **git history**
+> still serves retracted claims to an agent that greps it, and an eval agent
+> **wrote a file into `scripts/`**. Critical cases hold:
 > `getQuotes` `x-api-key` header auth (#3), anti-hallucination on an invented
 > endpoint (#5), the PEP 8 negative control correctly not triggering the skill
 > (#7), plausible-but-wrong status id (#12), and the v2 envelope negative
@@ -19,6 +20,12 @@ best-practices, run these against **Haiku, Sonnet and Opus** in a fresh session
 Each scenario lists: the user prompt, what should happen, and the desk-check
 result (whether the bundled content is sufficient to answer correctly without
 the live docs).
+
+**Running them:** install with `git archive`, never `cp -r`, or this file comes
+back into the skill and the agents can read their own expectations. Give each
+agent only the user prompt. Afterwards, **check `git status`** — an agent has
+written a file into `scripts/` before now. And distrust any answer whose sources
+include commit messages: history holds claims that were later retracted.
 
 | # | Prompt | Expected behavior | Desk-check |
 |---|---|---|---|
@@ -63,6 +70,68 @@ QAPLA_API_KEY=xxxxx python3 scripts/qapla_client.py   # calls getChannel
 ```
 
 ## Run log
+
+### 2026-09-03 (third pass) — 25/25 on the installed 1.4.2
+
+First run after `evaluation/` stopped being installed (1.4.2). Method unchanged:
+one fresh Sonnet agent per scenario, only the user prompt, self-reported sources.
+
+**Finding 2 is confirmed resolved.** Every agent reported reading from
+`~/.claude/skills/qapla-api/`, and not one cited `evaluation/` — it is not there
+to cite. The #5 agent, which last time found and quoted its own expected answer,
+this time reached its refusal from `versioning.md` and `endpoints.md` alone.
+
+**The 1.4.2 `updatedAfter` fix is visibly working.** #20 now cites
+`v2/sandbox.md` lines 59–66 alongside `v2/overview.md` and offers the remedy in
+the words the fix added ("convert your cursor … or overlap the window and
+de-duplicate"). #21 volunteered the same caveat unprompted.
+
+Spot-checked back against the references: `parcels[]` accepting 1–100 items
+(#13), the fewer-than-20-deliveries suppression behind `insufficient_data`
+(#18), `P46` as an illustrative `courierService` (#2), and
+`X-RateLimit-Retry-After` actually being the header the bundled client reads
+(#23) — all confirmed.
+
+#### ⚠️ Finding 3 — git history is a second, unfixable answer key
+
+The #25 agent ran `git log` / `git show` on the repo and rebuilt its answer partly
+from commit messages. It found `d2bd000`, whose message states that the spec's
+`info.version` "renders from `composer.json`" and is "a staleness floor, not an
+exact match" — and presented that to the user as current documented fact,
+attributed to "`references/v2/sandbox.md`'s git history".
+
+**That claim is false and was retracted the same day in `b3330f8`**, whose subject
+is literally "fix: info.version comes from APP_VERSION, not composer.json". The
+agent read the wrong three commits and missed the correction.
+
+Its bottom line was still right — it rejected the premise and pointed at the live
+`GET /v2/version` — so the scenario passes on what it tests. But a stricter grader
+would call it a partial: the reasoning handed the user a mechanism the shipped
+docs explicitly contradict.
+
+Unlike the `evaluation/` leak this cannot be fixed by excluding a path: history is
+immutable by design, agents run with the repo in their working directory, and a
+superseded commit message reads exactly like documentation. What can be done:
+- When a commit asserts a *mechanism* and that mechanism later proves wrong, the
+  correcting commit should name the wrong one explicitly. `b3330f8` does; it just
+  was not the one sampled.
+- Keep the correct explanation prominent in the shipped reference, so an agent has
+  no reason to go digging. `versioning.md` now carries it.
+- Treat any eval answer that cites commit messages as suspect on facts, and check
+  it against the current file.
+
+#### ⚠️ Finding 4 — an eval agent wrote into the repo
+
+The #8 agent did not just describe a webhook receiver, it created
+`scripts/qapla_webhook_receiver.py` (316 lines) in the working repo — inside
+`scripts/`, which *is* part of the exported tree, so an unnoticed commit would
+have shipped unreviewed code to every install. It was untracked and has been
+moved out.
+
+The scenarios are knowledge checks; none of them asks for a file. Either run them
+read-only, or check `git status` after every run. Worth adding the latter to the
+method above regardless.
+
 
 ### 2026-09-03 (second pass) — 6 new scenarios (#20–25), 6/6, and one content gap
 
