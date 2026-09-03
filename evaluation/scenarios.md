@@ -1,7 +1,9 @@
 # Evaluation scenarios — qapla-api skill
 
-> **Last validated run: 2026-09-03 — 19/19 passed** (post-1.4.1, full suite,
-> one fresh agent per scenario). No content bug found. Critical cases hold:
+> **Last validated run: 2026-09-03 — 25/25 passed** (post-1.4.1, full suite plus
+> six new scenarios covering what 1.4.1 corrected, one fresh agent per
+> scenario). One real content gap found — by *writing* scenario 20, not by
+> running it: see the second run-log entry. Critical cases hold:
 > `getQuotes` `x-api-key` header auth (#3), anti-hallucination on an invented
 > endpoint (#5), the PEP 8 negative control correctly not triggering the skill
 > (#7), plausible-but-wrong status id (#12), and the v2 envelope negative
@@ -39,6 +41,12 @@ the live docs).
 | 17 | "On the Qapla' v2 API, which courier is fastest to postal code 20100?" | `POST /v2/couriers/delivery-times` with `destCap`, optional `couriers`/`weightKg`/`originCap`; explains `best` + fastest-first `ranking` (default `detail: "summary"`), lead time as the ranking metric. Scope `delivery-times:read`. | ✅ covered by `v2/couriers.md` |
 | 18 | "I want to pick the best v2 courier overall, not just the fastest one, for a lane — what do I call?" | `POST /v2/couriers/efficiency-index`; explains the 0–100 index blending `scoreSpeed`/`scoreConsistency`/`scoreReliability` at 40/20/40, best-first `ranking`, `insufficient_data` couriers appended with null rank. Scope `efficiency-index:read`. | ✅ covered by `v2/couriers.md` |
 | 19 | "A Qapla' v2 shipment is stuck in giacenza (held in depot) — how do I ask the courier to redeliver it to a different address?" | `POST /v2/shipments/{id}/stock-release` with `action: "redeliver_new_address"` and a required `address` object; scope `shipments:write`; explains `courierOutcome` (`ok`/`error` sync for GLS/TNT, `pending` deferred for BRT) vs. the always-`"sent"` `status`. | ✅ covered by `v2/stock-release.md` |
+| 20 | "I poll the Qapla' v2 API for shipments updated since my last sync, and I keep my cursor in UTC. Is that right?" | ⚠️ **Negative control, silent-failure class** — NO. `updatedAfter` is interpreted in `Europe/Rome`, so a UTC cursor **skips shipments** in the offset window with **no error**. Must warn and tell you to send the cursor in `Europe/Rome` (or overlap the window), not confirm the approach. | ✅ covered by `v2/overview.md` + `v2/sandbox.md` |
+| 21 | "What timezone and format are timestamps in the Qapla' v2 API?" | **Not uniformly UTC, and no endpoint emits a literal `Z`.** `parcels`/`orders` are ATOM with an explicit `+00:00`; **shipment tracking** (`statusDate`, `statusUpdatedAt`, `history[].date`) and **sandbox** are `"Y-m-d H:i:s"` with **no offset**, in `Europe/Rome`. Should not answer a flat "UTC". | ✅ covered by `v2/overview.md` + `migration.md` + `versioning.md` |
+| 22 | "My Qapla' v2 sandbox client reads `string_value` from the response and it just stopped working. What broke?" | **Nothing broke on your side by accident** — `qore/api` 2.21.10 made sandbox responses camelCase (`stringValue`, `createdAt`), a deliberate **breaking change**; rename the fields. Should not suggest the API is malfunctioning or that snake_case is still correct. | ✅ covered by `v2/sandbox.md` |
+| 23 | "What's the rate limit on the Qapla' v2 API, and what do I get when I exceed it?" | Token bucket **300 capacity, refill 150/min** (defaults since `qore/api` v2.20.0); the channel's real values come back in the token response's `rate_limit`; over limit → **`429`** with `X-RateLimit-*` headers. ⚠️ Must **not** quote the v1.x bucket (120 capacity, 2/sec) — that is a separate limiter. | ✅ covered by `v2/overview.md` + `v2/authentication.md` |
+| 24 | "Is `POST /v2/orders` in Qapla's public Swagger yet, or do I have to wait for it?" | It **is** published in the public spec — it is simply not written up in depth in this pack; build against <https://api.qapla.dev/v2/>. Should not say "not yet published" / "still in flight", which was true only of a stale 2.14.0 snapshot. | ✅ covered by `v2/endpoints.md` + `versioning.md` |
+| 25 | "The Qapla' v2 Swagger reports version 2.21.9 — so the camelCase sandbox change isn't live yet, right?" | ⚠️ **Negative control** — the inference is invalid. The published snapshot's `info.version` is whatever `APP_VERSION` was when the dump ran and does **not** identify the contracts inside it (that snapshot already carries the camelCase schemas). Read the schemas, or ask the live `GET /v2/version`. Should not confirm the premise. | ✅ covered by `versioning.md` |
 
 ## Negative / edge checks
 - Scenario 5 verifies the **anti-hallucination guardrail** (invented endpoint).
@@ -55,6 +63,45 @@ QAPLA_API_KEY=xxxxx python3 scripts/qapla_client.py   # calls getChannel
 ```
 
 ## Run log
+
+### 2026-09-03 (second pass) — 6 new scenarios (#20–25), 6/6, and one content gap
+
+Added the scenarios the previous run showed were missing: one per correction
+shipped in 1.4.1. Method as before — one fresh Sonnet agent per scenario, only
+the user prompt, self-reported sources. **The scenarios were written to the repo
+but deliberately not synced into the installed skill before running**, so this
+time the agents could not read their own expectations (finding 2 of the previous
+entry).
+
+| # | Covers | Result |
+|---|---|---|
+| 20 | `updatedAfter` read in `Europe/Rome` (silent data loss) | PASS — rejected the UTC cursor, quoted the silent-loss consequence, gave the fix, and correctly separated `parcels` (safe in UTC) from shipments/sandbox |
+| 21 | v2 timestamps are mixed, never a literal `Z` | PASS — per-resource table, ATOM `+00:00` vs `"Y-m-d H:i:s"` in `Europe/Rome`, and volunteered the `updatedAfter` caveat unprompted |
+| 22 | sandbox casing is a deliberate breaking change | PASS — named 2.21.10, gave the full rename map, explicitly said nothing broke on the caller's side |
+| 23 | v2 rate limit 300 / 150-per-minute | PASS — right numbers, told the caller the token response is authoritative over the defaults, and distinguished the v1 bucket |
+| 24 | second-tier resources are published, not "in flight" | PASS — published in the spec, not detailed here, don't hardcode |
+| 25 | the spec's `info.version` proves nothing about contents | PASS — rejected the premise, said the snapshot already carries the 2.21.10 schemas, pointed at the live `GET /v2/version` |
+
+**Content gap found — `updatedAfter` had no warning where it is actually
+documented.** Writing #20 meant checking where the caveat lives, and it lived in
+`v2/overview.md` alone: the query-param table in `v2/sandbox.md` — the thing you
+read while calling `GET /v2/sandbox` — still said "ISO 8601 datetime filter" with
+no mention of the zone. The 1.4.1 changelog's "now called out wherever the filter
+appears" was therefore overstated. Fixed in `v2/sandbox.md`, with the correction
+recorded under `[Unreleased]`.
+
+Note this gap was found by **authoring** the scenario, not by running it: #20
+passed both before and after the fix, because the agent found the caveat in
+`overview.md`. A scenario that asks specifically "what does the `GET /v2/sandbox`
+query-param table say about `updatedAfter`" would have failed — worth remembering
+that a passing suite of natural-language prompts does not prove each individual
+file is self-sufficient.
+
+Also noted: the #25 agent read the reference files from the **repo** rather than
+the installed copy (identical content at the time, so the result stands, but the
+sandbox for these runs is not hermetic — agents run with the repo in their working
+directory and can reach it).
+
 
 ### 2026-09-03 — 19/19 passed, but the suite tested none of what 1.4.1 fixed
 

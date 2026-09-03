@@ -56,8 +56,14 @@ All required except `dateTimeValue` (optional). `stringValue` needs ≥3 chars.
 |---|---|---|
 | `page` | 1 | positive |
 | `limit` | 20 | positive, max 100 |
-| `updatedAfter` | — | ISO 8601 datetime filter |
-| `updatedBefore` | — | ISO 8601 datetime filter |
+| `updatedAfter` | — | ISO 8601 datetime filter — ⚠️ **read in `Europe/Rome`**, see below |
+| `updatedBefore` | — | ISO 8601 datetime filter — same zone |
+
+⚠️ **Both filters are interpreted in `Europe/Rome`, not UTC.** Passing a UTC
+cursor does not raise an error, it just **silently omits** rows in the offset
+window (1–2h depending on DST). Convert your cursor to `Europe/Rome` before
+sending it, or overlap the window and de-duplicate. The same applies to the
+`updatedAfter` filter on the `shipments` resource.
 
 Returns the paginated envelope (`items`/`total`/`page`/`limit`/`pages`); supports
 ETag / `304`.

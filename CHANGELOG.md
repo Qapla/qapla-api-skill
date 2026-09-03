@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **`v2/sandbox.md`: the `updatedAfter` / `updatedBefore` rows carried no
+  timezone warning.** 1.4.1 said the `Europe/Rome` caveat was "called out
+  wherever the filter appears"; that was overstated — it landed in
+  `v2/overview.md` only, while the query-param table an integrator actually
+  reads when calling `GET /v2/sandbox` still described them as plain "ISO 8601
+  datetime filter". Both rows now carry the warning, with a note on what to do
+  about it (convert the cursor, or overlap and de-duplicate) and a pointer that
+  the `shipments` resource has the same filter. Found by writing eval scenario
+  20, which exists precisely to cover this failure.
+
 ## [1.4.1] - 2026-09-03
 
 Corrections to the v2 references, realigning them with the `qore/api`
