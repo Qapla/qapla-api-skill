@@ -71,14 +71,29 @@ with the entrypoint — they hold the actual knowledge.
 
 ### Claude Code
 
-Copy the whole folder into your skills directory:
+Export the tree into your skills directory:
 
 ```bash
 # project-level (this repo only)
-mkdir -p .claude/skills && cp -r qapla-api .claude/skills/
+mkdir -p .claude/skills/qapla-api
+git archive HEAD | tar -x -C .claude/skills/qapla-api
 
 # or user-level (all your projects)
-mkdir -p ~/.claude/skills && cp -r qapla-api ~/.claude/skills/
+mkdir -p ~/.claude/skills/qapla-api
+git archive HEAD | tar -x -C ~/.claude/skills/qapla-api
+```
+
+`git archive` is used rather than `cp -r` because **`evaluation/` is marked
+`export-ignore` in [`.gitattributes`](.gitattributes) and must not be
+installed**: it lists the expected answer for every validation prompt, so an
+agent that can read it while answering one of those prompts is grading its own
+homework. (This also keeps it out of GitHub's release tarballs. The suite still
+lives in the repo — it is a maintainer tool, not part of the knowledge pack.)
+
+If you copy by hand instead, exclude it explicitly:
+
+```bash
+rsync -a --exclude 'evaluation/' --exclude '.git/' ./ ~/.claude/skills/qapla-api/
 ```
 
 The skill loads automatically when a task matches its `description`. Keep

@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **`evaluation/` is no longer installed with the skill.** It is marked
+  `export-ignore` in `.gitattributes`, so the documented `git archive` install
+  path (README updated) leaves it out, as do GitHub's release tarballs. It listed
+  the expected answer for every validation prompt right next to the content it
+  validates, and an eval run caught an agent reading it while answering one of
+  those prompts. The suite stays in the repo — it is a maintainer tool, not part
+  of the knowledge pack.
+
 ### Fixed
 - **`v2/sandbox.md`: the `updatedAfter` / `updatedBefore` rows carried no
   timezone warning.** 1.4.1 said the `Europe/Rome` caveat was "called out

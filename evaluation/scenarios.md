@@ -71,7 +71,8 @@ shipped in 1.4.1. Method as before — one fresh Sonnet agent per scenario, only
 the user prompt, self-reported sources. **The scenarios were written to the repo
 but deliberately not synced into the installed skill before running**, so this
 time the agents could not read their own expectations (finding 2 of the previous
-entry).
+entry — since made structural: `evaluation/` is `export-ignore`d and no longer
+installed at all).
 
 | # | Covers | Result |
 |---|---|---|
@@ -153,8 +154,14 @@ answer key.** The #5 agent opened `evaluation/scenarios.md`, found its own promp
 listed as an anti-hallucination test with the expected refusal, and said so in its
 answer. Its refusal was independently well-founded, so the pass stands, but the
 negative controls (#5, #7, #12, #16) cannot be called clean while the expected
-behaviour is one grep away. Either exclude `evaluation/` from what gets installed,
-or move the expectations out of the shipped tree.
+behaviour is one grep away.
+
+> **Resolved (2026-09-03).** `evaluation/` is now `export-ignore` in
+> `.gitattributes`, so `git archive` — the documented install path in the README
+> — leaves it out, and the installed skill no longer carries it. Runs from
+> 2026-09-03 (second pass) onward are clean by construction rather than by
+> remembering to sync in the right order. **When re-running, install with
+> `git archive`, not `cp -r`**, or the answer key comes back.
 
 **Not done this run:** the three-model matrix (Haiku/Sonnet/Opus) this file asks
 for. Sonnet only.
