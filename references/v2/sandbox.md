@@ -10,24 +10,31 @@ header, REST verbs, pagination, ETag/`304`, RFC 7807 errors, validation
 `violations`) against a harmless resource before wiring up real ones. Treat it as
 the canonical "hello world" for a v2 client.
 
-> **Casing is symmetric since `qore/api` 2.21.10** (2026-09-03): request and
-> response are both camelCase. Before that the endpoint accepted `stringValue` but
-> answered `string_value`, so you could not read back what you had just written
-> using the same names. **If you integrated against the old snake_case response,
-> that is a breaking change** — rename the fields.
+> ⚠️ **Response casing depends on the deployed `qore/api` version.** Up to and
+> including **2.21.9** — what is in production as of 2026-09-03 — the endpoint
+> accepts camelCase but answers **snake_case**, so you cannot read back what you
+> just wrote under the same names. From **2.21.10** both directions are camelCase.
+> 2.21.10 is not deployed yet: write a parser that tolerates both, because the
+> switch is a **breaking change** if you only handle snake_case.
+>
+> Note that <https://api.qapla.dev/v2/> already shows the 2.21.10 camelCase
+> examples, ahead of production. **Request** bodies are camelCase in every version.
 
 ## The entity
 
-| Response field | Type | Notes |
-|---|---|---|
-| `id` | integer | Server-assigned |
-| `stringValue` | string | min 3 chars |
-| `intValue` | integer | |
-| `boolValue` | boolean | |
-| `floatValue` | float | |
-| `dateTimeValue` | string \| null | `"Y-m-d H:i:s"`, no offset, `Europe/Rome` |
-| `createdAt` | string | `"Y-m-d H:i:s"`, no offset, `Europe/Rome` |
-| `updatedAt` | string \| null | `"Y-m-d H:i:s"`, no offset, `Europe/Rome` |
+Request fields are always camelCase. The response field name depends on the
+deployed version (see the warning above).
+
+| Response ≤2.21.9 | Response 2.21.10+ | Type | Notes |
+|---|---|---|---|
+| `id` | `id` | integer | Server-assigned |
+| `string_value` | `stringValue` | string | min 3 chars |
+| `int_value` | `intValue` | integer | |
+| `bool_value` | `boolValue` | boolean | |
+| `float_value` | `floatValue` | float | |
+| `date_time_value` | `dateTimeValue` | string \| null | `"Y-m-d H:i:s"`, no offset, `Europe/Rome` |
+| `created_at` | `createdAt` | string | `"Y-m-d H:i:s"`, no offset, `Europe/Rome` |
+| `updated_at` | `updatedAt` | string \| null | `"Y-m-d H:i:s"`, no offset, `Europe/Rome` |
 
 ## Create — `POST /v2/sandbox`
 
@@ -42,9 +49,10 @@ the canonical "hello world" for a v2 client.
 ```
 
 All required except `dateTimeValue` (optional). `stringValue` needs ≥3 chars.
-→ `201 Created` with the entity (snake_case fields). Samples:
+→ `201 Created` with the entity. Samples:
 [request](../examples/v2/sandbox.request.json) (camelCase) /
-[response](../examples/v2/sandbox.response.json) (snake_case).
+[response](../examples/v2/sandbox.response.json) (snake_case, i.e. the deployed
+2.21.9 shape — see the casing warning above).
 
 ## List — `GET /v2/sandbox`
 

@@ -13,35 +13,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.4.1] - 2026-09-03
 
-Corrections. A customer integrating v2 in production hit two places where the
-public documentation promised one thing and the API did another, and this pack
-had inherited part of the same drift.
+Corrections to the v2 references, realigning them with the `qore/api`
+implementation and the regenerated public spec. Two of the entries below change
+behaviour you may already have coded against — read the `updatedAfter` and
+sandbox notes.
 
 ### Fixed
 - **v2 is not uniformly UTC, and never emits a literal `Z`.** `v2/overview.md` and
   `migration.md` claimed UTC / `YYYY-MM-DDTHH:MM:SSZ` across the board. Reality:
   `parcels` and `orders` use ATOM with an explicit `+00:00`, while **shipment
   tracking** (`statusDate`, `statusUpdatedAt`, `history[].date`) and **sandbox**
-  return `"Y-m-d H:i:s"` with **no offset**, in `Europe/Rome`.
+  return `"Y-m-d H:i:s"` with **no offset**, in `Europe/Rome`. Moving tracking to
+  real UTC is a *planned* breaking change, not a done one.
 - ⚠️ **`updatedAfter` is read in `Europe/Rome` too**, which is the dangerous half:
   polling incrementally in UTC does not raise an error, it **silently skips
   shipments** in the offset window. Now called out wherever the filter appears.
 - **`orders`, `shipments`, `labels` and `couriers` are no longer "not yet in the
   public spec".** That was true when written; the Swagger snapshot had simply gone
-  stale at 2.14.0 and was regenerated to 2.21.9 on 2026-09-03, at which point they
-  appeared. Reworded to "published, but not detailed here", which is what actually
-  distinguishes them.
+  stale at 2.14.0 and was regenerated to 2.21.9 (published as api.qapla.dev
+  `1.0.11` on 2026-09-03), at which point they appeared. Reworded to "published,
+  but not detailed here", which is what actually distinguishes them.
 - **The `api_key` warning in `v2/authentication.md` is obsolete**: the public docs
-  were corrected on 2026-09-03. Kept the field guidance and added the failure mode
-  the customer actually saw — a wrong field name is **`422`**, not `400`.
+  now show `apiKey`. Kept the field guidance and added the real failure mode — a
+  wrong field name is **`422`** (`apiKey should not be blank`), not `400`; with
+  `#[MapRequestPayload]`, `400` means a missing or malformed body.
 - **Rate limit in `v2/overview.md` was two generations old** (120 capacity, refill
-  2/sec). It is 300 capacity, refill 150/min since `qore/api` v2.20.0.
+  2/sec). It is **300** capacity, refill **150/min** since `qore/api` v2.20.0. The
+  same stale numbers were still in the token-response example in
+  `v2/authentication.md` and in `references/examples/v2/authToken.response.json`,
+  and `rate_limit.refill_rate` was described as tokens per **second** when it is
+  per **minute** — all three fixed. (The v1.x limit is a different bucket and is
+  unchanged: 120 capacity, 2/sec.)
+- **`v2/parcels.md` restated the sandbox casing** and was left inconsistent with
+  the entry below; it now points at `v2/sandbox.md` instead of duplicating it.
 
 ### Changed
-- **`v2/sandbox.md`: the casing quirk is gone.** The endpoint used to accept
-  `stringValue` and answer `string_value`; since `qore/api` 2.21.10 request and
-  response are both camelCase. Entity table updated. ⚠️ Breaking for anyone who
-  integrated against the old snake_case response.
+- **`v2/sandbox.md`: the casing asymmetry is now version-gated, not deleted.** Up
+  to and including `qore/api` **2.21.9** — what is in production as of this
+  release — the endpoint accepts `stringValue` but answers `string_value`, so you
+  cannot read back what you just wrote under the same names. From **2.21.10** both
+  directions are camelCase. 2.21.10 is not deployed yet, so the entity table lists
+  both shapes and the response example still shows the deployed one. ⚠️ When
+  2.21.10 ships this is a breaking change for anyone parsing the snake_case
+  response — make your parser tolerant now.
+  Note that <https://api.qapla.dev/v2/> already publishes the 2.21.10 camelCase
+  examples, ahead of production.
 
 
 ## [1.4.0] - 2026-07-07

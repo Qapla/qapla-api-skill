@@ -10,8 +10,8 @@
   "token_type": "Bearer",
   "expires_in": 86400,
   "rate_limit": {
-    "refill_rate": 2,
-    "bucket_size": 120
+    "refill_rate": 150,
+    "bucket_size": 300
   },
   "cache": false
 }

@@ -19,9 +19,9 @@ Content-Type: application/json
 
 > The field is **`apiKey`** (camelCase), renamed from `api_key` in v2.8.8
 > ("consistent with all other endpoints"). The public docs showed the stale
-> `api_key` until 2026-09-03 — a customer hit `422 apiKey should not be blank`
-> copying the example — and are now corrected. A wrong field name gives **`422`**,
-> not `400`: with `#[MapRequestPayload]`, `400` means a missing or malformed body.
+> `api_key` until 2026-09-03 and are now corrected. A wrong field name gives
+> **`422`** (`apiKey should not be blank`), not `400`: with
+> `#[MapRequestPayload]`, `400` means a missing or malformed body.
 
 ### Response
 
@@ -31,7 +31,7 @@ Content-Type: application/json
   "scopes": ["parcels:create", "parcels:read", "..."],
   "token_type": "Bearer",
   "expires_in": 86400,
-  "rate_limit": { "refill_rate": 2, "bucket_size": 120 },
+  "rate_limit": { "refill_rate": 150, "bucket_size": 300 },
   "cache": false
 }
 ```
@@ -42,7 +42,7 @@ Content-Type: application/json
 | `scopes` | The permissions embedded in this token (what the key is allowed to do) |
 | `token_type` | Always `Bearer` |
 | `expires_in` | Token lifetime in **seconds** — `86400` = 24h |
-| `rate_limit` | This channel's bucket: `refill_rate` (tokens/sec) and `bucket_size` (capacity) |
+| `rate_limit` | This channel's bucket: `refill_rate` (tokens restored per **minute**) and `bucket_size` (burst capacity). Defaults are 150 / 300 since `qore/api` v2.20.0; a channel can be given custom values |
 | `cache` | `true` if the token came from Qapla's cache, `false` if freshly minted (also surfaced as the `X-Auth-Cache: HIT\|MISS` header) |
 
 Sample payloads: [`../examples/v2/authToken.request.json`](../examples/v2/authToken.request.json)
