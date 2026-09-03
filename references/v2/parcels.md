@@ -10,8 +10,8 @@ from (e.g. `shopify`). All units are metric (kg, cm).
 
 > v2 surface as of `qore/api` 2.9.4. Field names are copied verbatim from the
 > implementation DTOs — request bodies and parcel **responses** are both
-> **camelCase**. (The `sandbox` resource is the exception, and a
-> version-dependent one — see [`sandbox.md`](sandbox.md).) Verify against
+> **camelCase** — as is every v2 resource since `qore/api` 2.21.10, which removed
+> the last exception (see [`sandbox.md`](sandbox.md)). Verify against
 > <https://api.qapla.dev/v2/> if anything looks off.
 
 ## Create — `POST /v2/parcels`

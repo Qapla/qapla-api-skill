@@ -19,8 +19,9 @@ behaviour you may already have coded against — read the `updatedAfter` and
 sandbox notes.
 
 ### Fixed
-- **v2 is not uniformly UTC, and never emits a literal `Z`.** `v2/overview.md` and
-  `migration.md` claimed UTC / `YYYY-MM-DDTHH:MM:SSZ` across the board. Reality:
+- **v2 is not uniformly UTC, and never emits a literal `Z`.** `v2/overview.md`,
+  `migration.md` and `versioning.md` each claimed UTC / `YYYY-MM-DDTHH:MM:SSZ`
+  across the board — three copies of the same wrong sentence. Reality:
   `parcels` and `orders` use ATOM with an explicit `+00:00`, while **shipment
   tracking** (`statusDate`, `statusUpdatedAt`, `history[].date`) and **sandbox**
   return `"Y-m-d H:i:s"` with **no offset**, in `Europe/Rome`. Moving tracking to
@@ -32,7 +33,11 @@ sandbox notes.
   public spec".** That was true when written; the Swagger snapshot had simply gone
   stale at 2.14.0 and was regenerated to 2.21.9 (published as api.qapla.dev
   `1.0.11` on 2026-09-03), at which point they appeared. Reworded to "published,
-  but not detailed here", which is what actually distinguishes them.
+  but not detailed here", which is what actually distinguishes them. `versioning.md`
+  also now warns that the spec's `info.version` can *understate* the deployed
+  version — it renders from `composer.json`, which is deliberately not bumped on
+  every release (2.21.10 ships with it reading 2.21.9) — so it is a staleness
+  floor, not an exact match.
 - **The `api_key` warning in `v2/authentication.md` is obsolete**: the public docs
   now show `apiKey`. Kept the field guidance and added the real failure mode — a
   wrong field name is **`422`** (`apiKey should not be blank`), not `400`; with
@@ -48,16 +53,18 @@ sandbox notes.
   the entry below; it now points at `v2/sandbox.md` instead of duplicating it.
 
 ### Changed
-- **`v2/sandbox.md`: the casing asymmetry is now version-gated, not deleted.** Up
-  to and including `qore/api` **2.21.9** — what is in production as of this
-  release — the endpoint accepts `stringValue` but answers `string_value`, so you
-  cannot read back what you just wrote under the same names. From **2.21.10** both
-  directions are camelCase. 2.21.10 is not deployed yet, so the entity table lists
-  both shapes and the response example still shows the deployed one. ⚠️ When
-  2.21.10 ships this is a breaking change for anyone parsing the snake_case
-  response — make your parser tolerant now.
-  Note that <https://api.qapla.dev/v2/> already publishes the 2.21.10 camelCase
-  examples, ahead of production.
+- ⚠️ **`v2/sandbox.md`: the casing asymmetry is gone — and that is a breaking
+  change.** Up to `qore/api` 2.21.9 the endpoint accepted `stringValue` but
+  answered `string_value`, so you could not read back what you had just written
+  under the same names. `qore/api` **2.21.10** (released 2026-09-03) makes request
+  and response both camelCase. Entity table, response example and the
+  cross-reference in `v2/parcels.md` all updated. **If you parse the snake_case
+  response, rename the fields.**
+- **`v2/authentication.md` error table repeated the `400` mistake** it warns about
+  two sections earlier: it listed `400` for a missing `apiKey`, when that is
+  `422`. `400` is now described as an absent or malformed body, and the two codes
+  the public Swagger omitted — `422` and `429`, both corrected in `qore/api`
+  2.21.10 — are documented.
 
 
 ## [1.4.0] - 2026-07-07

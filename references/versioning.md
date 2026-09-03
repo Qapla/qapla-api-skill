@@ -54,14 +54,20 @@ knowledge does not carry over. At a high level it differs in:
   `Authorization: Bearer …` header. v1-style auth (`apiKey` in the body) won't work.
 - **Errors** — standard **HTTP status codes**, not the `{"<endpoint>":{"result":…}}`
   envelope.
-- **Time** — **UTC**, ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`), vs CEST + `YYYY-MM-DD HH:MM:SS`.
+- **Time** — ⚠️ **not uniformly UTC, and never a literal `Z`.** `parcels`/`orders`
+  use ATOM (`YYYY-MM-DDTHH:MM:SS+00:00`); shipment tracking and `sandbox` return
+  `YYYY-MM-DD HH:MM:SS` in `Europe/Rome` with no offset, same as v1.3. See
+  [`v2/overview.md`](v2/overview.md).
 
 v2 is developed and documented independently and is **actively evolving** toward
 becoming the platform's primary API surface. This skill now documents its **stable
 core** (auth, parcels, sandbox, jobs) under [`v2/`](v2/overview.md), extracted from
 the real `qore/api` implementation. The public Swagger had lagged badly — it sat at
 2.14.0 until it was regenerated to 2.21.9 on 2026-09-03 — so check its `info.version`
-before trusting it. Other resources (orders, shipments, labels, couriers) are now
+before trusting it. Note that `info.version` can also *understate* the deployed
+version: it is rendered from `composer.json`, whose `version` field is deliberately
+not bumped on every release (2.21.10 ships with it still reading 2.21.9). Treat it
+as a staleness floor, not an exact match. Other resources (orders, shipments, labels, couriers) are now
 published in that spec but are not detailed in this skill; for those, the live docs
 are the authoritative source:
 

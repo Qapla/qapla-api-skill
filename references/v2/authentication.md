@@ -91,9 +91,14 @@ Auth/authorization failures use the standard v2 RFC 7807 error body (see
 
 | Status | When |
 |---|---|
-| `400` | Malformed request (e.g. missing/!`apiKey`) |
+| `400` | Body absent or malformed JSON — **not** a bad field name |
 | `401` | Invalid/expired token, or unknown API key |
 | `403` | Authenticated but missing the required **scope** (or product) |
+| `422` | Validation failed, e.g. a wrong or missing `apiKey` field (`apiKey should not be blank`) |
+| `429` | Rate limit exceeded — the token endpoint is throttled like any other |
+
+`422` and `429` were missing from the public Swagger for `POST /v2/auth/token`,
+which listed only `400`/`401`; corrected in `qore/api` 2.21.10.
 
 ## Security
 
