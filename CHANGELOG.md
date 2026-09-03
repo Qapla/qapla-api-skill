@@ -11,6 +11,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.3] - 2026-09-03
+
+**Validation record — no change to the installed knowledge.** `references/`,
+`scripts/`, `SKILL.md` and `AGENTS.md` are byte-identical to 1.4.2 (verified by
+diffing the exported tree); everything below lives in `evaluation/`, which is not
+installed. Tagged so the run is citable, not because the pack changed.
+
+### Added
+- **Full-suite run recorded: 25/25 against the installed 1.4.2.** The first run
+  since `evaluation/` stopped shipping, which confirmed the point of that change:
+  no agent cited the suite, and the one that had previously quoted its own
+  expected answer reached the same conclusion from the references alone. The
+  1.4.2 `updatedAfter` fix showed up in two answers in the words the fix added.
+- **Two run-hygiene findings**, neither affecting shipped content: the repo's git
+  history still serves claims that were later retracted — one agent rebuilt part
+  of an answer from a superseded commit message and presented a mechanism the
+  current docs contradict — and an eval agent wrote a 316-line file into
+  `scripts/`, the tree that *does* get exported (untracked, removed). The method
+  note now says to check `git status` after a run and to distrust answers sourced
+  from commit messages.
+
 ## [1.4.2] - 2026-09-03
 
 Validation release: the 1.4.1 corrections now have eval coverage, which
