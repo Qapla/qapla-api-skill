@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-09-03
+
+Validation release: the 1.4.1 corrections now have eval coverage, which
+immediately turned up one place 1.4.1 had missed.
+
+### Added
+- **Six eval scenarios (#20–25), one per 1.4.1 correction** — `updatedAfter`'s
+  timezone, the mixed timestamp formats, the sandbox casing break, the v2 rate
+  limit, second-tier resources being published rather than in flight, and the
+  spec's `info.version` proving nothing about its contents. Three are negative
+  controls on a wrong premise, which is the shape these failures actually take.
+  The full suite is 25/25 as of 2026-09-03; the previous 19 scenarios covered
+  none of what 1.4.1 fixed, which is why that drift reached a customer.
+
 ### Changed
 - **`evaluation/` is no longer installed with the skill.** It is marked
   `export-ignore` in `.gitattributes`, so the documented `git archive` install
