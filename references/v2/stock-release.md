@@ -11,7 +11,7 @@ depot.
 
 > v2 surface as of `qore/api` **2.12.0** (2026-07-06). This is a single action
 > endpoint on the `shipments` resource — the general `shipments` CRUD (bulk
-> create, search, read) is still in flight; see [`endpoints.md`](endpoints.md).
+> create, search, read) is published but not detailed here; see [`endpoints.md`](endpoints.md).
 > Also billable in principle, but — like [`couriers.md`](couriers.md) — the
 > product-ownership gate is not wired yet; a valid token + scope is enough for
 > now.

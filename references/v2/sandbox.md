@@ -10,23 +10,24 @@ header, REST verbs, pagination, ETag/`304`, RFC 7807 errors, validation
 `violations`) against a harmless resource before wiring up real ones. Treat it as
 the canonical "hello world" for a v2 client.
 
-> ⚠️ **Field-casing quirk:** the **request** bodies use camelCase
-> (`stringValue`, `dateTimeValue`), but the **response** comes back in snake_case
-> (`string_value`, `date_time_value`, `created_at`). This mirrors the
-> implementation as of `qore/api` 2.9.4 — don't assume symmetry.
+> **Casing is symmetric since `qore/api` 2.21.10** (2026-09-03): request and
+> response are both camelCase. Before that the endpoint accepted `stringValue` but
+> answered `string_value`, so you could not read back what you had just written
+> using the same names. **If you integrated against the old snake_case response,
+> that is a breaking change** — rename the fields.
 
 ## The entity
 
 | Response field | Type | Notes |
 |---|---|---|
 | `id` | integer | Server-assigned |
-| `string_value` | string | min 3 chars |
-| `int_value` | integer | |
-| `bool_value` | boolean | |
-| `float_value` | float | |
-| `date_time_value` | string \| null | `"Y-m-d H:i:s"` |
-| `created_at` | string | `"Y-m-d H:i:s"` |
-| `updated_at` | string \| null | `"Y-m-d H:i:s"` |
+| `stringValue` | string | min 3 chars |
+| `intValue` | integer | |
+| `boolValue` | boolean | |
+| `floatValue` | float | |
+| `dateTimeValue` | string \| null | `"Y-m-d H:i:s"`, no offset, `Europe/Rome` |
+| `createdAt` | string | `"Y-m-d H:i:s"`, no offset, `Europe/Rome` |
+| `updatedAt` | string \| null | `"Y-m-d H:i:s"`, no offset, `Europe/Rome` |
 
 ## Create — `POST /v2/sandbox`
 

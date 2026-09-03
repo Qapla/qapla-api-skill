@@ -17,9 +17,11 @@ Content-Type: application/json
 { "apiKey": "YOUR_CHANNEL_PRIVATE_API_KEY" }
 ```
 
-> ⚠️ The field is **`apiKey`** (camelCase). The public Swagger may still show
-> `api_key` (snake_case) — that is stale; the deployed API renamed it to `apiKey`
-> in v2.8.8 ("consistent with all other endpoints"). Use `apiKey`.
+> The field is **`apiKey`** (camelCase), renamed from `api_key` in v2.8.8
+> ("consistent with all other endpoints"). The public docs showed the stale
+> `api_key` until 2026-09-03 — a customer hit `422 apiKey should not be blank`
+> copying the example — and are now corrected. A wrong field name gives **`422`**,
+> not `400`: with `#[MapRequestPayload]`, `400` means a missing or malformed body.
 
 ### Response
 

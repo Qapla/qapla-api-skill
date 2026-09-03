@@ -11,6 +11,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-09-03
+
+Corrections. A customer integrating v2 in production hit two places where the
+public documentation promised one thing and the API did another, and this pack
+had inherited part of the same drift.
+
+### Fixed
+- **v2 is not uniformly UTC, and never emits a literal `Z`.** `v2/overview.md` and
+  `migration.md` claimed UTC / `YYYY-MM-DDTHH:MM:SSZ` across the board. Reality:
+  `parcels` and `orders` use ATOM with an explicit `+00:00`, while **shipment
+  tracking** (`statusDate`, `statusUpdatedAt`, `history[].date`) and **sandbox**
+  return `"Y-m-d H:i:s"` with **no offset**, in `Europe/Rome`.
+- ⚠️ **`updatedAfter` is read in `Europe/Rome` too**, which is the dangerous half:
+  polling incrementally in UTC does not raise an error, it **silently skips
+  shipments** in the offset window. Now called out wherever the filter appears.
+- **`orders`, `shipments`, `labels` and `couriers` are no longer "not yet in the
+  public spec".** That was true when written; the Swagger snapshot had simply gone
+  stale at 2.14.0 and was regenerated to 2.21.9 on 2026-09-03, at which point they
+  appeared. Reworded to "published, but not detailed here", which is what actually
+  distinguishes them.
+- **The `api_key` warning in `v2/authentication.md` is obsolete**: the public docs
+  were corrected on 2026-09-03. Kept the field guidance and added the failure mode
+  the customer actually saw — a wrong field name is **`422`**, not `400`.
+- **Rate limit in `v2/overview.md` was two generations old** (120 capacity, refill
+  2/sec). It is 300 capacity, refill 150/min since `qore/api` v2.20.0.
+
+### Changed
+- **`v2/sandbox.md`: the casing quirk is gone.** The endpoint used to accept
+  `stringValue` and answer `string_value`; since `qore/api` 2.21.10 request and
+  response are both camelCase. Entity table updated. ⚠️ Breaking for anyone who
+  integrated against the old snake_case response.
+
+
 ## [1.4.0] - 2026-07-07
 
 ### Added

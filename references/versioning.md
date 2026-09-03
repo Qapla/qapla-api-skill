@@ -59,10 +59,11 @@ knowledge does not carry over. At a high level it differs in:
 v2 is developed and documented independently and is **actively evolving** toward
 becoming the platform's primary API surface. This skill now documents its **stable
 core** (auth, parcels, sandbox, jobs) under [`v2/`](v2/overview.md), extracted from
-the real `qore/api` implementation (more current than the public Swagger, which can
-lag). Other resources (orders, shipments, labels, couriers) exist in the
-implementation but are still in flight — for those, the live docs are the
-authoritative source:
+the real `qore/api` implementation. The public Swagger had lagged badly — it sat at
+2.14.0 until it was regenerated to 2.21.9 on 2026-09-03 — so check its `info.version`
+before trusting it. Other resources (orders, shipments, labels, couriers) are now
+published in that spec but are not detailed in this skill; for those, the live docs
+are the authoritative source:
 
 - Docs + Swagger UI: <https://api.qapla.dev/v2/>
 
