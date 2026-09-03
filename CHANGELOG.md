@@ -11,6 +11,67 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-09-03
+
+Corrections to the v2 references, realigning them with the `qore/api`
+implementation and the regenerated public spec. Two of the entries below change
+behaviour you may already have coded against — read the `updatedAfter` and
+sandbox notes.
+
+### Fixed
+- **v2 is not uniformly UTC, and never emits a literal `Z`.** `v2/overview.md`,
+  `migration.md` and `versioning.md` each claimed UTC / `YYYY-MM-DDTHH:MM:SSZ`
+  across the board — three copies of the same wrong sentence. Reality:
+  `parcels` and `orders` use ATOM with an explicit `+00:00`, while **shipment
+  tracking** (`statusDate`, `statusUpdatedAt`, `history[].date`) and **sandbox**
+  return `"Y-m-d H:i:s"` with **no offset**, in `Europe/Rome`. Moving tracking to
+  real UTC is a *planned* breaking change, not a done one.
+- ⚠️ **`updatedAfter` is read in `Europe/Rome` too**, which is the dangerous half:
+  polling incrementally in UTC does not raise an error, it **silently skips
+  shipments** in the offset window. Now called out wherever the filter appears.
+- **`orders`, `shipments`, `labels` and `couriers` are no longer "not yet in the
+  public spec".** That was true when written; the Swagger snapshot had simply gone
+  stale at 2.14.0 and was regenerated to 2.21.9 (published as api.qapla.dev
+  `1.0.11` on 2026-09-03), at which point they appeared. Reworded to "published,
+  but not detailed here", which is what actually distinguishes them.
+- **`versioning.md`: the spec snapshot's `info.version` does not identify the
+  contracts inside it.** It is a hand-dumped static file whose version label is
+  whatever `APP_VERSION` was at dump time — verified today, the published snapshot
+  reads `2.21.9` while the schemas in it are 2.21.10's (camelCase `sandbox`,
+  `422`/`429` on `/v2/auth/token`). So the label spots a badly stale spec but
+  cannot tell you whether a feature is present; read the content for that. The live
+  `GET /v2/version` is exact, and carries a build stamp
+  (`v2.21.10-202609031153`) — parse it as a prefix, not bare semver.
+- **The `api_key` warning in `v2/authentication.md` is obsolete**: the public docs
+  now show `apiKey`. Kept the field guidance and added the real failure mode — a
+  wrong field name is **`422`** (`apiKey should not be blank`), not `400`; with
+  `#[MapRequestPayload]`, `400` means a missing or malformed body.
+- **Rate limit in `v2/overview.md` was two generations old** (120 capacity, refill
+  2/sec). It is **300** capacity, refill **150/min** since `qore/api` v2.20.0. The
+  same stale numbers were still in the token-response example in
+  `v2/authentication.md` and in `references/examples/v2/authToken.response.json`,
+  and `rate_limit.refill_rate` was described as tokens per **second** when it is
+  per **minute** — all three fixed, along with the stale "refill ~2/sec" comment
+  on the retry constants in `scripts/qapla_v2_client.py`. (The v1.x limit is a
+  different bucket and is unchanged: 120 capacity, 2/sec.)
+- **`v2/parcels.md` restated the sandbox casing** and was left inconsistent with
+  the entry below; it now points at `v2/sandbox.md` instead of duplicating it.
+
+### Changed
+- ⚠️ **`v2/sandbox.md`: the casing asymmetry is gone — and that is a breaking
+  change.** Up to `qore/api` 2.21.9 the endpoint accepted `stringValue` but
+  answered `string_value`, so you could not read back what you had just written
+  under the same names. `qore/api` **2.21.10** (released 2026-09-03) makes request
+  and response both camelCase. Entity table, response example and the
+  cross-reference in `v2/parcels.md` all updated. **If you parse the snake_case
+  response, rename the fields.**
+- **`v2/authentication.md` error table repeated the `400` mistake** it warns about
+  two sections earlier: it listed `400` for a missing `apiKey`, when that is
+  `422`. `400` is now described as an absent or malformed body, and the two codes
+  the public Swagger omitted — `422` and `429`, both corrected in `qore/api`
+  2.21.10 — are documented.
+
+
 ## [1.4.0] - 2026-07-07
 
 ### Added

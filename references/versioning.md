@@ -54,15 +54,30 @@ knowledge does not carry over. At a high level it differs in:
   `Authorization: Bearer …` header. v1-style auth (`apiKey` in the body) won't work.
 - **Errors** — standard **HTTP status codes**, not the `{"<endpoint>":{"result":…}}`
   envelope.
-- **Time** — **UTC**, ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`), vs CEST + `YYYY-MM-DD HH:MM:SS`.
+- **Time** — ⚠️ **not uniformly UTC, and never a literal `Z`.** `parcels`/`orders`
+  use ATOM (`YYYY-MM-DDTHH:MM:SS+00:00`); shipment tracking and `sandbox` return
+  `YYYY-MM-DD HH:MM:SS` in `Europe/Rome` with no offset, same as v1.3. See
+  [`v2/overview.md`](v2/overview.md).
 
 v2 is developed and documented independently and is **actively evolving** toward
 becoming the platform's primary API surface. This skill now documents its **stable
 core** (auth, parcels, sandbox, jobs) under [`v2/`](v2/overview.md), extracted from
-the real `qore/api` implementation (more current than the public Swagger, which can
-lag). Other resources (orders, shipments, labels, couriers) exist in the
-implementation but are still in flight — for those, the live docs are the
-authoritative source:
+the real `qore/api` implementation. The public Swagger had lagged badly — it sat
+at 2.14.0 until it was regenerated on 2026-09-03 — but ⚠️ **do not read the
+snapshot's `info.version` as the release of the contracts inside it.**
+`v2/swagger/openapi.json` is a static file dumped by hand, and its version label
+is whatever `APP_VERSION` happened to be when the dump ran — nothing ties the two
+together. As of this writing the published snapshot is labelled `2.21.9` while the
+schemas in it are 2.21.10's (camelCase `sandbox` responses, `422`/`429` on
+`/v2/auth/token`). Use the label to notice a *badly* stale spec; never use it to
+decide whether a given feature is in there. For that, read the content.
+
+`GET /v2/version` on the live instance is exact by contrast: it and the running
+service's own `info.version` read the same parameter, so they cannot disagree. The
+deployed value carries a build stamp — e.g. `v2.21.10-202609031153` — so parse it
+as a prefix, not as bare semver. Other resources (orders, shipments, labels, couriers) are now
+published in that spec but are not detailed in this skill; for those, the live docs
+are the authoritative source:
 
 - Docs + Swagger UI: <https://api.qapla.dev/v2/>
 

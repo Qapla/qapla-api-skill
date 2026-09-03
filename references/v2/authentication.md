@@ -17,9 +17,11 @@ Content-Type: application/json
 { "apiKey": "YOUR_CHANNEL_PRIVATE_API_KEY" }
 ```
 
-> ⚠️ The field is **`apiKey`** (camelCase). The public Swagger may still show
-> `api_key` (snake_case) — that is stale; the deployed API renamed it to `apiKey`
-> in v2.8.8 ("consistent with all other endpoints"). Use `apiKey`.
+> The field is **`apiKey`** (camelCase), renamed from `api_key` in v2.8.8
+> ("consistent with all other endpoints"). The public docs showed the stale
+> `api_key` until 2026-09-03 and are now corrected. A wrong field name gives
+> **`422`** (`apiKey should not be blank`), not `400`: with
+> `#[MapRequestPayload]`, `400` means a missing or malformed body.
 
 ### Response
 
@@ -29,7 +31,7 @@ Content-Type: application/json
   "scopes": ["parcels:create", "parcels:read", "..."],
   "token_type": "Bearer",
   "expires_in": 86400,
-  "rate_limit": { "refill_rate": 2, "bucket_size": 120 },
+  "rate_limit": { "refill_rate": 150, "bucket_size": 300 },
   "cache": false
 }
 ```
@@ -40,7 +42,7 @@ Content-Type: application/json
 | `scopes` | The permissions embedded in this token (what the key is allowed to do) |
 | `token_type` | Always `Bearer` |
 | `expires_in` | Token lifetime in **seconds** — `86400` = 24h |
-| `rate_limit` | This channel's bucket: `refill_rate` (tokens/sec) and `bucket_size` (capacity) |
+| `rate_limit` | This channel's bucket: `refill_rate` (tokens restored per **minute**) and `bucket_size` (burst capacity). Defaults are 150 / 300 since `qore/api` v2.20.0; a channel can be given custom values |
 | `cache` | `true` if the token came from Qapla's cache, `false` if freshly minted (also surfaced as the `X-Auth-Cache: HIT\|MISS` header) |
 
 Sample payloads: [`../examples/v2/authToken.request.json`](../examples/v2/authToken.request.json)
@@ -89,9 +91,14 @@ Auth/authorization failures use the standard v2 RFC 7807 error body (see
 
 | Status | When |
 |---|---|
-| `400` | Malformed request (e.g. missing/!`apiKey`) |
+| `400` | Body absent or malformed JSON — **not** a bad field name |
 | `401` | Invalid/expired token, or unknown API key |
 | `403` | Authenticated but missing the required **scope** (or product) |
+| `422` | Validation failed, e.g. a wrong or missing `apiKey` field (`apiKey should not be blank`) |
+| `429` | Rate limit exceeded — the token endpoint is throttled like any other |
+
+`422` and `429` were missing from the public Swagger for `POST /v2/auth/token`,
+which listed only `400`/`401`; corrected in `qore/api` 2.21.10.
 
 ## Security
 

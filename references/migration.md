@@ -104,7 +104,10 @@ v1.3 — migrate only for features you need. At a high level it differs in:
   (`apiKey` in body/query) won't work on v2.
 - **Errors** — standard **HTTP status codes**, not the `{"<endpoint>":{"result":…}}`
   envelope.
-- **Time / dates** — **UTC**, ISO 8601 (`YYYY-MM-DDTHH:MM:SSZ`).
+- **Time / dates** — ⚠️ **not uniformly UTC, and never with a literal `Z`.**
+  `parcels`/`orders` use ATOM (`YYYY-MM-DDTHH:MM:SS+00:00`); shipment tracking and
+  `sandbox` still return `YYYY-MM-DD HH:MM:SS` in `Europe/Rome` with no offset,
+  exactly like v1.3. Don't assume the migration changes the zone for tracking.
 
 - **Scopes** — v2 enforces **granular scopes** per endpoint (e.g. `parcels:create`);
   v1.x has none. The token response lists what your key can do.
@@ -113,9 +116,9 @@ v1.3 — migrate only for features you need. At a high level it differs in:
 
 The **stable core** (auth, parcels, sandbox, jobs) is now documented in
 [`v2/`](v2/overview.md) — start at [`v2/overview.md`](v2/overview.md) and
-[`v2/authentication.md`](v2/authentication.md) for the token flow. Resources still
-in flight (orders, shipments, labels, couriers) should be built against the live
-docs/Swagger: <https://api.qapla.dev/v2/>. See
+[`v2/authentication.md`](v2/authentication.md) for the token flow. The other
+resources (orders, shipments, labels, couriers) are published in the Swagger but not
+detailed here — build those against the live docs: <https://api.qapla.dev/v2/>. See
 [`versioning.md`](versioning.md#v2--separate-generation) for the positioning.
 
 ## Related references

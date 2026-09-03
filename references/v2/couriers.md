@@ -13,7 +13,7 @@ created or changed.
 > v2 surface as of `qore/api` **2.12.0** (2026-07-06). Both endpoints share the
 > same request shape and origin-resolution rules; documented together to avoid
 > repetition. This is distinct from the general `couriers` **resource**
-> (list / get by code), which is still in flight — see
+> (list / get by code), which is published but not detailed here — see
 > [`endpoints.md`](endpoints.md).
 >
 > **Entitlement note:** both are internally billable "network analytics"

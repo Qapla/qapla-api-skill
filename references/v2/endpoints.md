@@ -3,14 +3,13 @@
 All v2 routes live under `https://api.qapla.it/v2/` and take a **Bearer JWT**
 (`Authorization: Bearer <token>`) — never `apiKey` in the body. See
 [`authentication.md`](authentication.md) and [`overview.md`](overview.md) for the
-shared conventions (RFC 7807 errors, UTC ISO 8601, ETag/`304`, async jobs,
-granular scopes).
+shared conventions (RFC 7807 errors, ETag/`304`, async jobs, granular scopes,
+and the **mixed** date/time formats — v2 is not uniformly UTC).
 
-> **Two tiers below.** The **stable core** is documented in this skill and matches
-> the deployed `qore/api` (v2.12.0). The **in-flight** resources exist in the
-> implementation but are not yet in the public Swagger and are still moving — they
-> are listed for awareness only; build against the live docs
-> (<https://api.qapla.dev/v2/>) when you need them.
+> **Two tiers below.** The **stable core** is documented in depth in this skill and
+> was verified against the deployed `qore/api`. The **second tier** is published in
+> the Swagger but not written up here in depth, and its contracts may still move —
+> build against the live docs (<https://api.qapla.dev/v2/>) when you need them.
 
 ## Stable core (documented here)
 
@@ -30,11 +29,13 @@ granular scopes).
 | `POST` | [`/v2/couriers/efficiency-index`](couriers.md#score-courier-efficiency--post-v2couriersefficiency-index) | Score couriers 0–100 (speed + consistency + reliability) for a destination CAP | `efficiency-index:read` |
 | `POST` | [`/v2/shipments/{id}/stock-release`](stock-release.md) | Ask the courier to redeliver / redeliver elsewhere / return to sender a shipment held in depot | `shipments:write` |
 
-## In flight — not yet in the public spec
+## Published, but not written up in depth here
 
-These are implemented in `qore/api` but not published in the v2 Swagger yet, and
-their contracts may still change. Mentioned so you know they're coming; **do not
-hardcode** against them from this skill — confirm on <https://api.qapla.dev/v2/>.
+⚠️ These **are** in the public Swagger — the spec snapshot was stale for a long
+time and was regenerated on 2026-09-03 (2.14.0 → 2.21.9), which is when they
+appeared. They are simply not documented in detail in this skill, and their
+contracts may still move. **Do not hardcode** against them from this skill —
+confirm on <https://api.qapla.dev/v2/>.
 
 | Resource | Methods (observed) | Notes |
 |---|---|---|
@@ -51,11 +52,11 @@ hardcode** against them from this skill — confirm on <https://api.qapla.dev/v2
 | You want to… | v1.3 | v2 (today) |
 |---|---|---|
 | Authenticate | `apiKey` per call | `POST /v2/auth/token` → Bearer JWT |
-| Import an order | `pushOrder` | `POST /v2/orders` *(in flight)* |
+| Import an order | `pushOrder` | `POST /v2/orders` |
 | Manage packages | (part of order/label) | `POST/GET/PATCH/DELETE /v2/parcels` ✅ |
-| Track a shipment | `pushShipment` / `getShipment` | `/v2/shipments` *(in flight)* |
-| Generate a label | `createLabel` → `confirmLabel` | `POST /v2/labels` *(in flight)* |
-| List couriers | `couriers` / `getCouriers` | `/v2/couriers` *(in flight)* |
+| Track a shipment | `pushShipment` / `getShipment` | `/v2/shipments` |
+| Generate a label | `createLabel` → `confirmLabel` | `POST /v2/labels` |
+| List couriers | `couriers` / `getCouriers` | `/v2/couriers` |
 | Release a held shipment | *(no v1.3 equivalent)* | `POST /v2/shipments/{id}/stock-release` ✅ |
 | Compare/score couriers on a lane | *(no v1.3 equivalent)* | `POST /v2/couriers/delivery-times` / `efficiency-index` ✅ |
 

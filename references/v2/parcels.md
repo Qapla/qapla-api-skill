@@ -9,9 +9,10 @@ the pair **(`reference`, `origin`)** — your order id plus the source system it
 from (e.g. `shopify`). All units are metric (kg, cm).
 
 > v2 surface as of `qore/api` 2.9.4. Field names are copied verbatim from the
-> implementation DTOs — note the request bodies are **camelCase**, and the parcel
-> **response** is camelCase too (the sandbox resource, by contrast, responds in
-> snake_case). Verify against <https://api.qapla.dev/v2/> if anything looks off.
+> implementation DTOs — request bodies and parcel **responses** are both
+> **camelCase** — as is every v2 resource since `qore/api` 2.21.10, which removed
+> the last exception (see [`sandbox.md`](sandbox.md)). Verify against
+> <https://api.qapla.dev/v2/> if anything looks off.
 
 ## Create — `POST /v2/parcels`
 
