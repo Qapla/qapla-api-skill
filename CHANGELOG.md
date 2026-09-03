@@ -47,8 +47,9 @@ sandbox notes.
   same stale numbers were still in the token-response example in
   `v2/authentication.md` and in `references/examples/v2/authToken.response.json`,
   and `rate_limit.refill_rate` was described as tokens per **second** when it is
-  per **minute** — all three fixed. (The v1.x limit is a different bucket and is
-  unchanged: 120 capacity, 2/sec.)
+  per **minute** — all three fixed, along with the stale "refill ~2/sec" comment
+  on the retry constants in `scripts/qapla_v2_client.py`. (The v1.x limit is a
+  different bucket and is unchanged: 120 capacity, 2/sec.)
 - **`v2/parcels.md` restated the sandbox casing** and was left inconsistent with
   the entry below; it now points at `v2/sandbox.md` instead of duplicating it.
 

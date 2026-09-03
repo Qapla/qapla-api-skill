@@ -47,8 +47,9 @@ import urllib.request
 BASE_URL = "https://api.qapla.it"
 API_PREFIX = "v2"
 
-# 429 is transient (token bucket, refill ~2/sec). Same backoff shape as the v1
-# client: 5 attempts, 1,2,4,8,16s.
+# 429 is transient (token bucket: 300 burst, refill 150/min since qore/api
+# v2.20.0, so ~2.5 tokens/sec). Same backoff shape as the v1 client: 5 attempts,
+# 1,2,4,8,16s. Note the v1 bucket is a different one (120 burst, 2/sec).
 MAX_RETRIES = 5
 BACKOFF_BASE_SECONDS = 1.0
 HTTP_TIMEOUT_SECONDS = 30
