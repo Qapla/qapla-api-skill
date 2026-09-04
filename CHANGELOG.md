@@ -11,8 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.4] - 2026-09-04
+
 ### Fixed
-- **The bundled v2 client waited on an header the API never sends.**
+- **The bundled v2 client waited on a header the API never sends.**
   `scripts/qapla_v2_client.py` read `X-RateLimit-Retry-After` from a `429`; the
   real headers are `Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`
   and `X-RateLimit-Reset`. The retry consequently always fell back to the
