@@ -51,7 +51,7 @@ include commit messages: history holds claims that were later retracted.
 | 20 | "I poll the Qapla' v2 API for shipments updated since my last sync, and I keep my cursor in UTC. Is that right?" | ⚠️ **Negative control, silent-failure class** — NO. `updatedAfter` is interpreted in `Europe/Rome`, so a UTC cursor **skips shipments** in the offset window with **no error**. Must warn and tell you to send the cursor in `Europe/Rome` (or overlap the window), not confirm the approach. | ✅ covered by `v2/overview.md` + `v2/sandbox.md` |
 | 21 | "What timezone and format are timestamps in the Qapla' v2 API?" | **Not uniformly UTC, and no endpoint emits a literal `Z`.** `parcels`/`orders` are ATOM with an explicit `+00:00`; **shipment tracking** (`statusDate`, `statusUpdatedAt`, `history[].date`) and **sandbox** are `"Y-m-d H:i:s"` with **no offset**, in `Europe/Rome`. Should not answer a flat "UTC". | ✅ covered by `v2/overview.md` + `migration.md` + `versioning.md` |
 | 22 | "My Qapla' v2 sandbox client reads `string_value` from the response and it just stopped working. What broke?" | **Nothing broke on your side by accident** — `qore/api` 2.21.10 made sandbox responses camelCase (`stringValue`, `createdAt`), a deliberate **breaking change**; rename the fields. Should not suggest the API is malfunctioning or that snake_case is still correct. | ✅ covered by `v2/sandbox.md` |
-| 23 | "What's the rate limit on the Qapla' v2 API, and what do I get when I exceed it?" | Token bucket **300 capacity, refill 150/min** (defaults since `qore/api` v2.20.0); the channel's real values come back in the token response's `rate_limit`; over limit → **`429`** with `X-RateLimit-*` headers. ⚠️ Must **not** quote the v1.x bucket (120 capacity, 2/sec) — that is a separate limiter. | ✅ covered by `v2/overview.md` + `v2/authentication.md` |
+| 23 | "What's the rate limit on the Qapla' v2 API, and what do I get when I exceed it?" | Token bucket **300 capacity, refill 150/min** (platform defaults since `qore/api` v2.20.0, per channel and overridable); the channel's real values come back in the token response's `rate_limit`; refill is **whole-cycle**, not a trickle; over limit → **`429`** carrying `Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`, and persisting through it costs a **1-hour `403` suspension** after 10 violations in 5 minutes. ⚠️ Must **not** quote the v1.x limiter — it is a different mechanism, and its real numbers are unsettled (see the note under Finding 2). | ✅ covered by `v2/overview.md` + `v2/authentication.md` |
 | 24 | "Is `POST /v2/orders` in Qapla's public Swagger yet, or do I have to wait for it?" | It **is** published in the public spec — it is simply not written up in depth in this pack; build against <https://api.qapla.dev/v2/>. Should not say "not yet published" / "still in flight", which was true only of a stale 2.14.0 snapshot. | ✅ covered by `v2/endpoints.md` + `versioning.md` |
 | 25 | "The Qapla' v2 Swagger reports version 2.21.9 — so the camelCase sandbox change isn't live yet, right?" | ⚠️ **Negative control** — the inference is invalid. The published snapshot's `info.version` is whatever `APP_VERSION` was when the dump ran and does **not** identify the contracts inside it (that snapshot already carries the camelCase schemas). Read the schemas, or ask the live `GET /v2/version`. Should not confirm the premise. | ✅ covered by `versioning.md` |
 
@@ -91,6 +91,17 @@ Spot-checked back against the references: `parcels[]` accepting 1–100 items
 (#18), `P46` as an illustrative `courierService` (#2), and
 `X-RateLimit-Retry-After` actually being the header the bundled client reads
 (#23) — all confirmed.
+
+> ⚠️ **The `X-RateLimit-Retry-After` check confirmed the wrong thing** (found
+> 2026-09-04). The client did read that name and the docs did say so, so the two
+> agreed — but the API never sends it: on a `429` `qore/api` returns
+> `Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining` and
+> `X-RateLimit-Reset`. The retry therefore always fell back to the exponential
+> guess (1+2+4+8s = 15s of budget against a wait of up to 60), gave up while the
+> bucket was still empty, and spent four extra `429`s doing it — with the
+> abuse threshold at ten in five minutes, half the way to a one-hour `403`
+> block. Checking a client against the docs only proves they tell the same
+> story; the response itself is the authority.
 
 #### ⚠️ Finding 3 — git history is a second, unfixable answer key
 

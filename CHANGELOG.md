@@ -11,6 +11,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **The bundled v2 client waited on an header the API never sends.**
+  `scripts/qapla_v2_client.py` read `X-RateLimit-Retry-After` from a `429`; the
+  real headers are `Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`
+  and `X-RateLimit-Reset`. The retry consequently always fell back to the
+  exponential guess — 1+2+4+8s, 15 seconds of budget against a wait that can
+  reach a full minute — so it exhausted its attempts while the bucket was still
+  empty and collected four extra `429`s on the way out. With the API suspending
+  a key for an hour after ten `429`s in five minutes, a single call could burn
+  half that threshold. It now honours `Retry-After` (capped), keeps a total
+  sleep budget per call, and reports the throttle instead of retrying early.
+
+### Changed
+- **`references/v2/overview.md` — the rate limit row now describes the
+  mechanism, not just the numbers**: the bucket refills one whole cycle at a
+  time (the per-minute allowance arrives at once, it does not trickle), the 300
+  / 150 pair is a platform default that a channel can override, the four real
+  `429` headers are listed, and the 1-hour `403` suspension after ten
+  violations in five minutes is called out. An agent reading the old row would
+  build a retry that hammers through the `429`.
+- `evaluation/scenarios.md`: scenario 23's expected answer updated to match, and
+  Finding 2 records that the `X-RateLimit-Retry-After` spot-check confirmed the
+  client and the docs agreed with each other while both were wrong about the
+  API. The v1.x numbers quoted there (120 capacity, 2/sec) are withdrawn rather
+  than corrected: the public v1 doc says bucket 10 + 1/sec, while
+  `Qapla\Services\RateLimiter` is a fixed window of 150 per 60s. That
+  contradiction is not this package's to settle.
+
 ## [1.4.3] - 2026-09-03
 
 **Validation record — no change to the installed knowledge.** `references/`,

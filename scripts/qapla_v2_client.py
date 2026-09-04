@@ -47,11 +47,21 @@ import urllib.request
 BASE_URL = "https://api.qapla.it"
 API_PREFIX = "v2"
 
-# 429 is transient (token bucket: 300 burst, refill 150/min since qore/api
-# v2.20.0, so ~2.5 tokens/sec). Same backoff shape as the v1 client: 5 attempts,
-# 1,2,4,8,16s. Note the v1 bucket is a different one (120 burst, 2/sec).
+# 429 is transient, but the bucket does NOT trickle: it refills one whole cycle
+# at a time, handing back the entire per-minute allowance at once (Symfony's
+# Rate::calculateNewTokensDuringInterval floors the elapsed time into cycles).
+# So after a 429 the wait is up to a full minute, and retrying earlier is
+# guaranteed to earn another one. That matters beyond politeness: 10 x 429 in
+# five minutes suspend the API key for an hour, answered 403 and not 429. The
+# wait therefore comes from the response (Retry-After) and not from a guess;
+# the exponential fallback only covers a 429 that arrives without the header.
 MAX_RETRIES = 5
 BACKOFF_BASE_SECONDS = 1.0
+# Cap on a single honoured Retry-After, and on the total time one call may
+# spend asleep. A channel throttled low enough to blow the budget is better
+# reported to the caller than slept through.
+MAX_RETRY_WAIT_SECONDS = 90.0
+RETRY_BUDGET_SECONDS = 150.0
 HTTP_TIMEOUT_SECONDS = 30
 # Refresh the JWT this many seconds before it actually expires, to avoid racing
 # the boundary on a slow call.
@@ -163,6 +173,7 @@ class QaplaV2Client:
             data = json.dumps(json_body).encode("utf-8")
             req_headers["Content-Type"] = "application/json"
 
+        slept = 0.0
         for attempt in range(MAX_RETRIES):
             req = urllib.request.Request(url, data=data, headers=req_headers, method=method)
             try:
@@ -170,9 +181,15 @@ class QaplaV2Client:
                     return resp.status, _parse_body(resp.read(), resp.headers)
             except urllib.error.HTTPError as exc:
                 if exc.code == 429 and attempt < MAX_RETRIES - 1:
-                    retry_after = exc.headers.get("X-RateLimit-Retry-After")
-                    delay = float(retry_after) if retry_after else BACKOFF_BASE_SECONDS * (2 ** attempt)
+                    delay = _retry_delay(exc.headers.get("Retry-After"), attempt)
+                    if slept + delay > RETRY_BUDGET_SECONDS:
+                        # Giving up now is the kinder failure: sleeping past the
+                        # budget hides the throttle from the caller, and retrying
+                        # early would just collect another 429 towards the
+                        # suspension threshold.
+                        raise _error_from_http(exc, method, path)
                     time.sleep(delay)
+                    slept += delay
                     continue
                 raise _error_from_http(exc, method, path)
             except urllib.error.URLError as exc:
@@ -330,6 +347,21 @@ def _parse_body(raw: bytes, headers) -> object:
         return json.loads(text)
     except json.JSONDecodeError:
         return text
+
+
+def _retry_delay(retry_after: str | None, attempt: int) -> float:
+    """Seconds to wait before retrying a 429.
+
+    `Retry-After` is what the API actually sends (RFC 6585, in seconds), capped
+    here against a bogus value. RFC 7231 also allows an HTTP-date form: qore/api
+    does not use it, so that case falls back to the exponential backoff rather
+    than carrying a date parser."""
+    if retry_after:
+        try:
+            return min(float(retry_after), MAX_RETRY_WAIT_SECONDS)
+        except ValueError:
+            pass
+    return BACKOFF_BASE_SECONDS * (2 ** attempt)
 
 
 def _error_from_http(exc: urllib.error.HTTPError, method: str, path: str) -> QaplaV2Error:
