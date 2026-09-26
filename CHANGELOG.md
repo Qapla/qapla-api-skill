@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.5] - 2026-09-26
+
 ### Fixed
 - **The v1 rate limit was described as a 120/2s token bucket, and it is not one.**
   The code (`Services\RateLimiter` in `qapla/lib`) is a per-channel fixed window on
