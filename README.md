@@ -145,7 +145,7 @@ curl -X POST https://api.qapla.it/1.3/pushShipment \
 - **Auth:** per-channel `apiKey` in the JSON body (Control Panel → Settings →
   Channels → Configure → Private API Key)
 - **Response:** `{"pushShipment": {"result": "OK", "error": null, ...}}`
-- **Rate limit:** token bucket, 120 capacity, +2/sec; a batch of N costs N
+- **Rate limit:** fixed window, 150 tokens per channel every 60s; a batch of N costs N
 
 See `SKILL.md` and `references/` for everything else.
 

@@ -57,6 +57,6 @@ Standard envelope plus `count` and a `shipments[]` array. Each shipment carries 
 - **Polling cadence:** query slightly overlapping windows (e.g. every 5 min for
   the last ~6 min) and dedupe on `id` + `qaplaStatus.id` + status date to avoid
   missing or double-processing events at window edges.
-- **Rate limit:** the standard token bucket applies (see `conventions.md`).
+- **Rate limit:** the standard per-channel limit applies (see `conventions.md`).
 - **Push vs pull:** for near-real-time, low-overhead delivery prefer webhooks
   (`webhooks.md`); use this endpoint for batch/poll-based flows or as a backstop.

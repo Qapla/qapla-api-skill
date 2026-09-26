@@ -9,7 +9,7 @@ Qapla' call needs and that are easy to get wrong:
      AND, for batch endpoints (pushShipment, pushOrder), a per-item
      `result`/`error` inside the returned array. A call can be "OK" overall
      while individual items are "KO". `split_batch()` separates them for you.
-  2. Rate limiting is a token bucket (capacity 120, refill 2 tokens/sec); going
+  2. Rate limiting is a fixed window per channel (150 tokens every 60s); going
      over returns HTTP 429. `call()` retries 429 with exponential backoff.
 
 This mirrors the rules documented in references/conventions.md and
@@ -36,10 +36,10 @@ import urllib.request
 BASE_URL = "https://api.qapla.it"
 DEFAULT_VERSION = "1.3"
 
-# 429 is transient: the bucket refills at 2 tokens/sec, so the worst-case wait
-# to clear a full 120-token burst is ~60s. Five attempts with exponential
-# backoff (1,2,4,8,16s -> ~31s total) clears typical bursts without hanging.
-MAX_RETRIES = 5
+# 429 is transient: the 60s window resets all at once, so the worst-case wait is
+# ~60s. Seven attempts, so six waits with exponential backoff (1,2,4,8,16,32s ->
+# ~63s total), outlast one full window without hanging.
+MAX_RETRIES = 7
 BACKOFF_BASE_SECONDS = 1.0
 HTTP_TIMEOUT_SECONDS = 30  # getQuotes/createLabel hit live carriers and are slow
 

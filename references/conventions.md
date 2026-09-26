@@ -53,20 +53,21 @@ call, plus a per-item `result`/`error` inside the returned array. A call can be
 }
 ```
 
-## Rate limiting (token bucket)
+## Rate limiting (fixed window)
 
 | Parameter | Value |
 |---|---|
-| Bucket capacity | 120 |
-| Refill rate | 2 tokens/second |
+| Limit | 150 tokens per channel |
+| Window | 60 seconds, starting from the first token spent; the full allowance comes back when it expires |
 | Cost | 1 token per item — a batch of 100 items costs **100 tokens** |
 
 Over the limit → HTTP `429 Too Many Requests`, and the JSON `error` is
 `"Too Many Requests"`. Back off and retry. **Abuse leads to an API Key ban.**
 
 Practical guidance:
-- Prefer batching, but cap batches (≈100 items) and pace them: at 2 tokens/sec
-  a 120-item burst then needs ~60s to refill.
+- Prefer batching, but cap batches (≈100 items): a single batch above 150 items
+  exceeds the limit on its own. After a `429` the wait is at most 60s, until the
+  window expires.
 - Implement exponential backoff on `429`.
 
 ## Dates & time zone

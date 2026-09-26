@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **The v1 rate limit was described as a 120/2s token bucket, and it is not one.**
+  The code (`Services\RateLimiter` in `qapla/lib`) is a per-channel fixed window on
+  Redis: 150 tokens every 60s, the whole allowance back when the window expires; a
+  batch still costs one token per item. `conventions.md`, `overview.md`,
+  `migration.md`, `AGENTS.md`, `README.md` and the eval expectation now say so, and
+  note that a single batch above 150 items exceeds the limit on its own.
+  `scripts/qapla_client.py` retried for ~15s in total (five attempts are four
+  waits, not five): it now makes seven attempts, ~63s of backoff, one full window.
+
 ## [1.4.4] - 2026-09-04
 
 ### Fixed

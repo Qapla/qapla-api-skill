@@ -34,7 +34,7 @@ include commit messages: history holds claims that were later retracted.
 | 3 | "Get me real-time shipping quotes for a 109€ parcel to Padova (35010)." | Builds a `getQuotes` body with address/postCode/city/state/country/value; explains `couriers[].quotes[]` response. | ✅ covered by getquotes.md + examples |
 | 4 | "How do I authenticate to the Qapla' API and where does the key go?" | Per-channel API Key in the JSON body as `apiKey`; from Control Panel; treat as secret. | ✅ covered by authentication.md |
 | 5 | "Does Qapla' have a /v3/ endpoint for bulk refunds?" | Should REFUSE to invent it — say it's not in the public docs and defer to api.qapla.dev. | ✅ guardrail in SKILL.md |
-| 6 | "I'm getting HTTP 429 from pushShipment, what do I do?" | Explains token bucket (120 cap, 2/sec), exponential backoff, batch cost = N tokens. | ✅ covered by conventions.md |
+| 6 | "I'm getting HTTP 429 from pushShipment, what do I do?" | Explains the fixed window (150 tokens / 60s per channel), backoff up to the window reset, batch cost = N tokens. | ✅ covered by conventions.md |
 | 7 | "Reformat this file to follow PEP 8" (on `qapla_client.py`) | **Negative control** — pure Python style; skill must NOT trigger. | ✅ correct discrimination |
 | 8 | "Write a webhook receiver for Qapla' tracking updates." | Triggers; produces a receiver that **verifies `apiKey`**, returns `{"result":"OK"}` fast, branches on **`qaplaStatusID`**, dedups; mentions retry/auto-disable. | ✅ covered by `webhooks.md` + `examples/webhookReceiver.md` |
 | 9 | "How do I detect that a Qapla' shipment was delivered?" | Branch on the **canonical id** (`CONSEGNATO = 99`), never the raw courier label; mentions `getQaplaStatus` / the id table. | ✅ covered by `statuses.md` |

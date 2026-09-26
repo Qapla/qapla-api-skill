@@ -85,7 +85,7 @@ array, not just the top-level one.
 
 ### 5. Rate limiting
 
-v1.x enforces a token bucket (capacity 120, refill 2/s); a batch costs one token
+v1.x enforces a fixed window per channel (150 tokens every 60s); a batch costs one token
 **per item** (100 shipments = 100 tokens). Add `429` handling with exponential
 back-off. The bundled `scripts/qapla_client.py` already does this.
 

@@ -30,7 +30,7 @@ Core facts (the rest is in `references/overview.md`):
 | **Base URL** | `https://api.qapla.it/<version>/<endpoint>` (e.g. `https://api.qapla.it/1.3/pushShipment`) |
 | **Auth** | Per-**channel** API Key, sent as `apiKey` in the JSON body. Treat it as a secret; never hard-code it. |
 | **Response envelope** | `{"<endpointName>": {"result": "OK"\|"KO", "error": null\|"<message>"}}`. For batch endpoints also check the per-item `result`. |
-| **Rate limit** | Token bucket: 120 capacity, +2/sec. A batch of N items costs N tokens. Over limit → HTTP `429` (back off and retry). |
+| **Rate limit** | Fixed window per channel: 150 tokens every 60s. A batch of N items costs N tokens. Over limit → HTTP `429` (back off and retry). |
 | **Sandbox** | Pass `"sandbox": true` in the body where supported (e.g. `createLabel`). Exception: `getQuotes` uses an `x-sandbox` header. |
 | **Versions** | `1.3` is current; many endpoints are still **1.2-only** (not yet migrated), so calling them under `/1.2/` is expected. `1.4` is `createLabel`-only. A separate **v2** (Bearer/JWT, RESTful, async jobs) is the platform's emerging generation; its stable core is documented under `references/v2/`. See `references/versioning.md`. |
 

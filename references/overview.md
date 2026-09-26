@@ -22,7 +22,7 @@ analytics. This document orients you to its **public REST API**.
 | **Protocol** | REST over HTTPS; JSON in, JSON out. Methods: GET/POST/PUT/DELETE/PATCH (most write endpoints use POST) |
 | **Auth** | Per-**channel** API Key, sent as `apiKey` in the JSON body (see `authentication.md`) |
 | **Response envelope** | `{"<endpointName>": {"result": "OK"\|"KO", "error": null\|"<message>"}}` |
-| **Rate limit** | Token bucket: 120 capacity, refill 2 tokens/sec. A batch of N items costs N tokens. Over limit → HTTP `429 Too Many Requests` |
+| **Rate limit** | Fixed window per channel: 150 tokens every 60s. A batch of N items costs N tokens. Over limit → HTTP `429 Too Many Requests` |
 | **Time zone** | CEST (UTC+2 DST / UTC+1 winter). Dates are `YYYY-MM-DD`, datetimes `YYYY-MM-DD HH:MM:SS` |
 | **Sandbox** | No separate environment. Pass `"sandbox": true` in the body on endpoints that support it (e.g. `createLabel`) to test without real effects (no carrier pickup, no billing). **`getQuotes` is the exception**: it uses an `x-sandbox` header (see its reference) |
 | **Versions** | `1.3` is the current version; use it where the endpoint exists. `1.1`/`1.2` are deprecated but still active — and **many endpoints are still 1.2-only** (not yet migrated), so calling them under `/1.2/` is expected. `1.4` exists for `createLabel` only (`parcelsTracking`). A separate **v2** (Bearer/JWT, UTC, HTTP-status errors) is a distinct RESTful generation, evolving toward becoming the primary surface — its stable core is documented under `v2/` (start at `v2/overview.md`). See `versioning.md` |
@@ -87,7 +87,7 @@ Key vocabulary:
   `result` inside the array (a call can be `OK` overall while individual items
   are `KO`).
 - Handle `429`: back off and retry. Remember a batch of N costs N tokens, so
-  large `pushShipment`/`pushOrder` batches drain the bucket fast.
+  large `pushShipment`/`pushOrder` batches use up the window fast.
 - Batch where the endpoint allows it (`pushShipment`, `pushOrder` accept arrays)
   instead of one HTTP call per item — but mind the 100-item practical cap and
   the token cost.
