@@ -28,6 +28,7 @@ and the **mixed** date/time formats — v2 is not uniformly UTC).
 | `POST` | [`/v2/couriers/delivery-times`](couriers.md#compare-delivery-times--post-v2couriersdelivery-times) | Rank couriers fastest-first for a destination CAP | `delivery-times:read` |
 | `POST` | [`/v2/couriers/efficiency-index`](couriers.md#score-courier-efficiency--post-v2couriersefficiency-index) | Score couriers 0–100 (speed + consistency + reliability) for a destination CAP | `efficiency-index:read` |
 | `POST` | [`/v2/shipments/{id}/stock-release`](stock-release.md) | Ask the courier to redeliver / redeliver elsewhere / return to sender a shipment held in depot | `shipments:write` |
+| `POST` | [`/v2/orders/courier-checks`](courier-checks.md#check-addresses-without-an-order--post-v2orderscourier-checks) | Would the courier refuse these addresses at label creation? 1–100 addresses, one courier or every active one | `orders:read` |
 
 ## Published, but not written up in depth here
 
@@ -39,7 +40,7 @@ confirm on <https://api.qapla.dev/v2/>.
 
 | Resource | Methods (observed) | Notes |
 |---|---|---|
-| `orders` | `GET`/`POST` `/v2/orders`, `GET`/`PUT`/`PATCH`/`DELETE` `/v2/orders/{id}` | Order CRUD; lookup by `(reference, source)` |
+| `orders` | `GET`/`POST` `/v2/orders`, `GET`/`PUT`/`PATCH`/`DELETE` `/v2/orders/{id}` | Order CRUD; lookup by `(reference, source)`. Their `courierChecks` field is documented: [`courier-checks.md`](courier-checks.md#on-order-responses--courierchecks) |
 | `shipments` | `POST`/`GET` `/v2/shipments`, `GET /v2/shipments/{id}` | Bulk create (max 100), search, read. (The `stock-release` action on an existing shipment is already stable — see above) |
 | `labels` | `POST /v2/labels` | Create shipping label (idempotent) |
 | `couriers` | `GET /v2/couriers`, `GET /v2/couriers/{code}` | List couriers / get by code. (The `delivery-times`/`efficiency-index` benchmark endpoints are already stable — see above) |
@@ -59,6 +60,7 @@ confirm on <https://api.qapla.dev/v2/>.
 | List couriers | `couriers` / `getCouriers` | `/v2/couriers` |
 | Release a held shipment | *(no v1.3 equivalent)* | `POST /v2/shipments/{id}/stock-release` ✅ |
 | Compare/score couriers on a lane | *(no v1.3 equivalent)* | `POST /v2/couriers/delivery-times` / `efficiency-index` ✅ |
+| Pre-check an address against the courier's rules | *(no v1.3 equivalent)* | `POST /v2/orders/courier-checks`, or `courierChecks` on any order response ✅ |
 
 For the version policy and when to choose v1.3 vs v2, see
 [`../versioning.md`](../versioning.md) and [`../migration.md`](../migration.md).

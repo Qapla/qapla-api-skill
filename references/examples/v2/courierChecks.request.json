@@ -1,0 +1,26 @@
+{
+    "items": [
+        {
+            "courierId": 4,
+            "consignee": {
+                "name": "Barbara Gordon",
+                "street": "Via Manin, 8",
+                "city": "Vigonza",
+                "state": "Padova",
+                "postcode": "35010",
+                "country": "IT"
+            }
+        },
+        {
+            "consignee": {
+                "name": "Barbara Gordon",
+                "street": "Via Manin, 8",
+                "city": "Vigonza",
+                "state": "PD",
+                "postcode": "35010",
+                "country": "IT"
+            },
+            "notes": "Ring twice"
+        }
+    ]
+}

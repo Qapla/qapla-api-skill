@@ -18,7 +18,7 @@ see `references/statuses.md` (branch on the canonical id); for the version polic
 and the separate v2 generation see `references/versioning.md`; to upgrade a legacy
 integration see `references/migration.md`. For the **v2 API** (Bearer/JWT, RESTful,
 async jobs) start at `references/v2/overview.md` and its resource deep-dives
-(`references/v2/{authentication,parcels,sandbox,couriers,stock-release,endpoints}.md`).
+(`references/v2/{authentication,parcels,sandbox,couriers,stock-release,courier-checks,endpoints}.md`).
 Runnable sample payloads are in
 `references/examples/`; a dependency-free reference client is
 `scripts/qapla_client.py`.

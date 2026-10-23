@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **v2 courier pre-checks** (`qore/api` 2.39.0): new deep-dive
+  `references/v2/courier-checks.md`. It covers the `courierChecks` field on every
+  order response (the preassigned courier, `null` without one) and
+  `POST /v2/orders/courier-checks`, which checks 1–100 addresses that are not an
+  order yet against one courier or every active courier of the channel. Codes and
+  their extra keys are documented, `ZONE_SUSPENDED` (2.33.0) included, with the
+  shape difference: one object or `null` on an order, a list per item on the
+  endpoint. Added to the stable core in `v2/endpoints.md`, with example payloads
+  `examples/v2/courierChecks.*.json` and `QaplaV2Client.check_addresses()`.
+  Eval scenarios #26–27 are added but not run yet.
+
 ## [1.4.5] - 2026-09-26
 
 ### Fixed

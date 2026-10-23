@@ -1,0 +1,27 @@
+[
+    [
+        {
+            "courierId": 4,
+            "status": "WARNING",
+            "checks": [
+                {
+                    "code": "PROVINCE_NOT_CODE",
+                    "field": "consignee.state",
+                    "suggestion": "PD"
+                }
+            ]
+        }
+    ],
+    [
+        {
+            "courierId": 4,
+            "status": "OK",
+            "checks": []
+        },
+        {
+            "courierId": 24,
+            "status": "OK",
+            "checks": []
+        }
+    ]
+]

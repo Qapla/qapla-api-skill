@@ -310,6 +310,16 @@ class QaplaV2Client:
             body["address"] = address
         return self.request("POST", f"shipments/{shipment_id}/stock-release", json_body=body)
 
+    # --- convenience: orders ----------------------------------------------
+
+    def check_addresses(self, items: list[dict]) -> tuple[int, object]:
+        """POST /v2/orders/courier-checks — would the courier refuse these
+        addresses at label creation? 1-100 items `{consignee, notes?, courierId?}`;
+        without `courierId` every active courier of the channel is checked.
+        Returns one list of `{courierId, status, checks}` per item, in order.
+        A warning only: nothing is saved. Requires scope `orders:read`."""
+        return self.request("POST", "orders/courier-checks", json_body={"items": items})
+
     # --- convenience: async jobs -----------------------------------------
 
     def get_job(self, job_id: str) -> tuple[int, object]:
