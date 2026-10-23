@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-23
+
 ### Added
 - **v2 courier pre-checks** (`qore/api` 2.39.0): new deep-dive
   `references/v2/courier-checks.md`. It covers the `courierChecks` field on every
@@ -21,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   shape difference: one object or `null` on an order, a list per item on the
   endpoint. Added to the stable core in `v2/endpoints.md`, with example payloads
   `examples/v2/courierChecks.*.json` and `QaplaV2Client.check_addresses()`.
-  Eval scenarios #26–27 are added but not run yet.
+  Eval scenarios #26–27 added, 2/2 pass.
 
 ## [1.4.5] - 2026-09-26
 

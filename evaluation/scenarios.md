@@ -54,8 +54,8 @@ include commit messages: history holds claims that were later retracted.
 | 23 | "What's the rate limit on the Qapla' v2 API, and what do I get when I exceed it?" | Token bucket **300 capacity, refill 150/min** (platform defaults since `qore/api` v2.20.0, per channel and overridable); the channel's real values come back in the token response's `rate_limit`; refill is **whole-cycle**, not a trickle; over limit → **`429`** carrying `Retry-After`, `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`, and persisting through it costs a **1-hour `403` suspension** after 10 violations in 5 minutes. ⚠️ Must **not** quote the v1.x limiter — it is a different mechanism, and its real numbers are unsettled (see the note under Finding 2). | ✅ covered by `v2/overview.md` + `v2/authentication.md` |
 | 24 | "Is `POST /v2/orders` in Qapla's public Swagger yet, or do I have to wait for it?" | It **is** published in the public spec — it is simply not written up in depth in this pack; build against <https://api.qapla.dev/v2/>. Should not say "not yet published" / "still in flight", which was true only of a stale 2.14.0 snapshot. | ✅ covered by `v2/endpoints.md` + `versioning.md` |
 | 25 | "The Qapla' v2 Swagger reports version 2.21.9 — so the camelCase sandbox change isn't live yet, right?" | ⚠️ **Negative control** — the inference is invalid. The published snapshot's `info.version` is whatever `APP_VERSION` was when the dump ran and does **not** identify the contracts inside it (that snapshot already carries the camelCase schemas). Read the schemas, or ask the live `GET /v2/version`. Should not confirm the premise. | ✅ covered by `versioning.md` |
-| 26 | "Before I create an order on the Qapla' v2 API, how can I tell whether the courier will reject the address?" | `POST /v2/orders/courier-checks` with `items[]` (1–100) of `{consignee, notes?, courierId?}`; without `courierId` every active courier of the channel is checked; response is one **list** of `{courierId, status, checks}` per item, in order, `courierId` canonical; scope `orders:read`; a warning only, nothing saved. Mentions the codes (`FIELD_TOO_LONG`, `PROVINCE_NOT_CODE`, `LOCALITY_NOT_DELIVERED` with `suggestions`, `ZONE_SUSPENDED` with `until`…) and `field` as the v2 payload path. | ⏳ not run yet — `v2/courier-checks.md` |
-| 27 | "`courierChecks` is `null` on my Qapla' v2 order — is the check broken?" | ⚠️ **Negative control** — no: `null` means the order has no preassigned courier (`courierId: 0`) or an unknown one; only the preassigned courier is checked on orders. To check an address against couriers anyway, `POST /v2/orders/courier-checks`. Should not invent an error. | ⏳ not run yet — `v2/courier-checks.md` |
+| 26 | "Before I create an order on the Qapla' v2 API, how can I tell whether the courier will reject the address?" | `POST /v2/orders/courier-checks` with `items[]` (1–100) of `{consignee, notes?, courierId?}`; without `courierId` every active courier of the channel is checked; response is one **list** of `{courierId, status, checks}` per item, in order, `courierId` canonical; scope `orders:read`; a warning only, nothing saved. Mentions the codes (`FIELD_TOO_LONG`, `PROVINCE_NOT_CODE`, `LOCALITY_NOT_DELIVERED` with `suggestions`, `ZONE_SUSPENDED` with `until`…) and `field` as the v2 payload path. | ✅ covered by `v2/courier-checks.md` |
+| 27 | "`courierChecks` is `null` on my Qapla' v2 order — is the check broken?" | ⚠️ **Negative control** — no: `null` means the order has no preassigned courier (`courierId: 0`) or an unknown one; only the preassigned courier is checked on orders. To check an address against couriers anyway, `POST /v2/orders/courier-checks`. Should not invent an error. | ✅ covered by `v2/courier-checks.md` |
 
 ## Negative / edge checks
 - Scenario 5 verifies the **anti-hallucination guardrail** (invented endpoint).
@@ -72,6 +72,24 @@ QAPLA_API_KEY=xxxxx python3 scripts/qapla_client.py   # calls getChannel
 ```
 
 ## Run log
+
+### 2026-10-23 — 2/2 new v2 scenarios passed (#26–27), release 1.5.0
+
+After documenting the v2 courier pre-checks (`v2/courier-checks.md`), the
+installed skill was synced from the repo (`git archive HEAD`, so `evaluation/`
+stayed out: the copy in `~/.claude/skills/qapla-api/` was still 1.4.2) and each
+scenario was given to a fresh Sonnet agent, user prompt only, self-reported
+sources.
+
+| # | Scenario | Triggered | Reference(s) opened | Result |
+|---|---|---|---|---|
+| 26 | check an address before the order exists | ✅ qapla-api | `v2/courier-checks.md` (installed copy) | ✅ PASS — `POST /v2/orders/courier-checks`, `orders:read`, 1–100 items, `courierId` optional (all active couriers), one list per item by position, codes with their extra keys, IT/SM/VA scope, 401/403/422/429, `courierChecks` on orders as the after-the-fact form |
+| 27 | `courierChecks` is `null` | ❌ not invoked | `v2/courier-checks.md`, `SKILL.md`, `v2/endpoints.md` from the **repo checkout**, not the installed skill | ✅ PASS on content — `null` = no preassigned courier or unknown courier, not a failure; points to the endpoint to check every courier |
+
+**Caveat on #27:** the agent answered from the repo files next to its working
+directory instead of triggering the skill, so it shows the content is right,
+not that the skill triggers on a bare `courierChecks` question. A run from a
+directory without the repo checkout would test the trigger.
 
 ### 2026-09-03 (third pass) — 25/25 on the installed 1.4.2
 
